@@ -14,7 +14,7 @@ Dennis Brandt Larsen - dbla19@student.aau.dk\
 Jamie Lee Smith Hammer - jhamme20@student.aau.dk\
 Loke Walsted - lwalst20@student.aau.dk\
 Mads Lundfold - mlundf20@student.aau.dk\
-Master Piyaboot Prasertsuwan - mprase20@student.aau.dk\
+Master Piyaboot Prasertsuwan - mprase20@student.aau.dk
 
 ### Project Layout
 
