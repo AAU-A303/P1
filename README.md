@@ -20,3 +20,7 @@ Master Piyaboot Prasertsuwan - mprase20@student.aau.dk
 
 
 ### Dependencies
+
+
+### Written Report
+We have chosen to write and format our report in LaTeX with Overleaf. A link can be found here: https://www.overleaf.com/read/gqgvbzvzymsk
