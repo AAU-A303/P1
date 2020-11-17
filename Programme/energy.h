@@ -63,5 +63,7 @@ int has_new_inquiry(void);
 
 /* energy.c */
 void setup(void);
+void do_calculations(void);
+void present(void);
 
 #endif /* ENERGY_H */
