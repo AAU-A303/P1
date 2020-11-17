@@ -1,5 +1,4 @@
 /*
- * Description: Here goes a description of this file.
  * File: energy.c               Date completed: 16th of November, 2020
  * Programmers: Anders Geert    E-mail: ageert20@student.aau.dk
  *              Christoffer Jønsson     cjanss20@student.aau.dk
