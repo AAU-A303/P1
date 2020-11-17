@@ -1,6 +1,6 @@
 /*
  ===============================================================================
- * File: data.c             Date completed: 16th of November, 2020
+ * File: data.c                 Date completed: 16th of November, 2020
  ===============================================================================
  * Programmers: Anders G.       E-mail: ageert20@student.aau.dk
  *              Christoffer J.          cjanss20@student.aau.dk
@@ -19,8 +19,6 @@
  */
 
 #include "energy.h"
-#define TRUE 1
-#define FALSE 0
 
 typedef struct {
     int day;
