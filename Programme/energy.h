@@ -7,8 +7,8 @@
  */
 
 #ifndef ENERGY_H
-#define ENERGY_H
-
+    #define ENERGY_H
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
