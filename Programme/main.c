@@ -10,7 +10,8 @@
  * Study Group: A303
  * Supervisor: Kamal Shahid     Class: P1, Computer Science - Fall Semester
  *
- * Description: This is the main file, from here the entire programme is run.
+ * Description: This is the main file, from here the entire programme is run and
+ *              maintained.
  */
 
 #include "energy.h"
