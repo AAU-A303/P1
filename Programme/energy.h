@@ -1,8 +1,4 @@
 /*
- * Programmer: Jamie Hammer     Date completed: 16th of November, 2020
- * Study Group: A303            E-mail: jhamme20@student.aau.dk
- * Supervisor: Kamal Shahid     Class: P1, Computer Science - Fall Semester
- *
  * Description: Here goes a description of this file.
  * File: energy.h               Date completed: 16th of November, 2020
  * Programmers: Anders Geert    E-mail: ageert20@student.aau.dk
