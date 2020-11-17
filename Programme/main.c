@@ -18,7 +18,9 @@
 
 int main(void)
 {
-    /* program starts here */
+    /* prompt user for date and time */
+    
+    /* doCalculations() */
 
     return EXIT_SUCCESS;
 }

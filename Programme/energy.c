@@ -16,10 +16,26 @@
 
 #include "energy.h"
 
-int main(void)
+/* Responsible for doing all of the calculations. */
+void beginCalculations(void)
 {
-    /* program starts here */
-    /*  */
+    /* getData(today) */
+    
+    /* do calculations on today */
+    
+    /* check if day ahead prices is available */
+    
+        /* if so, do calculations on tomorrow */
+}
 
-    return EXIT_SUCCESS;
+/* Does the calculations on the received data, takes in a day struct. */
+void doCalculations(void)
+{
+    /* add fees */
+}
+
+/* This presents the received data to the user. */
+void present(void)
+{
+    
 }
