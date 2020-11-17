@@ -21,25 +21,25 @@
 #include "energy.h"
 
 /* Responsible for doing all of the calculations. */
-void beginCalculations(void)
+void setup(void)
 {
-    /* getData(today) */
+    /* TODO: Instantiate Day struct and pass it to get_user_input */
     
-    /* do calculations on today */
+    get_user_input();
     
-    /* check if day ahead prices is available */
-    
-        /* if so, do calculations on tomorrow */
+    doCalculations();
 }
 
 /* Does the calculations on the received data, takes in a day struct. */
 void doCalculations(void)
 {
-    /* add fees */
+    /* TODO: Add fees */
+    
+    present();
 }
 
 /* This presents the received data to the user. */
 void present(void)
 {
-    
+    /* TODO: Present the data */
 }

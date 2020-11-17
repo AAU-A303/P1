@@ -34,14 +34,34 @@
 #define TRUE  1         /* boolean value for true */
 #define FALSE 0         /* boolean value for false */
 
-#define DATEOPTIONS 7   /* the amount of dates in our prototype dataset */
-#define TIMEOPTIONS 2   /* the amount of clock times to choose from */
+#define DAY_AHEAD 14    /* the release time of the day ahead prices */
+#define DAY_HOURS 24    /* the amount of hours in a day */
+
+#define JAN 1           /* the number of the months and the current year */
+#define FEB 2
+#define MAR 3
+#define APR 4
+#define MAY 5
+#define JUN 6
+#define JUL 7
+#define AUG 8
+#define SEP 9
+#define OCT 10
+#define NOV 11
+#define DEC 12
+#define CURRENT_YEAR 2020
 
 /* Function Prototypes */
 
-int get_user_input(void);               /* user_com.c */
-void select(int*, char**, int);         /* user_com.c */
-void show_menu(char**, int);            /* user_com.c */
-int input_validation(int*, int);        /* user_com.c */
+/* user_com.c */
+void get_user_input(void);
+void set_date(int*, int*, int);
+void set_time(int*);
+int days_in_month(int, int);
+int is_leap_year(int);
+int has_new_inquiry(void);
+
+/* energy.c */
+void setup(void);
 
 #endif /* ENERGY_H */

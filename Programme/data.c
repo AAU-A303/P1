@@ -28,7 +28,7 @@ typedef struct {
 
 typedef struct {
     Date date;
-    float prices[24];
+    float prices[HOURS_IN_DAY];
 } Energy_price;
 
 Energy_price* get_data(char filename[], int *energy_price_index);

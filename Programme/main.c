@@ -22,9 +22,13 @@
 
 int main(void)
 {
-    /* prompt user for date and time */
+    printf("\nWelcome...\n");
     
-    /* doCalculations() */
+    do {
+        setup();
+    } while (has_new_inquiry());
+    
+    printf("Thank you for trying out our prototype!\n");
 
     return EXIT_SUCCESS;
 }
