@@ -19,7 +19,7 @@
 
 #include "energy.h"
 
-/* FOR DEBUGGING ONLY!!! TODO: DELETE WHEN IMPLEMENTED */
+/* FOR DEBUGGING ONLY!!! TODO: DELETE FUNCTION WHEN FULLY IMPLEMENTED */
 int main (void)
 {
     do {
