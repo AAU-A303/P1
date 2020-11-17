@@ -17,8 +17,27 @@
 #ifndef ENERGY_H
 #define ENERGY_H
 
+/* Libraries */
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
-#include <time.h>
-#include <string.h>
+#include <math.h>       /* for doing math */
+#include <time.h>       /* for working with time */
+#include <string.h>     /* for working with strings */
+
+/* Symbolic Constants */
+
+#define TRUE  1         /* boolean value for true */
+#define FALSE 0         /* boolean value for false */
+
+#define DATEOPTIONS 7   /* the amount of dates in our prototype dataset */
+#define TIMEOPTIONS 2   /* the amount of clock times to choose from */
+
+/* Function Prototypes */
+
+int get_user_input(void);               /* user_com.c */
+void select(int*, char**, int);         /* user_com.c */
+void show_menu(char**, int);            /* user_com.c */
+int input_validation(int*, int);        /* user_com.c */
+
+#endif /* ENERGY_H */
