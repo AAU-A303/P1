@@ -18,28 +18,10 @@
  ===============================================================================
  */
 
-#include "energy.h"
-
-typedef struct {
-    int day;
-    int month;
-    int year;
-} Date;
-
-typedef struct {
-    Date date;
-    float prices[DAY_HOURS];
-} Energy_price;
-
-typedef struct {
-    Energy_price today;
-    Energy_price tomorrow;
-    int access_tomorrow;
-} Price_data;
+#include "./H_files/data.h"
 
 int main(void) {
     /* program starts here */
-    int energy_price_length = 0;
     Price_data price_data;
     Date today = (Date){5, 11, 2020};
     /*
@@ -158,7 +140,7 @@ int date_diffrence_in_days(Date *date_a, Date *date_b){
     current_date_seconds = mktime(&current_date);
     next_date_seconds = mktime(&next_date);
 
- 
+    return (next_date_seconds - current_date_seconds) / DAY_IN_SECONDS; 
 }
 
 int date_equals(Date *date_a, Date *date_b){

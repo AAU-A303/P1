@@ -17,7 +17,7 @@
  ===============================================================================
  */
 
-#include "energy.h"
+#include "./H_files/user_com.h"
 
 /* FOR DEBUGGING ONLY!!! TODO: DELETE FUNCTION WHEN FULLY IMPLEMENTED */
 int main (void)
