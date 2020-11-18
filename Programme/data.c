@@ -47,8 +47,17 @@ int main(void) {
     /* program starts here */
     int energy_price_length = 0;
     Energy_price* energy_price_array;
+    /*
+        We call the function get_data with the filepath: "./dataset/prices_2020_hourly_dkk.txt"
+        And the with the point to "energy_price_index" this ensures we know how many elements the
+        "energy_price_array" contains.
+    */
     energy_price_array = get_data("./dataset/prices_2020_hourly_dkk.txt", &energy_price_length);
+    /*
+        Here we call the print function that prints out the elements of the entire array.
+    */
     print_energy_price_array(energy_price_array, energy_price_length);
+
     return EXIT_SUCCESS;
 }
 
@@ -67,10 +76,12 @@ Energy_price* get_data(char filepath[], int *energy_price_index) {
     line_count = count_lines(filepath);
     /*
         We know the average lenght of a day so we can calculate the amount of days we need to store in the array.
-
     */
     energy_price_array = (Energy_price*)malloc(((line_count/24)+2) * sizeof(Energy_price));
 
+    /*
+        Check if the array was allocated correctly.
+    */
     if(energy_price_array == NULL){
         printf("Was unable to allocate energy_prices array!\n");
     }
@@ -86,12 +97,10 @@ Energy_price* get_data(char filepath[], int *energy_price_index) {
     */
     if(file != NULL){
         /*
-            Reset the initial energy_prices struct.
+            Reset the initial energy_prices struct by setting it to a date of "0/0/0".
             This is done to prevent the wrong dates being loaded into the structure.
         */
-        energy_price.date.day = 0;
-        energy_price.date.month = 0;
-        energy_price.date.year = 0;
+        energy_price.date = (Date){0, 0, 0};
         /*
             While theres still a new line fill the char array with it's contents.
         */
