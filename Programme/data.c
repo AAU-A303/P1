@@ -20,8 +20,6 @@
 
 #include "energy.h"
 
-#define DAY_IN_SECONDS 86400
-
 typedef struct {
     int day;
     int month;
@@ -30,7 +28,7 @@ typedef struct {
 
 typedef struct {
     Date date;
-    float prices[HOURS_IN_DAY];
+    float prices[DAY_HOURS];
 } Energy_price;
 
 typedef struct {
@@ -38,15 +36,6 @@ typedef struct {
     Energy_price tomorrow;
     int access_tomorrow;
 } Price_data;
-
-Price_data get_data(char filepath[], Date target_date);
-void set_date(Date *date, char date_string[]);
-int date_equals(Date *date_a, Date *date_b);
-int date_diffrence_in_days(Date *date_a, Date *date_b);
-
-void print_date(Date date);
-void print_energy_price(Energy_price energy_price);
-void print_price_data(Price_data price_data);
 
 int main(void) {
     /* program starts here */

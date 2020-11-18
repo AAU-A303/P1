@@ -36,6 +36,7 @@
 
 #define DAY_AHEAD 14        /* the release time of the day ahead prices */
 #define DAY_HOURS 24        /* the amount of hours in a day */
+#define DAY_SECONDS 86400   /* the amount of seconds in a day */
 
 #define JAN 1               /* the number of the months and the current year */
 #define FEB 2
@@ -65,5 +66,15 @@ int has_new_inquiry(void);
 void setup(void);
 void do_calculations(void);
 void present(void);
+
+/* data.c */
+Price_data get_data(char filepath[], Date target_date);
+void set_date(Date *date, char date_string[]);
+int date_equals(Date *date_a, Date *date_b);
+int date_diffrence_in_days(Date *date_a, Date *date_b);
+
+void print_date(Date date);
+void print_energy_price(Energy_price energy_price);
+void print_price_data(Price_data price_data);
 
 #endif /* ENERGY_H */
