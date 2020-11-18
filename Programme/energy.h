@@ -38,7 +38,7 @@
 #define DAY_HOURS 24            /* the amount of hours in a day */
 #define DAY_IN_SECONDS 86400    /* the amount of seconds in a day */
 
-#define JAN 1                   /* the number of the months and the current year */
+#define JAN 1                   /* the number of the months and current year */
 #define FEB 2
 #define MAR 3
 #define APR 4
