@@ -27,7 +27,7 @@ void setup(void)
     
     get_user_input();
     
-    doCalculations();
+    do_calculations();
 }
 
 /* Does the calculations on the received data, takes in a day struct. */

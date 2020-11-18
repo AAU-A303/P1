@@ -28,7 +28,7 @@
 #include <math.h>               /* for doing math */
 #include <time.h>               /* for working with time */
 #include <string.h>             /* for working with strings */
-
+#include "user_com.h"
 /* Symbolic Constants */
 
 #define TRUE  1                 /* boolean value for true */
@@ -39,9 +39,5 @@
 void setup(void);               /* input: none, output: none */
 void do_calculations(void);     /* input: none, output: none */
 void present(void);             /* input: none, output: none */
-
-void print_date(Date date);
-void print_energy_price(Energy_price energy_price);
-void print_price_data(Price_data price_data);
 
 #endif /* ENERGY_H */

@@ -32,6 +32,7 @@
 #define FALSE 0                 /* boolean value for false */
 
 #define DAY_AHEAD 14            /* the release time of the day ahead prices */
+#define DAY_HOURS 24
 
 #define JAN 1                   /* the number of the months and current year */
 #define FEB 2

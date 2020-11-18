@@ -69,7 +69,7 @@ void set_date(int *day, int *month, int year)
             if (*month == 11 && *day > 5) { continue; }
             
             if (*day <= days_in_month(*month, CURRENT_YEAR) && *day > 0)
-                {is_valid = TRUE;
+                is_valid = TRUE;
         }
     } while (!is_valid);
 }

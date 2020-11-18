@@ -23,13 +23,16 @@
 int main(void) {
     /* program starts here */
     Price_data price_data;
-    Date today = (Date){5, 11, 2020};
+    Date today;
+    today.day = 5;
+    today.month = 11;
+    today.year = 2020;
     /*
         We call the function get_data with the file path "./dataset/prices_2020_hourly_dkk.txt".
         And with the pointer to "energy_price_index", this ensures we know how many elements the
         "energy_price_array" contains.
     */
-    price_data = get_data("./dataset/prices_2020_hourly_dkk.txt", today);
+    price_data = get_data("./Programme/dataset/prices_2020_hourly_dkk.txt", today);
     /*
         Here we call the print function that prints out the elements of the entire array.
     */
