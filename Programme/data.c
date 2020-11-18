@@ -58,7 +58,7 @@ int main(void) {
         And with the pointer to "energy_price_index", this ensures we know how many elements the
         "energy_price_array" contains.
     */
-    price_data = get_date("./dataset/prices_2020_hourly_dkk.txt", today);
+    price_data = get_data("./dataset/prices_2020_hourly_dkk.txt", today);
     /*
         Here we call the print function that prints out the elements of the entire array.
     */
