@@ -36,8 +36,6 @@
 
 /* Function Prototypes */
 
-
-/* energy.c */
 void setup(void);               /* input: none, output: none */
 void do_calculations(void);     /* input: none, output: none */
 void present(void);             /* input: none, output: none */

@@ -33,12 +33,34 @@
 #define FALSE 0                 /* boolean value for false */
 #define DAY_HOURS 24            /* the amount of hours in a day */
 #define DAY_IN_SECONDS 86400    /* the amount of seconds in a day */
+/* Structs */
 
-/* data.c */
+typedef struct {
+    int day;
+    int month;
+    int year;
+} Date;
+
+typedef struct {
+    Date date;
+    float prices[DAY_HOURS];
+} Energy_price;
+
+typedef struct {
+    Energy_price today;
+    Energy_price tomorrow;
+    int access_tomorrow;
+} Price_data;
+
+/* Function Prototypes */
 
 Price_data get_data(char filepath[], Date target_date);
-void set_date(Date *date, char date_string[]);
+void date_set(Date *date, char date_string[]);
 int date_equals(Date *date_a, Date *date_b);
 int date_diffrence_in_days(Date *date_a, Date *date_b);
+
+void print_date(Date date);
+void print_energy_price(Energy_price energy_price);
+void print_price_data(Price_data price_data);
 
 #endif /* DATA_H */
