@@ -48,8 +48,8 @@ int main(void) {
     int energy_price_length = 0;
     Energy_price* energy_price_array;
     /*
-        We call the function get_data with the filepath: "./dataset/prices_2020_hourly_dkk.txt"
-        And the with the point to "energy_price_index" this ensures we know how many elements the
+        We call the function get_data with the file path "./dataset/prices_2020_hourly_dkk.txt".
+        And with the pointer to "energy_price_index", this ensures we know how many elements the
         "energy_price_array" contains.
     */
     energy_price_array = get_data("./dataset/prices_2020_hourly_dkk.txt", &energy_price_length);
@@ -75,7 +75,7 @@ Energy_price* get_data(char filepath[], int *energy_price_index) {
     */
     line_count = count_lines(filepath);
     /*
-        We know the average lenght of a day so we can calculate the amount of days we need to store in the array.
+        We know the average length of a day so, we can calculate the number of days we need to store in the array.
     */
     energy_price_array = (Energy_price*)malloc(((line_count/24)+2) * sizeof(Energy_price));
 
@@ -87,27 +87,27 @@ Energy_price* get_data(char filepath[], int *energy_price_index) {
     }
     /*
         "fopen" opens a file given a "filepath" and the "mode" of which to open the file.
-        In this case we just need to read the file so we use the "r" mode.
+        In this case, we just need to read the file so we use the "r" mode.
         ("r" = read), ("w" = write), ("a" = append) and ("+" = update). These modes can be combined with each other.
     */
     file = fopen(filepath, "r");
 
     /*
-        If the "file" is "NULL" then we where unable to either find or open the file.
+        If the "file" is "NULL", then we were unable to either find or open the file.
     */
     if(file != NULL){
         /*
-            Reset the initial energy_prices struct by setting it to a date of "0/0/0".
-            This is done to prevent the wrong dates being loaded into the structure.
+            Reset the initial energy_prices struct by setting it to date of "0/0/0".
+            We do this to prevent the wrong dates from being loaded into the structure.
         */
         energy_price.date = (Date){0, 0, 0};
         /*
-            While theres still a new line fill the char array with it's contents.
+            While there's still a new line, fill the char array with its contents.
         */
         while (fgets(line, sizeof(line), file)) {
             /*
                 split up the line into the format:
-                char[]: string_date and float: price
+                char[]: "string_date" and float: "price"
             */
             sscanf(line, "%s %f", date_string, &price);
 
@@ -120,10 +120,10 @@ Energy_price* get_data(char filepath[], int *energy_price_index) {
             set_date(&date, date_string);
             
             /*
-                We compare the dates. if the second date is larger than the first date.
-                Then we have a new date and we increment the "energy_price_index" and reset the "price_index".
+                We compare the dates if the second date is larger than the first date.
+                Then we have a new date, and we increment the "energy_price_index" and reset the "price_index".
                 Then we add the "energy_price" to the "energy_price_array" at the "energy_price_index".
-                The last thing we do is update the "energy_price" structurs "date" field to the new date value.
+                The last thing we do is update the "energy_price" struct "date" field to the new date value.
             */
             if(compare_dates(&energy_price.date, &date)){
                 *energy_price_index += 1;
@@ -131,19 +131,19 @@ Energy_price* get_data(char filepath[], int *energy_price_index) {
                 energy_price_array[*energy_price_index] = energy_price;
                 set_date(&energy_price.date, date_string);
                 /* 
-                    Maybe we should reset the "energy_price" prices fields in the case theres
+                    Maybe we should reset the "energy_price" prices fields in the case there's
                     less than 24 data points in a given date.
                 */
             }
             /*
-                For each loop we add the current energy price to the "energy_price" "prices" field.
+                For each loop, we add the current energy price to the "energy_price" "prices" field.
                 And then increment the "price_index".
             */
             energy_price.prices[price_index] = price;
             price_index++;
         }
         /*
-            After reading the last line we exit. This means we wont append the last "energy_price" struct.
+            After reading the last line, we exit. That means we won't append the last "energy_price" struct.
             We fix this by incrementing "energy_price_index" and appending the last "energy_price" struct.
         */
         *energy_price_index += 1;
@@ -153,9 +153,9 @@ Energy_price* get_data(char filepath[], int *energy_price_index) {
         printf("Failed to open file \"%s\"\n\n", filepath);
     }
     /*
-        It's important to remeber to close the file after opening it.
-        The reuslt of not closing the file is that both other programs and this program
-        will be unable to open the file again. Until this program exits.
+        It's important to remember to close the file after opening it.
+        The result of not closing the file is that both other programs and this program
+        will be unable to open the file again until this program exits.
     */
     fclose(file);
     /*
