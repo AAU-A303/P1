@@ -19,11 +19,8 @@
  */
 
 #include "energy.h"
-#define TRUE 1
-#define FALSE 0
+
 #define DAY_IN_SECONDS 86400
-#include <time.h>
-#include <math.h>
 
 typedef struct {
     int day;
@@ -42,7 +39,7 @@ typedef struct {
     int access_tomorrow;
 } Price_data;
 
-Price_data get_date(char filepath[], Date target_date);
+Price_data get_data(char filepath[], Date target_date);
 void set_date(Date *date, char date_string[]);
 int date_equals(Date *date_a, Date *date_b);
 int date_diffrence_in_days(Date *date_a, Date *date_b);
@@ -70,12 +67,12 @@ int main(void) {
     return EXIT_SUCCESS;
 }
 
-Price_data get_date(char filepath[], Date target_date) {
+Price_data get_data(char filepath[], Date target_date) {
     float price;
     char date_string[64];
     char line[128];
     int index_today = 0, index_tomorrow = 0;
-    Date current_date;
+    Date current_date = {0};
     Energy_price today = {0};
     Energy_price tomorrow = {0};
     Price_data price_data = {0};
@@ -86,7 +83,6 @@ Price_data get_date(char filepath[], Date target_date) {
         ("r" = read), ("w" = write), ("a" = append) and ("+" = update). These modes can be combined with each other.
     */
     file = fopen(filepath, "r");
-
     /*
         If the "file" is "NULL", then we were unable to either find or open the file.
     */
@@ -100,7 +96,6 @@ Price_data get_date(char filepath[], Date target_date) {
                 char[]: "string_date" and float: "price"
             */
             sscanf(line, "%s %f", date_string, &price);
-
             /*
                 split up the "date_string" int to the format:
                 int: day
@@ -108,12 +103,12 @@ Price_data get_date(char filepath[], Date target_date) {
                 int: year
             */
             set_date(&current_date, date_string);
-            
             /*
-                We compare the dates if the second date is larger than the first date.
-                Then we have a new date, and we increment the "energy_price_index" and reset the "price_index".
-                Then we add the "energy_price" to the "energy_price_array" at the "energy_price_index".
-                The last thing we do is update the "energy_price" struct "date" field to the new date value.
+                First, we check if the "current_date" is equal to the "target_date".
+                If the two dates are equal we set "today.date" to the current_date
+                and we add the "current_price" to the "today.price" array at the "index_today".
+                If the check fails we check if its the next day instead.
+                And if it is the next day we set the "tomorrow.date" and "tomorrow.price" at "index_tomorrow".
             */
             if(date_equals(&current_date, &target_date)){
                 set_date(&today.date, date_string);
@@ -130,6 +125,10 @@ Price_data get_date(char filepath[], Date target_date) {
     } else {
         printf("Failed to open file \"%s\"\n\n", filepath);
     }
+    /*
+        Now that we have populated the "Energy_price" struct "today" and "tomorrow".
+        we can add them to "price_data.today" and "price_data.tomorrow".
+    */
     price_data.today = today;
     price_data.tomorrow = tomorrow;
     /*
@@ -170,7 +169,7 @@ int date_diffrence_in_days(Date *date_a, Date *date_b){
     current_date_seconds = mktime(&current_date);
     next_date_seconds = mktime(&next_date);
 
-    return (next_date_seconds - current_date_seconds) / DAY_IN_SECONDS;
+ 
 }
 
 int date_equals(Date *date_a, Date *date_b){
