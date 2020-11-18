@@ -33,10 +33,10 @@ typedef struct {
     float prices[24];
 } Energy_price;
 
-Energy_price* get_data(char filename[], int *energy_price_index);
+Energy_price* get_data(char filepath[], int *energy_price_index);
 void set_date(Date *date, char date_string[]);
 int compare_dates(Date *date_a, Date *date_b);
-int count_lines(char filename[]);
+int count_lines(char filepath[]);
 Date initialize_date(void);
 
 void print_date(Date date);
@@ -51,8 +51,8 @@ int main(void) {
     print_energy_price_array(energy_price_array, energy_price_length);
     return EXIT_SUCCESS;
 }
-/* Add input parameter*/
-Energy_price* get_data(char filename[], int *energy_price_index) {
+
+Energy_price* get_data(char filepath[], int *energy_price_index) {
     float price;
     char date_string[64];
     char line[128];
@@ -61,42 +61,98 @@ Energy_price* get_data(char filename[], int *energy_price_index) {
     Energy_price energy_price;
     Energy_price* energy_price_array;
     FILE* file;
+    /*
+        This function opens the "file" in read-only mode and increments every time it encounters a new line.
+    */
+    line_count = count_lines(filepath);
+    /*
+        We know the average lenght of a day so we can calculate the amount of days we need to store in the array.
 
-    line_count = count_lines(filename);
-    /**/
+    */
     energy_price_array = (Energy_price*)malloc(((line_count/24)+2) * sizeof(Energy_price));
 
     if(energy_price_array == NULL){
         printf("Was unable to allocate energy_prices array!\n");
     }
-    
-    file = fopen(filename, "r");
+    /*
+        "fopen" opens a file given a "filepath" and the "mode" of which to open the file.
+        In this case we just need to read the file so we use the "r" mode.
+        ("r" = read), ("w" = write), ("a" = append) and ("+" = update). These modes can be combined with each other.
+    */
+    file = fopen(filepath, "r");
 
+    /*
+        If the "file" is "NULL" then we where unable to either find or open the file.
+    */
     if(file != NULL){
+        /*
+            Reset the initial energy_prices struct.
+            This is done to prevent the wrong dates being loaded into the structure.
+        */
         energy_price.date.day = 0;
         energy_price.date.month = 0;
         energy_price.date.year = 0;
+        /*
+            While theres still a new line fill the char array with it's contents.
+        */
         while (fgets(line, sizeof(line), file)) {
+            /*
+                split up the line into the format:
+                char[]: string_date and float: price
+            */
             sscanf(line, "%s %f", date_string, &price);
-            set_date(&date, date_string);
 
+            /*
+                split up the "date_string" int to the format:
+                int: day
+                int: month
+                int: year
+            */
+            set_date(&date, date_string);
+            
+            /*
+                We compare the dates. if the second date is larger than the first date.
+                Then we have a new date and we increment the "energy_price_index" and reset the "price_index".
+                Then we add the "energy_price" to the "energy_price_array" at the "energy_price_index".
+                The last thing we do is update the "energy_price" structurs "date" field to the new date value.
+            */
             if(compare_dates(&energy_price.date, &date)){
                 *energy_price_index += 1;
-                printf("Index: %d\n",*energy_price_index);
                 price_index = 0;
                 energy_price_array[*energy_price_index] = energy_price;
                 set_date(&energy_price.date, date_string);
+                /* 
+                    Maybe we should reset the "energy_price" prices fields in the case theres
+                    less than 24 data points in a given date.
+                */
             }
+            /*
+                For each loop we add the current energy price to the "energy_price" "prices" field.
+                And then increment the "price_index".
+            */
             energy_price.prices[price_index] = price;
             price_index++;
         }
+        /*
+            After reading the last line we exit. This means we wont append the last "energy_price" struct.
+            We fix this by incrementing "energy_price_index" and appending the last "energy_price" struct.
+        */
         *energy_price_index += 1;
         energy_price_array[*energy_price_index] = energy_price;
 
     } else {
-        printf("Failed to open file \"%s\"\n\n", filename);
+        printf("Failed to open file \"%s\"\n\n", filepath);
     }
+    /*
+        It's important to remeber to close the file after opening it.
+        The reuslt of not closing the file is that both other programs and this program
+        will be unable to open the file again. Until this program exits.
+    */
     fclose(file);
+    /*
+        The last thing we do is return the output parameter "energy_price_index".
+        And return the "energy_price_array" as a return value.
+    */
     return energy_price_array;
 }
 
@@ -124,8 +180,8 @@ int compare_dates(Date *date_a, Date *date_b){
     }
 }
 
-int count_lines(char filename[]){
-    FILE *file = fopen(filename, "r");
+int count_lines(char filepath[]){
+    FILE *file = fopen(filepath, "r");
     int current_char = 0, lines = 1;
 
     if (file != NULL){
@@ -135,7 +191,7 @@ int count_lines(char filename[]){
             }
         }
     } else {
-        printf("Failed to open file \"%s\"\n\n", filename);
+        printf("Failed to open file \"%s\"\n\n", filepath);
         return 0;
     }
     fclose(file);
