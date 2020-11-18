@@ -32,4 +32,4 @@ all:
 	$(CC) $(CFLAGS) -c $(program_folder)main.c -o $(build_folder)main.o
 	
 	$(CC) $(CFLAGS) $(program_folder)data.c -o $(build_folder)data$(EXTENSION)
-	$(CC) $(CFLAGS) $(build_folder)energy.o $(build_folder)user_com.o $(program_folder)main.c -o $(build_folder)main.$(EXTENSION)
+	$(CC) $(CFLAGS) $(build_folder)energy.o $(build_folder)user_com.o $(program_folder)main.c -o $(build_folder)main$(EXTENSION)
