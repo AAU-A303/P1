@@ -55,17 +55,17 @@
 /* Function Prototypes */
 
 /* user_com.c */
-void get_user_input(void);
-void set_date(int*, int*, int);
-void set_time(int*);
-int days_in_month(int, int);
-int is_leap_year(int);
-int has_new_inquiry(void);
+void get_user_input(void);      /* input: none, output: none */
+void set_date(int*, int*, int); /* input: day, month, year, output: none */
+void set_time(int*);            /* input: hour, output: none */
+int days_in_month(int, int);    /* input: month, year, output: num of days */
+int is_leap_year(int);          /* input: year, output: boolean */
+int has_new_inquiry(void);      /* input: none, output: boolean */
 
 /* energy.c */
-void setup(void);
-void do_calculations(void);
-void present(void);
+void setup(void);               /* input: none, output: none */
+void do_calculations(void);     /* input: none, output: none */
+void present(void);             /* input: none, output: none */
 
 /* data.c */
 Price_data get_data(char filepath[], Date target_date);
