@@ -20,8 +20,6 @@
 
 #include "energy.h"
 
-#define DAY_IN_SECONDS 86400
-
 typedef struct {
     int day;
     int month;
@@ -30,7 +28,7 @@ typedef struct {
 
 typedef struct {
     Date date;
-    float prices[HOURS_IN_DAY];
+    float prices[DAY_HOURS];
 } Energy_price;
 
 typedef struct {
@@ -40,7 +38,7 @@ typedef struct {
 } Price_data;
 
 Price_data get_data(char filepath[], Date target_date);
-void set_date(Date *date, char date_string[]);
+void date_set(Date *date, char date_string[]);
 int date_equals(Date *date_a, Date *date_b);
 int date_diffrence_in_days(Date *date_a, Date *date_b);
 
@@ -58,7 +56,7 @@ int main(void) {
         And with the pointer to "energy_price_index", this ensures we know how many elements the
         "energy_price_array" contains.
     */
-    price_data = get_date("./dataset/prices_2020_hourly_dkk.txt", today);
+    price_data = get_data("./dataset/prices_2020_hourly_dkk.txt", today);
     /*
         Here we call the print function that prints out the elements of the entire array.
     */
@@ -102,7 +100,7 @@ Price_data get_data(char filepath[], Date target_date) {
                 int: month
                 int: year
             */
-            set_date(&current_date, date_string);
+            date_set(&current_date, date_string);
             /*
                 First, we check if the "current_date" is equal to the "target_date".
                 If the two dates are equal we set "today.date" to the current_date
@@ -111,12 +109,12 @@ Price_data get_data(char filepath[], Date target_date) {
                 And if it is the next day we set the "tomorrow.date" and "tomorrow.price" at "index_tomorrow".
             */
             if(date_equals(&current_date, &target_date)){
-                set_date(&today.date, date_string);
+                date_set(&today.date, date_string);
                 today.prices[index_today] = price;
                 index_today++;
             } else {
                 if(date_diffrence_in_days(&target_date, &current_date) == 1){
-                    set_date(&tomorrow.date, date_string);
+                    date_set(&tomorrow.date, date_string);
                     tomorrow.prices[index_tomorrow] = price;
                     index_tomorrow++;
                 }
@@ -144,7 +142,7 @@ Price_data get_data(char filepath[], Date target_date) {
     return price_data;
 }
 
-void set_date(Date *date, char date_string[]){
+void date_set(Date *date, char date_string[]){
     sscanf(date_string, "%d/%d/%d", &date->day, &date->month, &date->year);
 }
 

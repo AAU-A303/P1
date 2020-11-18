@@ -25,19 +25,20 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>           /* for doing math */
-#include <time.h>           /* for working with time */
-#include <string.h>         /* for working with strings */
+#include <math.h>               /* for doing math */
+#include <time.h>               /* for working with time */
+#include <string.h>             /* for working with strings */
 
 /* Symbolic Constants */
 
-#define TRUE  1             /* boolean value for true */
-#define FALSE 0             /* boolean value for false */
+#define TRUE  1                 /* boolean value for true */
+#define FALSE 0                 /* boolean value for false */
 
-#define DAY_AHEAD 14        /* the release time of the day ahead prices */
-#define DAY_HOURS 24        /* the amount of hours in a day */
+#define DAY_AHEAD 14            /* the release time of the day ahead prices */
+#define DAY_HOURS 24            /* the amount of hours in a day */
+#define DAY_IN_SECONDS 86400    /* the amount of seconds in a day */
 
-#define JAN 1               /* the number of the months and the current year */
+#define JAN 1                   /* the number of the months and the current year */
 #define FEB 2
 #define MAR 3
 #define APR 4
