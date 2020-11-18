@@ -54,7 +54,7 @@ void get_user_input(void)
     }
 }
 
-/* Set the temp date for the prototype */
+/* Set the temp date for the prototype. */
 void set_date(int *day, int *month, int year)
 {
     int is_valid = FALSE;
@@ -74,7 +74,7 @@ void set_date(int *day, int *month, int year)
     } while (!is_valid);
 }
 
-/* Set the temp time for the prototype */
+/* Set the temp time for the prototype. */
 void set_time(int *hour)
 {
     int is_valid = FALSE;
@@ -86,7 +86,7 @@ void set_time(int *hour)
     } while (!is_valid);
 }
 
-/* Checks and returns the amount of days in the currently selected month */
+/* Checks and returns the amount of days in the currently selected month. */
 int days_in_month(int month, int year)
 {
     int days;
@@ -102,7 +102,7 @@ int days_in_month(int month, int year)
     return days;
 }
 
-/* Checks and returns whether the current year is a leap year or not */
+/* Checks and returns whether the current year is a leap year or not. */
 int is_leap_year(int year)
 {
     if (year % 400 == 0) return TRUE;
@@ -111,7 +111,7 @@ int is_leap_year(int year)
     else return FALSE;
 }
 
-/* Returns whether the user wants to check another day or exit the programme */
+/* Returns whether the user wants to check another day or exit the programme. */
 int has_new_inquiry()
 {
     char input;

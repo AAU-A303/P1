@@ -20,4 +20,6 @@
 #ifndef LOCALISATION_H
 #define LOCALISATION_H
 
+#include <st>
+
 #endif /* LOCALISATION_H */
