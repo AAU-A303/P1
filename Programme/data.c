@@ -20,6 +20,8 @@
 
 #include "energy.h"
 
+#define DAY_IN_SECONDS 86400
+
 typedef struct {
     int day;
     int month;
@@ -31,74 +33,60 @@ typedef struct {
     float prices[HOURS_IN_DAY];
 } Energy_price;
 
-Energy_price* get_data(char filepath[], int *energy_price_index);
+typedef struct {
+    Energy_price today;
+    Energy_price tomorrow;
+    int access_tomorrow;
+} Price_data;
+
+Price_data get_data(char filepath[], Date target_date);
 void set_date(Date *date, char date_string[]);
-int compare_dates(Date *date_a, Date *date_b);
-int count_lines(char filepath[]);
-Date initialize_date(void);
+int date_equals(Date *date_a, Date *date_b);
+int date_diffrence_in_days(Date *date_a, Date *date_b);
 
 void print_date(Date date);
 void print_energy_price(Energy_price energy_price);
-void print_energy_price_array(Energy_price energy_price_array[], int length);
+void print_price_data(Price_data price_data);
 
 int main(void) {
     /* program starts here */
     int energy_price_length = 0;
-    Energy_price* energy_price_array;
+    Price_data price_data;
+    Date today = (Date){5, 11, 2020};
     /*
         We call the function get_data with the file path "./dataset/prices_2020_hourly_dkk.txt".
         And with the pointer to "energy_price_index", this ensures we know how many elements the
         "energy_price_array" contains.
     */
-    energy_price_array = get_data("./dataset/prices_2020_hourly_dkk.txt", &energy_price_length);
+    price_data = get_date("./dataset/prices_2020_hourly_dkk.txt", today);
     /*
         Here we call the print function that prints out the elements of the entire array.
     */
-    print_energy_price_array(energy_price_array, energy_price_length);
+    print_price_data(price_data);
 
     return EXIT_SUCCESS;
 }
 
-Energy_price* get_data(char filepath[], int *energy_price_index) {
+Price_data get_data(char filepath[], Date target_date) {
     float price;
     char date_string[64];
     char line[128];
-    int line_count, price_index = 0;
-    Date date;
-    Energy_price energy_price;
-    Energy_price* energy_price_array;
+    int index_today = 0, index_tomorrow = 0;
+    Date current_date = {0};
+    Energy_price today = {0};
+    Energy_price tomorrow = {0};
+    Price_data price_data = {0};
     FILE* file;
-    /*
-        This function opens the "file" in read-only mode and increments every time it encounters a new line.
-    */
-    line_count = count_lines(filepath);
-    /*
-        We know the average length of a day so, we can calculate the number of days we need to store in the array.
-    */
-    energy_price_array = (Energy_price*)malloc(((line_count/24)+2) * sizeof(Energy_price));
-
-    /*
-        Check if the array was allocated correctly.
-    */
-    if(energy_price_array == NULL){
-        printf("Was unable to allocate energy_prices array!\n");
-    }
     /*
         "fopen" opens a file given a "filepath" and the "mode" of which to open the file.
         In this case, we just need to read the file so we use the "r" mode.
         ("r" = read), ("w" = write), ("a" = append) and ("+" = update). These modes can be combined with each other.
     */
     file = fopen(filepath, "r");
-
     /*
         If the "file" is "NULL", then we were unable to either find or open the file.
     */
     if(file != NULL){
-        /*
-            Reset the initial energy_prices struct by setting it to date of "0/0/0".
-            We do this to prevent the wrong dates from being loaded into the structure.
-        */
-        energy_price.date = (Date){0, 0, 0};
         /*
             While there's still a new line, fill the char array with its contents.
         */
@@ -108,48 +96,41 @@ Energy_price* get_data(char filepath[], int *energy_price_index) {
                 char[]: "string_date" and float: "price"
             */
             sscanf(line, "%s %f", date_string, &price);
-
             /*
                 split up the "date_string" int to the format:
                 int: day
                 int: month
                 int: year
             */
-            set_date(&date, date_string);
-            
+            set_date(&current_date, date_string);
             /*
-                We compare the dates if the second date is larger than the first date.
-                Then we have a new date, and we increment the "energy_price_index" and reset the "price_index".
-                Then we add the "energy_price" to the "energy_price_array" at the "energy_price_index".
-                The last thing we do is update the "energy_price" struct "date" field to the new date value.
+                First, we check if the "current_date" is equal to the "target_date".
+                If the two dates are equal we set "today.date" to the current_date
+                and we add the "current_price" to the "today.price" array at the "index_today".
+                If the check fails we check if its the next day instead.
+                And if it is the next day we set the "tomorrow.date" and "tomorrow.price" at "index_tomorrow".
             */
-            if(compare_dates(&energy_price.date, &date)){
-                *energy_price_index += 1;
-                price_index = 0;
-                energy_price_array[*energy_price_index] = energy_price;
-                set_date(&energy_price.date, date_string);
-                /* 
-                    Maybe we should reset the "energy_price" prices fields in the case there's
-                    less than 24 data points in a given date.
-                */
+            if(date_equals(&current_date, &target_date)){
+                set_date(&today.date, date_string);
+                today.prices[index_today] = price;
+                index_today++;
+            } else {
+                if(date_diffrence_in_days(&target_date, &current_date) == 1){
+                    set_date(&tomorrow.date, date_string);
+                    tomorrow.prices[index_tomorrow] = price;
+                    index_tomorrow++;
+                }
             }
-            /*
-                For each loop, we add the current energy price to the "energy_price" "prices" field.
-                And then increment the "price_index".
-            */
-            energy_price.prices[price_index] = price;
-            price_index++;
         }
-        /*
-            After reading the last line, we exit. That means we won't append the last "energy_price" struct.
-            We fix this by incrementing "energy_price_index" and appending the last "energy_price" struct.
-        */
-        *energy_price_index += 1;
-        energy_price_array[*energy_price_index] = energy_price;
-
     } else {
         printf("Failed to open file \"%s\"\n\n", filepath);
     }
+    /*
+        Now that we have populated the "Energy_price" struct "today" and "tomorrow".
+        we can add them to "price_data.today" and "price_data.tomorrow".
+    */
+    price_data.today = today;
+    price_data.tomorrow = tomorrow;
     /*
         It's important to remember to close the file after opening it.
         The result of not closing the file is that both other programs and this program
@@ -160,61 +141,49 @@ Energy_price* get_data(char filepath[], int *energy_price_index) {
         The last thing we do is return the output parameter "energy_price_index".
         And return the "energy_price_array" as a return value.
     */
-    return energy_price_array;
+    return price_data;
 }
 
 void set_date(Date *date, char date_string[]){
     sscanf(date_string, "%d/%d/%d", &date->day, &date->month, &date->year);
 }
 
-int compare_dates(Date *date_a, Date *date_b){
-    if(date_b->year > date_a->year){
-        return TRUE;
-    } else if (date_b->year == date_a->year){
-        if(date_b->month > date_a->month){
-            return TRUE;
-        } else if (date_b->month == date_a->month) {
-            if(date_b->day > date_a->day){
-                return TRUE;
-            } else if(date_b->day == date_a->day){
-                return FALSE;
-            }
-        } else{
-            return FALSE;
-        }
-    } else {
-        return FALSE;
-    }
+int date_diffrence_in_days(Date *date_a, Date *date_b){
+    struct tm current_date = { 0 };
+    struct tm next_date = { 0 };
+    double current_date_seconds;
+    double next_date_seconds;
+    /*
+        Add out date values to the tm struct.
+        We subtract 1900 from the year since tm_year is specified by the years since 1900.
+        We subtract 1 from the month since tm_month is int the range 0-11.  
+    */
+    current_date.tm_year = date_a->year - 1900;
+    current_date.tm_mon = date_a->month - 1;
+    current_date.tm_mday = date_a->day;
+
+    next_date.tm_year = date_b->year - 1900;
+    next_date.tm_mon = date_b->month - 1;
+    next_date.tm_mday = date_b->day;
+
+    current_date_seconds = mktime(&current_date);
+    next_date_seconds = mktime(&next_date);
+
+ 
 }
 
-int count_lines(char filepath[]){
-    FILE *file = fopen(filepath, "r");
-    int current_char = 0, lines = 1;
-
-    if (file != NULL){
-        while((current_char = fgetc(file)) != EOF){
-            if (current_char == '\n'){
-                lines++;
+int date_equals(Date *date_a, Date *date_b){
+    if(date_a->year == date_b->year){
+        if(date_a->month == date_b->month){
+            if(date_a->day == date_b->day){
+                return TRUE;
             }
         }
-    } else {
-        printf("Failed to open file \"%s\"\n\n", filepath);
-        return 0;
-    }
-    fclose(file);
-    return lines;
+    } return FALSE;
 }
 
 void print_date(Date date){
     printf("%d/%d/%d ", date.day, date.month, date.year);
-}
-
-void print_energy_price_array(Energy_price energy_price_array[], int energy_price_length){
-    int i = 0;
-    printf("Array_length: %d\n", energy_price_length);
-    for(i = 0; i <= energy_price_length; i++){
-        print_energy_price(energy_price_array[i]);
-    }
 }
 
 void print_energy_price(Energy_price energy_price){
@@ -225,4 +194,10 @@ void print_energy_price(Energy_price energy_price){
     for(j = 0; j < 24; j++){
         printf("\tHour: %d Price: %.2f\n", j, energy_price.prices[j]);
     }
+}
+
+void print_price_data(Price_data price_data){
+    print_energy_price(price_data.today);
+    print_energy_price(price_data.tomorrow);
+    printf("Access to tomorrow: %d \n",price_data.access_tomorrow);
 }
