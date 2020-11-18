@@ -1,17 +1,17 @@
 /*
  ===============================================================================
- * File: energy.c               Date completed: 16th of November, 2020
+ * File: energy.c                   Date completed: 16th of November, 2020
  ===============================================================================
- * Programmers: Anders G.       E-mail: ageert20@student.aau.dk
- *              Christoffer J.          cjanss20@student.aau.dk
- *              Dennis L.               dbla19@student.aau.dk
- *              Jamie H.                jhamme20@student.aau.dk
- *              Loke W.                 lwalst20@student.aau.dk
- *              Mads L.                 mlundf20@student.aau.dk
- *              Master P.               mprase20@student.aau.dk
+ * Programmers: Anders G.           E-mail: ageert20@student.aau.dk
+ *              Christoffer J.              cjanss20@student.aau.dk
+ *              Dennis L.                   dbla19@student.aau.dk
+ *              Jamie H.                    jhamme20@student.aau.dk
+ *              Loke W.                     lwalst20@student.aau.dk
+ *              Mads L.                     mlundf20@student.aau.dk
+ *              Master P.                   mprase20@student.aau.dk
  ===============================================================================
  * Study Group: A303
- * Supervisor: Kamal Shahid     Class: P1, Computer Science - Fall Semester
+ * Supervisor: Kamal Shahid         Class: P1, Computer Science - Fall Semester
  ===============================================================================
  * Description: This is responsible for managing most of our logic of this
  *              programme.
@@ -21,25 +21,25 @@
 #include "energy.h"
 
 /* Responsible for doing all of the calculations. */
-void beginCalculations(void)
+void setup(void)
 {
-    /* getData(today) */
+    /* TODO: Instantiate Day struct and pass it to get_user_input */
     
-    /* do calculations on today */
+    get_user_input();
     
-    /* check if day ahead prices is available */
-    
-        /* if so, do calculations on tomorrow */
+    doCalculations();
 }
 
 /* Does the calculations on the received data, takes in a day struct. */
-void doCalculations(void)
+void do_calculations(void)
 {
-    /* add fees */
+    /* TODO: Add fees */
+    
+    present();
 }
 
 /* This presents the received data to the user. */
 void present(void)
 {
-    
+    /* TODO: Present the data */
 }
