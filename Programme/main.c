@@ -18,7 +18,8 @@
  ===============================================================================
  */
 
-#include "./H_files/main.h"
+#include "./H_files/user_com.h"
+#include "./H_files/energy.h"
 
 int main(void)
 {

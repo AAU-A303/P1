@@ -19,16 +19,6 @@
 
 #include "./H_files/user_com.h"
 
-/* FOR DEBUGGING ONLY!!! TODO: DELETE FUNCTION WHEN FULLY IMPLEMENTED */
-int main (void)
-{
-    do {
-        get_user_input();
-    } while (has_new_inquiry());
-    
-    return EXIT_SUCCESS;
-}
-
 /* Gets the user input for date and time. */
 void get_user_input(void)
 {
