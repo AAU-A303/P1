@@ -21,5 +21,15 @@
 #define LOCALISATION_H
 
 #include <stdlib.h>
+#include <stdio.h>
+#include <strings.h>
+
+enum languages {
+    english,
+    danish
+};
+
+void prn_debug(char string[]);
+void print_string_from_id(enum languages language, char target_id[]);
 
 #endif /* LOCALISATION_H */
