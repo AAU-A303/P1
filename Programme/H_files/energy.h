@@ -25,20 +25,22 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>               /* for doing math */
-#include <time.h>               /* for working with time */
-#include <string.h>             /* for working with strings */
+#include <math.h>                           /* for doing math */
+#include <time.h>                           /* for working with time */
+#include <string.h>                         /* for working with strings */
 #include "user_com.h"
 #include "data.h"
 /* Symbolic Constants */
 
-#define TRUE  1                 /* boolean value for true */
-#define FALSE 0                 /* boolean value for false */
+#define TRUE  1                             /* boolean value for true */
+#define FALSE 0                             /* boolean value for false */
+
+#define TRANSPORT_FEE 0                     /*  */
 
 /* Function Prototypes */
 
-void setup(void);               /* input: none, output: none */
-void do_calculations(Price_data *data);     /* input: none, output: none */
-void present(void);             /* input: none, output: none */
+void setup(void);                           /* input: none, output: none */
+void do_calculations(User_data *data);      /* input: none, output: none */
+void present(void);                         /* input: none, output: none */
 
 #endif /* ENERGY_H */
