@@ -31,7 +31,7 @@ void setup(void)
 }
 
 /* Does the calculations on the received data, takes in a day struct. */
-void do_calculations(void)
+void do_calculations(Price_data data)
 {
     /* TODO: Add fees */
     
