@@ -7,36 +7,38 @@ CFLAGS = -ansi -pedantic -Wall
 #---------------------------------------------------------------------
 ifeq ($(OS),Windows_NT)
 	MD := mkdir
-	RM := rm
+	RM := del /Q /S *.o
 	CC := gcc
 	EXTENSION := .exe
 else
 	MD := mkdir
-	RM := rm
+	RM := rm -f *.o
 	CC := gcc-10
 	EXTENSION := .out
 endif
-
 #---------------------------------------------------------------------
 # Variabels
 #---------------------------------------------------------------------
-build_folder = build/
+build_folder = Build/
 program_folder = Programme/
+target = main
+dependencies = data energy localisation con_manager user_com
+obj = \
+	$(build_folder)data.o \
+	$(build_folder)energy.o \
+	$(build_folder)localisation.o \
+	$(build_folder)con_manager.o \
+	$(build_folder)user_com.o
 #---------------------------------------------------------------------
 # build functions
 #---------------------------------------------------------------------
-all:
-	$(CC) $(CFLAGS) -c $(program_folder)data.c -o $(build_folder)data.o
-	$(CC) $(CFLAGS) -c $(program_folder)energy.c -o $(build_folder)energy.o
-	$(CC) $(CFLAGS) -c $(program_folder)user_com.c -o $(build_folder)user_com.o
-	$(CC) $(CFLAGS) -c $(program_folder)localisation.c -o $(build_folder)localisation.o
-	$(CC) $(CFLAGS) -c $(program_folder)con_manager.c -o $(build_folder)con_manager.o
-	$(CC) $(CFLAGS) -c $(program_folder)main.c -o $(build_folder)main.o
-	
-	$(CC) $(CFLAGS) \
-		$(build_folder)localisation.o \
-		$(build_folder)data.o \
-		$(build_folder)energy.o \
-		$(build_folder)user_com.o \
-		$(build_folder)con_manager.o \
-		$(program_folder)main.c -o $(build_folder)main$(EXTENSION)
+all: $(target)
+
+main: $(dependencies)
+	$(CC) $(CFLAGS) $(obj) $(program_folder)$@.c -o $(build_folder)$@$(EXTENSION)
+
+$(dependencies):
+	$(CC) $(CFLAGS) -c $(program_folder)$@.c -o $(build_folder)$@.o
+
+clean:	
+	$(RM)
