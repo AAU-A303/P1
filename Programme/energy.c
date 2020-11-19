@@ -24,17 +24,26 @@
 void setup(void)
 {
     /* TODO: Instantiate Day struct and pass it to get_user_input */
-    
+
     get_user_input();
-    
+
     do_calculations();
 }
 
 /* Does the calculations on the received data, takes in a day struct. */
-void do_calculations(Price_data data)
+void do_calculations(void)
 {
     /* TODO: Add fees */
-    
+
+    float transport_afgifter,elpris,samlet pris;
+
+    elpris = 0.2464; /* Elpris koster 0.2464kr. eller 24.64øre */
+    transport_afgifter  = 1.61; /* transport_afgifter koster 1.61kr/kWh*/
+    samlet_pris = 1.86 /*samlet pris i alt */
+
+
+
+
     present();
 }
 
