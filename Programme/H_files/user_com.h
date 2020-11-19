@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "data.h"
-
+#include "localisation.h"
 /* Symbolic Constants */
 
 #define TRUE  1                 /* boolean value for true */
@@ -51,7 +51,7 @@
 /* Function Prototypes */
 
 /* user_com.c */
-void get_user_input(Price_data *data);      /* input: none, output: none */
+void get_user_input(User_data *data);      /* input: none, output: none */
 void set_date(int*, int*, int); /* input: day, month, year, output: none */
 void set_time(int*);            /* input: hour, output: none */
 int days_in_month(int, int);    /* input: month, year, output: num of days */
