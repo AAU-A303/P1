@@ -1,0 +1,3 @@
+Continue,Would you like to check another day? Enter Y or N> ,Vil du teste en anden dag? Tast Y for ja og N for nej> .
+Enter_date,Please enter the current date (DD/MM format)> ,Indtast den nuværende dato (DD/MM format)> .
+Enter_hour,Please enter the current hour (HH format)> ,Indtast den nuværende time (TT format)> .
