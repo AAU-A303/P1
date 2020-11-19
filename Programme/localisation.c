@@ -32,15 +32,15 @@ void print_string_from_id(enum languages language, char target_id[])
     char line[1024];
     char filepath[] = "./Programme/dataset/localisation.txt";
     FILE *stream = fopen(filepath, "r");
-    if(stream != NULL){
+    if(stream != NULL)
+    {
         while (fgets(line, 1024, stream))
         {
             sscanf(line, "%[^,],%[^,],%[^.].", id, english, danish);
-            if (strcmp(target_id, id) == 0){
+            if (strcmp(target_id, id) == 0)
+            {
                 prn_debug(language == 0 ? english : danish);    /* TODO: call the console manager instead */
             }
         }
-    } else {
-        printf("Failed to open file \"%s\"\n\n", filepath);
-    }
+    } else { printf("Failed to open file \"%s\"\n\n", filepath); }
 }
