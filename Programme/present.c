@@ -24,10 +24,6 @@
 // eller dyr og anvende de functioner som allerede er lavet!!!
 
 #include "./H_files/data.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
 
 #define LOW_PRICE 4
 
@@ -46,7 +42,7 @@ int main(void)
                                     2.01, 3.05, 6.91, 9.99, 7.10, 8.24};*/
     
     /*char input_data_1[120] = "2.01 3.05 6.91 9.99 7.10 8.24 2.01 3.05 6.91 9.99 7.10 8.24 2.01 3.05 6.91 9.99 7.10 8.24 2.01 3.05 6.91 9.99 7.10 8.24";*/
-    
+
     /*print_price_double(input_data);
     print_price_string(input_data_1);*/
 
