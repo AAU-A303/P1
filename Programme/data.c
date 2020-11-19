@@ -19,27 +19,8 @@
  */
 
 #include "./H_files/data.h"
-/*
-    Price_data price_data;
-    Date today;
-    today.day = 5;
-    today.month = 11;
-    today.year = 2020;
 
-        We call the function get_data with the file path "./dataset/prices_2020_hourly_dkk.txt".
-        And with the pointer to "energy_price_index", this ensures we know how many elements the
-        "energy_price_array" contains.
-
-    price_data = get_data("./Programme/dataset/prices_2020_hourly_dkk.txt", today);
-
-        Here we call the print function that prints out the elements of the entire array.
-    
-    print_price_data(price_data);
-
-    return EXIT_SUCCESS;
-*/
-
-Price_data get_data(char filepath[], Date target_date) {
+void get_data(char filepath[], User_data *user_data, Date target_date) {
     float price;
     char date_string[64];
     char line[128];
@@ -47,7 +28,6 @@ Price_data get_data(char filepath[], Date target_date) {
     Date current_date = {0};
     Energy_price today = {0};
     Energy_price tomorrow = {0};
-    Price_data price_data = {0};
     FILE* file;
     /*
         "fopen" opens a file given a "filepath" and the "mode" of which to open the file.
@@ -99,21 +79,16 @@ Price_data get_data(char filepath[], Date target_date) {
     }
     /*
         Now that we have populated the "Energy_price" struct "today" and "tomorrow".
-        we can add them to "price_data.today" and "price_data.tomorrow".
+        we can add them to "user_data->today" and "user_data->tomorrow".
     */
-    price_data.today = today;
-    price_data.tomorrow = tomorrow;
+    user_data->today = today;
+    user_data->tomorrow = tomorrow;
     /*
         It's important to remember to close the file after opening it.
         The result of not closing the file is that both other programs and this program
         will be unable to open the file again until this program exits.
     */
     fclose(file);
-    /*
-        The last thing we do is return the output parameter "energy_price_index".
-        And return the "energy_price_array" as a return value.
-    */
-    return price_data;
 }
 
 void date_set(Date *date, char date_string[]){
@@ -168,8 +143,8 @@ void print_energy_price(Energy_price energy_price){
     }
 }
 
-void print_price_data(Price_data price_data){
-    print_energy_price(price_data.today);
-    print_energy_price(price_data.tomorrow);
-    printf("Access to tomorrow: %d \n",price_data.access_tomorrow);
+void print_user_data(User_data user_data){
+    print_energy_price(user_data.today);
+    print_energy_price(user_data.tomorrow);
+    printf("Access to tomorrow: %d \n",user_data.access_tomorrow);
 }
