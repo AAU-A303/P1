@@ -20,28 +20,24 @@
 #include "./H_files/user_com.h"
 
 /* Gets the user input for date and time. */
-void get_user_input(void)
+void get_user_input(Price_data *data)
 {
+    Date today = { 0 };
     int day, month, year = CURRENT_YEAR;
     int hour;
     
     set_date(&day, &month, year);
-    printf("\nThe chosen date is: %.02d/%.02d, %d\n", day, month, year);
     
     set_time(&hour);
-    printf("\nAccording to the chosen time, the clock is: %.02d:00\n", hour);
     
-    if (hour > DAY_AHEAD)
-    {
-        /* TODO: If so, set is_available of the struct to TRUE */
-        /* TODO: Populate the day_ahead array with the data for the next day */
-        printf("\nDay Ahead prices are available!\n");
-    }
-    else
-    {
-        /* TODO: Else, set is_available of the struct to FALSE */
-        printf("\nDay Ahead prices are NOT yet available...\n");
-    }
+    today.day = day;
+    today.month = month;
+    today.year = year;
+
+    *data = get_data("./Programme/dataset/prices_2020_hourly_dkk.txt", today);
+    
+    if (hour > DAY_AHEAD) { data->access_tomorrow = TRUE; }
+    else { data->access_tomorrow = FALSE; }
 }
 
 /* Set the temp date for the prototype. */

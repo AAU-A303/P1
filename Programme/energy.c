@@ -23,15 +23,15 @@
 /* Responsible for doing all of the calculations. */
 void setup(void)
 {
-    /* TODO: Instantiate Day struct and pass it to get_user_input */
+    Price_data data = { 0 };
 
-    get_user_input();
-
-    do_calculations();
+    get_user_input(&data);
+    
+    do_calculations(&data);
 }
 
 /* Does the calculations on the received data, takes in a day struct. */
-void do_calculations(void)
+void do_calculations(Price_data *data)
 {
     /* TODO: Add fees */
 
@@ -41,14 +41,11 @@ void do_calculations(void)
     transport_afgifter  = 1.61; /* transport_afgifter koster 1.61kr/kWh*/
     samlet_pris = 1.86 /*samlet pris i alt */
 
-
-
-
     present();
 }
 
 /* This presents the received data to the user. */
-void present(void)
+void present()
 {
     /* TODO: Present the data */
 }
