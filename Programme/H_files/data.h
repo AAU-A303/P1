@@ -25,7 +25,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h> 
-
+#include "localisation.h"
 
 /* Symbolic Constants */
 
@@ -50,17 +50,18 @@ typedef struct {
     Energy_price today;
     Energy_price tomorrow;
     int access_tomorrow;
-} Price_data;
+    enum languages language;
+} User_data;
 
 /* Function Prototypes */
 
-Price_data get_data(char filepath[], Date target_date);
+void get_data(char filepath[], User_data *user_data, Date target_date);
 void date_set(Date *date, char date_string[]);
 int date_equals(Date *date_a, Date *date_b);
 int date_diffrence_in_days(Date *date_a, Date *date_b);
 
 void print_date(Date date);
 void print_energy_price(Energy_price energy_price);
-void print_price_data(Price_data price_data);
+void print_user_data(User_data user_data);
 
 #endif /* DATA_H */

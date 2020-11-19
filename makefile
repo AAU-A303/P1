@@ -29,6 +29,12 @@ all:
 	$(CC) $(CFLAGS) -c $(program_folder)data.c -o $(build_folder)data.o
 	$(CC) $(CFLAGS) -c $(program_folder)energy.c -o $(build_folder)energy.o
 	$(CC) $(CFLAGS) -c $(program_folder)user_com.c -o $(build_folder)user_com.o
+	$(CC) $(CFLAGS) -c $(program_folder)localisation.c -o $(build_folder)localisation.o
 	$(CC) $(CFLAGS) -c $(program_folder)main.c -o $(build_folder)main.o
 	
-	$(CC) $(CFLAGS) $(build_folder)data.o $(build_folder)energy.o $(build_folder)user_com.o $(program_folder)main.c -o $(build_folder)main$(EXTENSION)
+	$(CC) $(CFLAGS) \
+		$(build_folder)localisation.o \
+		$(build_folder)data.o \
+		$(build_folder)energy.o \
+		$(build_folder)user_com.o \
+		$(program_folder)main.c -o $(build_folder)main$(EXTENSION)

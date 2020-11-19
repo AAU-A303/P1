@@ -20,11 +20,13 @@
 #include "./H_files/user_com.h"
 
 /* Gets the user input for date and time. */
-void get_user_input(Price_data *data)
+void get_user_input(User_data *data)
 {
     Date today = { 0 };
     int day, month, year = CURRENT_YEAR;
     int hour;
+
+    /* Set language */
     
     set_date(&day, &month, year);
     
@@ -34,11 +36,11 @@ void get_user_input(Price_data *data)
     today.month = month;
     today.year = year;
 
-    *data = get_data("./Programme/dataset/prices_2020_hourly_dkk.txt", today);
+    get_data("./Programme/dataset/prices_2020_hourly_dkk.txt", data, today);
     
     if (hour > DAY_AHEAD) { data->access_tomorrow = TRUE; }
     else { data->access_tomorrow = FALSE; }
-    print_price_data(*data);
+    print_user_data(*data);
 }
 
 /* Set the temp date for the prototype. */
@@ -47,7 +49,8 @@ void set_date(int *day, int *month, int year)
     int is_valid = FALSE;
     
     do {
-        printf("Please enter the current date (DD/MM format): ");
+        print_string_from_id(0,"Enter_date");       /* TODO: Change when language select has been implemented */
+        /* printf("Please enter the current date (DD/MM format)> "); */
         scanf(" %d/%d", day, month);
         
         /* TODO: remove the first two if statements after Jan 1st */
@@ -67,7 +70,8 @@ void set_time(int *hour)
     int is_valid = FALSE;
     
     do {
-        printf("Please enter the current hour (HH format)> ");
+        print_string_from_id(0,"Enter_hour");
+        /* printf("Please enter the current hour (HH format)> "); */
         scanf(" %d", hour);
         if(*hour < DAY_HOURS && *hour >= 0) is_valid = TRUE;
     } while (!is_valid);
@@ -106,7 +110,8 @@ int has_new_inquiry()
     
     do
     {
-        printf("\nWould you like to check another day? Enter Y or N> ");
+        print_string_from_id(0, "Continue");
+        /* printf("\nWould you like to check another day? Enter Y or N> "); */
         scanf(" %c", &input);
         
         if ((input != 'y') || (input != 'Y') ||
