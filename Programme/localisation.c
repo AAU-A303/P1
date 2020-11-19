@@ -19,31 +19,28 @@
 
 #include "./H_files/localisation.h"
 
-/*  */
-
-int main()
+void prn_debug(char string[])
 {
-    FILE *stream = fopen("./localisation/localisation.csv", "r");
-
-    char line[1024];
-    while (fgets(line, 1024, stream))
-    {
-        char *tmp = strdup(line);
-        printf("Field 3 would be %s\n", getfield(tmp, 3));
-        // NOTE strtok clobbers tmp
-        free(tmp);
-    }
+    printf("%s", string);
 }
 
-const char *getfield(char *line, int num)
+void print_string_from_id(enum languages language, char target_id[])
 {
-    const char *tok;
-    for (tok = strtok(line, ";");
-            tok && *tok;
-            tok = strtok(NULL, ";\n"))
-    {
-        if (!--num)
-            return tok;
+    char id[64];
+    char english[256];
+    char danish[256];
+    char line[1024];
+    char filepath[] = "./Programme/dataset/localisation.txt";
+    FILE *stream = fopen(filepath, "r");
+    if(stream != NULL){
+        while (fgets(line, 1024, stream))
+        {
+            sscanf(line, "%[^,],%[^,],%[^.].", id, english, danish);
+            if (strcmp(target_id, id) == 0){
+                prn_debug(language == 0 ? english : danish);    /* TODO: call the console manager instead */
+            }
+        }
+    } else {
+        printf("Failed to open file \"%s\"\n\n", filepath);
     }
-    return NULL;
 }
