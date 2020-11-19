@@ -38,6 +38,7 @@ void get_user_input(Price_data *data)
     
     if (hour > DAY_AHEAD) { data->access_tomorrow = TRUE; }
     else { data->access_tomorrow = FALSE; }
+    print_price_data(*data);
 }
 
 /* Set the temp date for the prototype. */
@@ -66,7 +67,7 @@ void set_time(int *hour)
     int is_valid = FALSE;
     
     do {
-        printf("Please enter the current hour (HH format): ");
+        printf("Please enter the current hour (HH format)> ");
         scanf(" %d", hour);
         if(*hour < DAY_HOURS && *hour >= 0) is_valid = TRUE;
     } while (!is_valid);
