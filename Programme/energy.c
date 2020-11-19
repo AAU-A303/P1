@@ -34,7 +34,13 @@ void setup(void)
 void do_calculations(Price_data *data)
 {
     /* TODO: Add fees */
-    
+
+    float transport_afgifter,elpris,samlet_pris;
+
+    elpris = 0.2464; /* Elpris koster 0.2464kr. eller 24.64øre */
+    transport_afgifter  = 1.61; /* transport_afgifter koster 1.61kr/kWh*/
+    samlet_pris = 1.86 /*samlet pris i alt */
+
     present();
 }
 
