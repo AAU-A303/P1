@@ -22,55 +22,71 @@
 /* Gets the user input for date and time. */
 void get_user_input(User_data *data)
 {
-    Date today = { 0 };
-    int day, month, year = CURRENT_YEAR;
     int hour;
 
-    /* Set language */
-    
-    set_date(&day, &month, year);
-    
-    set_time(&hour);
-    
-    today.day = day;
-    today.month = month;
-    today.year = year;
+    set_language(data);
+    set_date(data);
+    set_time(&hour, data);
 
-    get_data("./Programme/dataset/prices_2020_hourly_dkk.txt", data, today);
+    get_data("./Programme/dataset/prices_2020_hourly_dkk.txt", data, data->today.date);
     
-    if (hour > DAY_AHEAD) { data->access_tomorrow = TRUE; }
+    if (hour >= DAY_AHEAD) { data->access_tomorrow = TRUE; }
     else { data->access_tomorrow = FALSE; }
     print_user_data(*data);
 }
 
-/* Set the temp date for the prototype. */
-void set_date(int *day, int *month, int year)
+/* Set the language for the prototype. */
+void set_language(User_data *data)
 {
     int is_valid = FALSE;
+    int answer = -1;
+
+    print_string_from_id(data->language, "Supported_languages", 1);
+    print_string("\t0: English", 1);
+    print_string("\t1: Dansk", 1);
+
+    do {
+        print_string_from_id(data->language, "Select_language", 0);
+        scanf(" %d", &answer);
+        if(answer >= 0 && answer < language_count) is_valid = TRUE;
+    } while (!is_valid);
+
+    data->language = answer;
+}
+
+/* Set the temp date for the prototype. */
+void set_date(User_data *data)
+{
+    int is_valid = FALSE;
+    int day, month, year = CURRENT_YEAR;
     
     do {
-        print_string_from_id(0,"Enter_date");       /* TODO: Change when language select has been implemented */
+        print_string_from_id(data->language, "Select_date", 0);
         /* printf("Please enter the current date (DD/MM format)> "); */
-        scanf(" %d/%d", day, month);
+        scanf(" %d/%d", &day, &month);
         
         /* TODO: remove the first two if statements after Jan 1st */
-        if(*month <= 11)
+        if(month <= 11)
         {
-            if (*month == 11 && *day > 5) { continue; }
+            if (month == 11 && day > 5) { continue; }
             
-            if (*day <= days_in_month(*month, CURRENT_YEAR) && *day > 0)
+            if (day <= days_in_month(month, CURRENT_YEAR) && day > 0)
                 is_valid = TRUE;
         }
     } while (!is_valid);
+
+    data->today.date.day = day; 
+    data->today.date.month = month; 
+    data->today.date.year = year;
 }
 
 /* Set the temp time for the prototype. */
-void set_time(int *hour)
+void set_time(int *hour, User_data *data)
 {
     int is_valid = FALSE;
     
     do {
-        print_string_from_id(0,"Enter_hour");
+        print_string_from_id(data->language, "Select_hour", 0);
         /* printf("Please enter the current hour (HH format)> "); */
         scanf(" %d", hour);
         if(*hour < DAY_HOURS && *hour >= 0) is_valid = TRUE;
@@ -103,14 +119,14 @@ int is_leap_year(int year)
 }
 
 /* Returns whether the user wants to check another day or exit the programme. */
-int has_new_inquiry()
+int has_new_inquiry(User_data data)
 {
     char input;
     int wrong_input = TRUE;
     
     do
     {
-        print_string_from_id(0, "Continue");
+        print_string_from_id(data.language, "Continue", 0);
         /* printf("\nWould you like to check another day? Enter Y or N> "); */
         scanf(" %c", &input);
         

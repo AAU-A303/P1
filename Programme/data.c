@@ -20,6 +20,7 @@
 
 #include "./H_files/data.h"
 
+
 void get_data(char filepath[], User_data *user_data, Date target_date) {
     float price;
     char date_string[64];
@@ -127,6 +128,16 @@ int date_equals(Date *date_a, Date *date_b){
             }
         }
     } return FALSE;
+}
+
+void reset_energy_price(Energy_price *energy_price){
+    int i = 0;
+    energy_price->date.year = 0;
+    energy_price->date.month = 0;
+    energy_price->date.day = 0;
+    for(i = 0; i < 24; i++){
+        energy_price->prices[i] = 0;
+    }
 }
 
 void print_date(Date date){

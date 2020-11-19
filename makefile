@@ -30,6 +30,7 @@ all:
 	$(CC) $(CFLAGS) -c $(program_folder)energy.c -o $(build_folder)energy.o
 	$(CC) $(CFLAGS) -c $(program_folder)user_com.c -o $(build_folder)user_com.o
 	$(CC) $(CFLAGS) -c $(program_folder)localisation.c -o $(build_folder)localisation.o
+	$(CC) $(CFLAGS) -c $(program_folder)con_manager.c -o $(build_folder)con_manager.o
 	$(CC) $(CFLAGS) -c $(program_folder)main.c -o $(build_folder)main.o
 	
 	$(CC) $(CFLAGS) \
@@ -37,4 +38,5 @@ all:
 		$(build_folder)data.o \
 		$(build_folder)energy.o \
 		$(build_folder)user_com.o \
+		$(build_folder)con_manager.o \
 		$(program_folder)main.c -o $(build_folder)main$(EXTENSION)

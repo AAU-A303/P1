@@ -39,8 +39,8 @@
 
 /* Function Prototypes */
 
-void setup(void);                           /* input: none, output: none */
-void do_calculations(User_data *data);      /* input: none, output: none */
-void present(void);                         /* input: none, output: none */
+void setup(User_data*);                      /* input: data, output: none */
+void do_calculations(User_data*);      		 /* input: data, output: none */
+void present(void);                          /* input: none, output: none */
 
 #endif /* ENERGY_H */

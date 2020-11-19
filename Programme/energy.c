@@ -21,13 +21,15 @@
 #include "./H_files/energy.h"
 
 /* Responsible for doing all of the calculations. */
-void setup(void)
-{
-    User_data data = { 0 };
+void setup(User_data *data)
+{    
+    reset_energy_price(&data->today);
+    reset_energy_price(&data->tomorrow);
 
-    get_user_input(&data);
+    get_user_input(data);
     
-    do_calculations(&data);
+    do_calculations(data);
+
 }
 
 /* Does the calculations on the received data, takes in a day struct. */

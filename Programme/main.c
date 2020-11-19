@@ -23,11 +23,12 @@
 
 int main(void)
 {
+    User_data data = { 0 };
     printf("\nWelcome...\n");
     
     do {
-        setup();
-    } while (has_new_inquiry());
+        setup(&data);
+    } while (has_new_inquiry(data));
     
     printf("Thank you for trying out our prototype!\n");
 

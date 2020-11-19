@@ -51,11 +51,12 @@
 /* Function Prototypes */
 
 /* user_com.c */
-void get_user_input(User_data *data);      /* input: none, output: none */
-void set_date(int*, int*, int); /* input: day, month, year, output: none */
-void set_time(int*);            /* input: hour, output: none */
-int days_in_month(int, int);    /* input: month, year, output: num of days */
-int is_leap_year(int);          /* input: year, output: boolean */
-int has_new_inquiry(void);      /* input: none, output: boolean */
+void get_user_input(User_data*);	/* input: data, output: none */
+void set_language(User_data*);		/* input: data, output: none */
+void set_date(User_data*); 			/* input: day, month, year, output: none */
+void set_time(int*, User_data*);	/* input: hour, output: none */
+int days_in_month(int, int);    	/* input: month, year, output: num of days */
+int is_leap_year(int);          	/* input: year, output: boolean */
+int has_new_inquiry(User_data);    /* input: data, output: boolean */
 
 #endif /* USER_COM_H */

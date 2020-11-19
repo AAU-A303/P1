@@ -24,7 +24,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h> 
+#include <time.h>
 #include "localisation.h"
 
 /* Symbolic Constants */
@@ -33,6 +33,7 @@
 #define FALSE 0                 /* boolean value for false */
 #define DAY_HOURS 24            /* the amount of hours in a day */
 #define DAY_IN_SECONDS 86400    /* the amount of seconds in a day */
+
 /* Structs */
 
 typedef struct {
@@ -55,13 +56,14 @@ typedef struct {
 
 /* Function Prototypes */
 
-void get_data(char filepath[], User_data *user_data, Date target_date);
-void date_set(Date *date, char date_string[]);
-int date_equals(Date *date_a, Date *date_b);
-int date_diffrence_in_days(Date *date_a, Date *date_b);
+void get_data(char[], User_data*, Date);
+void date_set(Date*, char[]);
+int date_equals(Date*, Date*);
+int date_diffrence_in_days(Date*, Date*);
+void reset_energy_price(Energy_price*);
 
-void print_date(Date date);
-void print_energy_price(Energy_price energy_price);
-void print_user_data(User_data user_data);
+void print_date(Date);
+void print_energy_price(Energy_price);
+void print_user_data(User_data);
 
 #endif /* DATA_H */

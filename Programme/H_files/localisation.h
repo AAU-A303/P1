@@ -23,13 +23,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <strings.h>
+#include "con_manager.h"
 
 enum languages {
     english,
-    danish
+    danish,
+    language_count
 };
 
-void prn_debug(char string[]);
-void print_string_from_id(enum languages language, char target_id[]);
+void print_string_from_id(enum languages, char[], int);
 
 #endif /* LOCALISATION_H */
