@@ -24,13 +24,13 @@
 int main(void)
 {
     User_data data = { 0 };
-    printf("\nWelcome...\n");
+    print_string_from_id(data.language, "Welcome", 1);
     
     do {
         setup(&data);
     } while (has_new_inquiry(data));
     
-    printf("Thank you for trying out our prototype!\n");
+    print_string_from_id(data.language, "Goodbye", 1);
 
     return EXIT_SUCCESS;
 }
