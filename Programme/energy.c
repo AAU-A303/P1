@@ -42,7 +42,6 @@ void do_calculations(User_data *data)
         convert_kwh(&data->today.prices[i]);
         add_fees(&data->today.prices[i]);
         
-        
         convert_kwh(&data->tomorrow.prices[i]);
         add_fees(&data->tomorrow.prices[i]);
     }
@@ -52,9 +51,6 @@ void do_calculations(User_data *data)
 
 /* This is responsible for coverting the current price to kwh */
 void convert_kwh(float *price) { *price = *price / MWH_TO_KWH; }
-
-/* This is responsible for coverting the current price to Danish øre */
-void convert_currency(float *price) { *price = *price * DKK_TO_OERE; }
 
 /* This is responsible for adding the fees to the current price */
 void add_fees(float *price) { *price += TRANSPORT_FEE; }
