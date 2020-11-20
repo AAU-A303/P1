@@ -38,4 +38,5 @@ void print_string_from_id(enum languages language, char target_id[], int needs_n
             }
         }
     } else { printf("Failed to open file \"%s\"\n\n", filepath); }
+    fclose(stream);
 }
