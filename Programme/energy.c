@@ -34,13 +34,10 @@ void setup(User_data *data)
 /* Does the calculations on the received data, takes in a day struct. */
 void do_calculations(User_data *data)
 {
-    int i;
-    
-    /* TODO: Add fees */
+    int i;    
     
     for (i = 0; i < DAY_HOURS; i++) {
-        convert_kwh(&data->today.prices[i]);
-        add_fees(&data->today.prices[i]);
+        convert_kwh(&data->today.prices[i]); add_fees(&data->today.prices[i]);
         
         convert_kwh(&data->tomorrow.prices[i]);
         add_fees(&data->tomorrow.prices[i]);
