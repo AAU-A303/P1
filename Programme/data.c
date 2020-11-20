@@ -20,7 +20,6 @@
 
 #include "./H_files/data.h"
 
-
 void get_data(char filepath[], User_data *user_data, Date target_date) {
     float price;
     char date_string[64];
@@ -135,7 +134,7 @@ void reset_energy_price(Energy_price *energy_price){
     energy_price->date.year = 0;
     energy_price->date.month = 0;
     energy_price->date.day = 0;
-    for(i = 0; i < 24; i++){
+    for(i = 0; i < DAY_HOURS; i++){
         energy_price->prices[i] = 0;
     }
 }
@@ -149,7 +148,7 @@ void print_energy_price(Energy_price energy_price){
     printf("Date: ");
     print_date(energy_price.date);
     printf("\n");
-    for(j = 0; j < 24; j++){
+    for(j = 0; j < DAY_HOURS; j++){
         printf("\tHour: %d Price: %.2f\n", j, energy_price.prices[j]);
     }
 }

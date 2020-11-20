@@ -35,12 +35,17 @@
 #define TRUE  1                             /* boolean value for true */
 #define FALSE 0                             /* boolean value for false */
 
-#define TRANSPORT_FEE 0                     /*  */
+#define MWH_TO_KWH 1000                     /* divide, to go from mWh to kWh */
+#define DKK_TO_OERE 100                     /* multiply, to change currency */
+#define TRANSPORT_FEE 1.61                  /* transport fee, pr. kWh */
 
 /* Function Prototypes */
 
 void setup(User_data*);                      /* input: data, output: none */
 void do_calculations(User_data*);      		 /* input: data, output: none */
-void present(void);                          /* input: none, output: none */
+void convert_kwh(float*);                    /* input: price, output: none */
+void convert_currency(float*);               /* input: price, output: none */
+void add_fees(float*);                       /* input: price, output: none */
+void present(User_data*);                    /* input: data, output: none */
 
 #endif /* ENERGY_H */
