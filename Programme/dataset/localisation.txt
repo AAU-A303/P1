@@ -1,7 +1,7 @@
-Welcome,Welcome to our prototype!,Velkommen til vores prototype! .
-Supported_languages,Supported languages: ,Tilgaengelige sprog: .
-Select_language,Please select a language> ,Vaelg et sprog> .
-Continue,Would you like to check another day? Enter Y or N> ,Vil du teste en anden dag? Tast Y for ja og N for nej> .
-Select_date,Please enter the current date (DD/MM format)> ,Indtast den nuvaerende dato (DD/MM format)> .
-Select_hour,Please enter the current hour (HH format)> ,Indtast den nuvaerende time (TT format)> .
-Goodbye,Thank you for trying out our prototype!,Tak fordi du tog dig tid til at teste vores prototype! .
+Welcome,Welcome to our prototype!,Velkommen til vores prototype!,Tervetuloa prototyyppiin!,
+Supported_languages,Supported languages: ,Tilg‘ngelige sprog: ,Tuetut kielet: ,
+Select_language,Please select a language> ,V‘lg et sprog> ,Valitse kieli> ,
+Continue,Would you like to check another day? Enter Y or N> ,Vil du teste en anden dag? Tast Y for ja og N for nej> ,Haluatko tarkistaa toisen p„iv„n? Sy”t„ Y tai N> ,
+Select_date,Please enter the current date (DD/MM format)> ,Indtast den nuv‘rende dato (DD/MM format)> ,Anna nykyinen p„iv„m„„r„ (PP / KK-muoto)> ,
+Select_hour,Please enter the current hour (HH format)> ,Indtast den nuv‘rende time (TT format)> ,Anna nykyinen tunti (HH-muoto)> ,
+Goodbye,Thank you for trying out our prototype!,Tak fordi du tog dig tid til at teste vores prototype! ,Kiitos kokeilemisesta!,
