@@ -26,6 +26,7 @@
 #include "con_manager.h"
 
 #define LINE_LENGTH 2048
+
 #if defined(_WIN32)
     #define LOCALISATION_FILE "./Programme/dataset/localisation_windows.txt"
 #else

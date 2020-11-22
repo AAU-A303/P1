@@ -30,8 +30,7 @@ void print_string_from_id(enum languages language, char target_id[], int needs_n
     int next_index = 0;
     int translation_length = 0;
     
-    char filepath[] = "./Programme/dataset/localisation.txt";
-    FILE *stream = fopen(filepath, "r");
+    FILE *stream = fopen(LOCALISATION_FILE, "r");
     if(stream != NULL){
         while (fgets(line, LINE_LENGTH, stream)){
             get_localisation_indexes(language_indexes, line);
@@ -47,7 +46,7 @@ void print_string_from_id(enum languages language, char target_id[], int needs_n
                 print_string(languages[language], needs_newline);
             }
         }
-    } else { printf("Failed to open file \"%s\"\n\n", filepath); }
+    } else { printf("Failed to open file \"%s\"\n\n", LOCALISATION_FILE); }
     fclose(stream);
 }
 
