@@ -25,12 +25,18 @@
 #include <strings.h>
 #include "con_manager.h"
 
+#define LINE_LENGTH 2048
+#define LOCALISATION_FILE "./Programme/dataset/localisation.txt"
+
 enum languages {
     english,
     danish,
+    finnish,
     language_count
 };
 
 void print_string_from_id(enum languages, char[], int);
+void get_localisation_indexes(int[], char[]);
+
 
 #endif /* LOCALISATION_H */
