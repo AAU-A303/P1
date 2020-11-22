@@ -44,7 +44,7 @@ void set_language(User_data *data)
     print_string_from_id(data->language, "Supported_languages", 1);
     print_string("\t0: English", 1);
     print_string("\t1: Dansk", 1);
-
+    print_string("\t2: Suomen kieli", 1);
     do {
         print_string_from_id(data->language, "Select_language", 0);
         scanf(" %d", &answer);
