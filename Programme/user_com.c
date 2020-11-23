@@ -20,7 +20,7 @@
 #include "./H_files/user_com.h"
 
 /* Constants */
-char* language_names[] = {"English","Dansk","Suomen kieli"};
+char* language_names[] = {"English","Dansk","Française","Suomen kieli"};
 
 /* Gets the user input for date and time. */
 void get_user_input(User_data *data)

@@ -27,15 +27,12 @@
 
 #define LINE_LENGTH 2048
 
-#if defined(_WIN32)
-    #define LOCALISATION_FILE "./Programme/dataset/localisation_windows.txt"
-#else
-    #define LOCALISATION_FILE "./Programme/dataset/localisation_other.txt"
-#endif
+#define LOCALISATION_FILE "./Programme/dataset/localisation.txt"
 
 enum languages {
     english,
     danish,
+    french,
     finnish,
     language_count
 };
