@@ -28,6 +28,6 @@
 
 /* Function Prototypes */
 
-void print_string(const char*, ...);
+void print_string(const char*, int);
 
 #endif /* CON_MANAGER_H */

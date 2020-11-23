@@ -44,10 +44,12 @@ void set_language(User_data *data)
     int is_valid = FALSE;
     int answer = -1;
     int i = 0;
+    char language[128];
 
     print_string_from_id(data->language, "Supported_languages", 1);
     for(i = 0; i < language_count; i++){
-        print_string("\t%d: %s\n", i, language_names[i]);
+        sprintf(language, "\t%d: %s\n", i, language_names[i]);
+        print_string(language, 0);
     }
     do {
         print_string_from_id(data->language, "Select_language", 0);

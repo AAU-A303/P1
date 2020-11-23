@@ -43,7 +43,7 @@ void print_string_from_id(enum languages language, char target_id[], int needs_n
                     strncpy(languages[language_index], &line[current_index], translation_length);
                     languages[language_index][translation_length] = '\0';
                 }
-                if(needs_newline) {print_string("%s\n",languages[language]);} else {print_string("%s",languages[language]);}
+                print_string(languages[language], needs_newline);
             }
         }
     } else { printf("Failed to open file \"%s\"\n\n", LOCALISATION_FILE); }
