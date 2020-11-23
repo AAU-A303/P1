@@ -19,6 +19,9 @@
 
 #include "./H_files/user_com.h"
 
+/* Constants */
+char* language_names[] = {"English","Dansk","Suomen kieli"};
+
 /* Gets the user input for date and time. */
 void get_user_input(User_data *data)
 {
@@ -28,7 +31,7 @@ void get_user_input(User_data *data)
     set_date(data);
     set_time(&hour, data);
 
-    get_data("./Programme/dataset/prices_2020_hourly_dkk.txt", data, data->today.date);
+    get_data(data, data->today.date);
     
     if (hour >= DAY_AHEAD) { data->access_tomorrow = TRUE; }
     else { data->access_tomorrow = FALSE; }
@@ -40,11 +43,12 @@ void set_language(User_data *data)
 {
     int is_valid = FALSE;
     int answer = -1;
+    int i = 0;
 
     print_string_from_id(data->language, "Supported_languages", 1);
-    print_string("\t0: English", 1);
-    print_string("\t1: Dansk", 1);
-    print_string("\t2: Suomen kieli", 1);
+    for(i = 0; i < language_count; i++){
+        print_string("\t%d: %s\n", i, language_names[i]);
+    }
     do {
         print_string_from_id(data->language, "Select_language", 0);
         scanf(" %d", &answer);
