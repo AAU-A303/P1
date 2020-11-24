@@ -37,7 +37,7 @@
 
 #define MWH_TO_KWH 1000                     /* divide, to go from mWh to kWh */
 #define TRANSPORT_FEE 1.61                  /* transport fee, pr. kWh */
-#define VAT 1.25                            /* Danih VAT */
+#define VAT 1.25                            /* Danish Value-Added Tax */
 
 /* Function Prototypes */
 

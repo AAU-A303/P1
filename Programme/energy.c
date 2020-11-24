@@ -52,6 +52,9 @@ void convert_kwh(float *price) { *price = *price / MWH_TO_KWH; }
 /* This is responsible for adding the fees to the current price */
 void add_fees(float *price) { *price += TRANSPORT_FEE; }
 
+/* This is responsible for adding the VAT to the current price */
+void add_vat(float *price) { *price = *price * VAT; }
+
 /* This presents the received data to the user. */
 void present(User_data *data)
 {
