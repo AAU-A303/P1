@@ -45,7 +45,7 @@ typedef struct {
 
 typedef struct {
     Date date;
-    float prices[DAY_HOURS];            /* UNIT: DKK pr. mWh */
+    float prices[DAY_HOURS];            /* UNIT: DKK pr. MWh */
     float co2_emissions[DAY_HOURS];     /* UNIT: Grams pr. kWh */ 
 } Energy_data;
 
