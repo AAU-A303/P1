@@ -20,9 +20,9 @@
 #include "./H_files/con_manager.h"
 
 /* Prints a given string to the console. */
-void print_string(char string[], int needs_newline)
+void print_string(const char* string, int needs_newline)
 {
-    if (needs_newline){ printf("%s\n", string); } else {printf("%s", string); }
+    if (needs_newline) {printf("%s\n", string);} else {printf("%s", string);}
 }
 
 /* Functions for graphs, if we choose to use them. */

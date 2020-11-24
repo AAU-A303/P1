@@ -24,9 +24,10 @@
 
 #include <stdio.h>
 #include <stdlib.h> 
+#include <stdarg.h>
 
 /* Function Prototypes */
 
-void print_string(char string[], int needs_newline);
+void print_string(const char*, int);
 
 #endif /* CON_MANAGER_H */

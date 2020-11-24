@@ -20,7 +20,7 @@
 
 #include "./H_files/data.h"
 
-void get_data(char filepath[], User_data *user_data, Date target_date) {
+void get_data(User_data *user_data, Date target_date) {
     float price;
     float co2_emission;
     char date_string[64];
@@ -31,11 +31,11 @@ void get_data(char filepath[], User_data *user_data, Date target_date) {
     Energy_data tomorrow = {0};
     FILE* file;
     /*
-        "fopen" opens a file given a "filepath" and the "mode" of which to open the file.
+        "fopen" opens a file given a "DATA_FILE" and the "mode" of which to open the file.
         In this case, we just need to read the file so we use the "r" mode.
         ("r" = read), ("w" = write), ("a" = append) and ("+" = update). These modes can be combined with each other.
     */
-    file = fopen(filepath, "r");
+    file = fopen(DATA_FILE, "r");
     /*
         If the "file" is "NULL", then we were unable to either find or open the file.
     */
@@ -78,7 +78,7 @@ void get_data(char filepath[], User_data *user_data, Date target_date) {
             }
         }
     } else {
-        printf("Failed to open file \"%s\"\n\n", filepath);
+        printf("Failed to open file \"%s\"\n\n", DATA_FILE);
     }
     /*
         Now that we have populated the "Energy_data" struct "today" and "tomorrow".

@@ -20,10 +20,17 @@
 
 #include "./H_files/user_com.h"
 #include "./H_files/energy.h"
+#if defined(_WIN32)
+    #include<windows.h>
+    #define SET_CONSOLE() SetConsoleOutputCP(65001)
+#else
+    #define SET_CONSOLE()
+#endif
 
 int main(void)
 {
     User_data data = { 0 };
+    SET_CONSOLE();
     print_string_from_id(data.language, "Welcome", 1);
     
     do {

@@ -48,9 +48,9 @@
 #define NOV 11
 #define DEC 12
 #define CURRENT_YEAR 2020
+
 /* Function Prototypes */
 
-/* user_com.c */
 void get_user_input(User_data*);	/* input: data, output: none */
 void set_language(User_data*);		/* input: data, output: none */
 void set_date(User_data*); 			/* input: day, month, year, output: none */
