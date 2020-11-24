@@ -27,7 +27,7 @@
 
 #define LINE_LENGTH 2048
 
-#define LOCALISATION_FILE "./Programme/dataset/localisation.txt"
+#define LOCALISATION_FILE "./Programme/dataset/localisation.csv"
 
 enum languages {
     english,

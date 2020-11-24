@@ -34,7 +34,7 @@ void print_string_from_id(enum languages language, char target_id[], int needs_n
     if(stream != NULL){
         while (fgets(line, LINE_LENGTH, stream)){
             get_localisation_indexes(language_indexes, line);
-            sscanf(line, "%[^,],", id);
+            sscanf(line, "%[^;];", id);
             if (strcmp(target_id, id) == 0){
                 for(language_index = 0; language_index < language_count; language_index++){
                     current_index = language_indexes[language_index]+1;
@@ -53,7 +53,7 @@ void print_string_from_id(enum languages language, char target_id[], int needs_n
 void get_localisation_indexes(int indexes[], char localisation_string[]){
     int i = 0, j = 0;
     for(i = 0; i < LINE_LENGTH && j <= language_count; i++){
-        if (localisation_string[i] == ','){
+        if (localisation_string[i] == ';'){
             indexes[j] = i;
             j++;
         }
