@@ -18,52 +18,8 @@
  ===============================================================================
  */
 
-#include "./H_files/data.h"
+#include "./H_files/present.h"
 
-#define LOW_PRICE 4
-
-void present_price_data(Price_data data);
-void print_prices(Energy_price prices);
-void print_date(Date date);
-double average_price(float prices[]);
-void print_price_string(char intput_data_1[]);
-
-/* for debugging */
-int main(void)
-{
-    /*double input_data[DAY_HOURS] = {2.01, 3.05, 6.91, 9.99, 7.10, 8.24,
-                                    2.01, 3.05, 6.91, 9.99, 7.10, 8.24,
-                                    2.01, 3.05, 6.91, 9.99, 7.10, 8.24,
-                                    2.01, 3.05, 6.91, 9.99, 7.10, 8.24};*/
-    
-    /*char input_data_1[120] = "2.01 3.05 6.91 9.99 7.10 8.24 2.01 3.05 6.91 9.99 7.10 8.24 2.01 3.05 6.91 9.99 7.10 8.24 2.01 3.05 6.91 9.99 7.10 8.24";*/
-
-    /*print_price_double(input_data);
-    print_price_string(input_data_1);*/
-
-    return EXIT_SUCCESS; 
-}
-
-/* If prices are given as an string */
-/* void print_price_string(char intput_data_1[])
-{
-    int i = 0, k = 0;
-    char prices[120];
-
-    for(k = 0; k < DAY_HOURS; k++)
-    {
-        while(!isspace(intput_data_1[i++]))
-        strncpy(prices, intput_data_1, i);
-        prices[i - 1] = '\0';
-        intput_data_1 += i;
-        i = 0;
-
-        printf("The electricity price for %02d:00 is %s\n", k, prices);
-    }
-}
-*/
-
-/* CHECK THIS OUT */
 void present_price_data(Price_data data)
 {
     print_prices(data.today);
@@ -73,12 +29,12 @@ void present_price_data(Price_data data)
 }
 
 /* If prices are given as an array of doubles */
-void print_prices(Energy_price value)
+void print_prices(Energy_data value)
 {
     float *prices = value.prices; 
     int i;
 
-    print_date(value.date);
+    print_date_2(value.date);
 
     for(i = 0; i < DAY_HOURS; i++)
     {
@@ -89,7 +45,7 @@ void print_prices(Energy_price value)
     }
 }
 
-void print_date(Date date)
+void print_date_2(Date date)
 {
     printf("Prices for %d/%d/%d:\n", date.day, date.month, date.year);
 }
@@ -106,29 +62,106 @@ double average_price(float prices[])
     average = average / DAY_HOURS;
 
     return average;
-}  
+}
 
-/** below function will need a struct of type "data" and a member "time" */
+void graph(float prices[], Date date)
+{
+    float min_price, max_price, max_y, step;
+    float y_axis[Y_AXIS_LENGTH];
 
+    find_extremes(prices, &min_price, &max_price);
 
-void CheckpriceNightTime(Day_or_night time)
-{   /*nighttime is defined as between 00:00 and 07:00 am*/
-    /*load in a struct with the given parameter "time"*/
-  
-    if(time.night >= 0.00 && time.night <= 7.00) 
+    make_y_axis(y_axis, min_price, max_price, &max_y, &step);
+    
+    round_prices(prices, step);
+
+    make_graph(prices, y_axis, date, max_y, step);
+}
+
+void find_extremes(float prices[], float *min_price, float *max_price)
+{
+    int i;
+    *min_price = prices[0], *max_price = prices[0];
+    for(i = 0; i < DAY_HOURS; i++)
     {
-         
+        if(prices[i] < *min_price)
+            *min_price = prices[i];
+        else if(prices[i] > *max_price)
+            *max_price = prices[i];
     }
 }
 
-void CheckpriceDayTime(Day_or_night day)
-{   /*daytime is defined as between 07:00 am to 23:00 pm*/
-    /*load in a struct with the given parameter "time"*/
-   Day_or_night time;
-    if(time.day >= 7.00 && time.day <= 0.00) 
+void make_y_axis(float y_axis[], float min_price, float max_price, float *max_y, float *step)
+{
+    int i;
+    float min_y = (int)(min_price / 1);
+    float current_step = 0;
+
+    *max_y = ((int)(max_price / 1) + 1);
+    current_step = *max_y;
+    *step = (*max_y - min_y) / Y_AXIS_LENGTH;
+
+    for(i = 0; i < Y_AXIS_LENGTH; i++)
     {
-        
+        y_axis[i] = current_step;
+        current_step -= *step;
     }
-   
+}
+
+void round_prices(float prices[], float step)
+{   
+    int i;
+
+    for(i = 0; i < DAY_HOURS; i++)
+        prices[i] = (prices[i] / step) * step;
+} 
+
+void make_graph(float prices[], float y_axis[], Date date, float max_y, float step)
+{
+    int i, j;
+    /* We make 24 empty string with 20 characters each and put them in an array.
+       Each string works as an hour's y-axis. */ 
+    float current_step;
+    char points[Y_AXIS_LENGTH] = "                    ";
+    char graph_points[DAY_HOURS][Y_AXIS_LENGTH];
     
+    for(i = 0; i < DAY_HOURS; i++)
+    {
+        for(j = 0; j < Y_AXIS_LENGTH; j++)
+            graph_points[i][j] = points[j];
+    } 
+
+    for(i = 0; i < DAY_HOURS; i++)
+    {
+        current_step = max_y;
+        for(j = 0; j < Y_AXIS_LENGTH; j++)
+        {
+            if(prices[i] - current_step >= step/2 && prices[i] - current_step <= step)
+            {
+                graph_points[i][j-1] = '*';
+            }
+            else if(prices[i] - current_step <= step/2 && prices[i] - current_step >= 0){
+                graph_points[i][j] = '*';
+            }
+            current_step -= step; 
+        }
+    } 
+
+    print_graph(y_axis, graph_points, date);
+}
+
+void print_graph(float y_axis[], char a[DAY_HOURS][Y_AXIS_LENGTH], Date date)
+{
+    int i, j;
+    printf("DKK / kWh %21s ENERGY PRICES %d/%d/%d\n", " ", date.day, date.month, date.year);
+    for(i = 0; i < Y_AXIS_LENGTH; i++)
+    {
+        printf("%.2lf |", y_axis[i]);
+        for(j = 0; j < DAY_HOURS; j++)
+            printf(" %c ", a[j][i]);
+        printf("\n");
+    }
+
+    printf(" ... |________________________________________________________________________\n");
+    printf("       00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23  HOUR\n");
 }

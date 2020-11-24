@@ -18,46 +18,28 @@
  ===============================================================================
  */
 
-#ifndef USER_COM_H
-#define USER_COM_H
-
-/* Libraries */
-#include <stdlib.h>
+#ifndef PRESENT_H
+#define PRESENT_H
+#include <math.h>
 #include <stdio.h>
-#include <string.h>
+#include <stdlib.h>
 #include "data.h"
 #include "present.h"
-#include "localisation.h"
-/* Symbolic Constants */
 
-#define TRUE  1                 /* boolean value for true */
-#define FALSE 0                 /* boolean value for false */
+#define LOW_PRICE 4
+#define Y_AXIS_LENGTH 20
 
-#define DAY_AHEAD 14            /* the release time of the day ahead prices */
-#define DAY_HOURS 24
+void present_price_data(Price_data data);
+void print_prices(Energy_data prices);
+void print_date_2(Date date);
+double average_price(float prices[]);
+void print_price_string(char intput_data_1[]);
 
-#define JAN 1                   /* the number of the months and current year */
-#define FEB 2
-#define MAR 3
-#define APR 4
-#define MAY 5
-#define JUN 6
-#define JUL 7
-#define AUG 8
-#define SEP 9
-#define OCT 10
-#define NOV 11
-#define DEC 12
-#define CURRENT_YEAR 2020
+void graph(float prices[], Date date);
+void find_extremes(float prices[], float *min_price, float *max_price);
+void make_y_axis(float y_axis[], float min_price, float max_price, float *max_y, float *step);
+void round_prices(float prices[], float step);
+void make_graph(float prices[], float y_axis[], Date date, float max_y, float step);
+void print_graph(float y_axis[], char a[DAY_HOURS][Y_AXIS_LENGTH], Date date);
 
-/* Function Prototypes */
-
-void get_user_input(User_data*);	/* input: data, output: none */
-void set_language(User_data*);		/* input: data, output: none */
-void set_date(User_data*); 			/* input: day, month, year, output: none */
-void set_time(int*, User_data*);	/* input: hour, output: none */
-int days_in_month(int, int);    	/* input: month, year, output: num of days */
-int is_leap_year(int);          	/* input: year, output: boolean */
-int has_new_inquiry(User_data);    /* input: data, output: boolean */
-
-#endif /* USER_COM_H */
+#endif /* PRESENT_H */
