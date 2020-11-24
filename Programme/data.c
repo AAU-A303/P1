@@ -21,8 +21,8 @@
 #include "./H_files/data.h"
 
 void get_data(User_data *user_data, Date target_date) {
-    float price;
-    float co2_emission;
+    float current_price;
+    float current_co2_emission;
     char date_string[64];
     char line[128];
     int index_today = 0, index_tomorrow = 0;
@@ -46,9 +46,9 @@ void get_data(User_data *user_data, Date target_date) {
         while (fgets(line, sizeof(line), file)) {
             /*
                 split up the line into the format:
-                char[]: "string_date" and float: "price", "co2_emission";
+                char[]: "string_date", float: "current_price" and float: "current_co2_emission";
             */
-            sscanf(line, "%s %f %f", date_string, &price, &co2_emission);
+            sscanf(line, "%s %f %f", date_string, &current_price, &current_co2_emission);
             /*
                 split up the "date_string" int to the format:
                 int: day
@@ -59,20 +59,21 @@ void get_data(User_data *user_data, Date target_date) {
             /*
                 First, we check if the "current_date" is equal to the "target_date".
                 If the two dates are equal we set "today.date" to the current_date
-                and we add the "current_price" to the "today.price" array at the "index_today".
+                and we add the "current_price" and "today.co2_emissions" to the "today.price"
+                and "today.co2_emissions" arrays at the "index_today".
                 If the check fails we check if its the next day instead.
                 And if it is the next day we set the "tomorrow.date" and "tomorrow.price" at "index_tomorrow".
             */
             if(date_equals(&current_date, &target_date)){
                 date_set(&today.date, date_string);
-                today.prices[index_today] = price;
-                today.co2_emissions[index_today] = co2_emission;
+                today.prices[index_today] = current_price;
+                today.co2_emissions[index_today] = current_co2_emission;
                 index_today++;
             } else {
                 if(date_diffrence_in_days(&target_date, &current_date) == 1){
                     date_set(&tomorrow.date, date_string);
-                    tomorrow.prices[index_tomorrow] = price;
-                    tomorrow.co2_emissions[index_tomorrow] = co2_emission;
+                    tomorrow.prices[index_tomorrow] = current_price;
+                    tomorrow.co2_emissions[index_tomorrow] = current_co2_emission;
                     index_tomorrow++;
                 }
             }
