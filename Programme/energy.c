@@ -59,5 +59,8 @@ void add_vat(float *price) { *price = *price * VAT; }
 void present(User_data *data)
 {
     /* TODO: Present the data */
-    print_user_data(*data);
+    graph(data->today.prices, data->today.date);
+    if(data->access_tomorrow){
+        graph(data->tomorrow.prices, data->tomorrow.date);
+    }
 }

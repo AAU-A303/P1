@@ -35,7 +35,6 @@ void get_user_input(User_data *data)
     
     if (hour >= DAY_AHEAD) { data->access_tomorrow = TRUE; }
     else { data->access_tomorrow = FALSE; }
-    print_user_data(*data);
 }
 
 /* Set the language for the prototype. */
