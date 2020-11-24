@@ -33,6 +33,7 @@
 #define FALSE 0                 /* boolean value for false */
 #define DAY_HOURS 24            /* the amount of hours in a day */
 #define DAY_IN_SECONDS 86400    /* the amount of seconds in a day */
+#define DATA_FILE "./Programme/dataset/prices_2020_hourly_dkk.txt"
 
 /* Structs */
 
@@ -56,7 +57,7 @@ typedef struct {
 
 /* Function Prototypes */
 
-void get_data(char[], User_data*, Date);
+void get_data(User_data*, Date);
 void date_set(Date*, char[]);
 int date_equals(Date*, Date*);
 int date_diffrence_in_days(Date*, Date*);

@@ -11,9 +11,15 @@ ifeq ($(OS),Windows_NT)
 	CC := gcc
 	EXTENSION := .exe
 else
+	UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S),Linux)
+        CC := gcc
+    endif
+    ifeq ($(UNAME_S),Darwin)
+        CC := gcc-10
+    endif
 	MD := mkdir
 	RM := rm -f *.o
-	CC := gcc-10
 	EXTENSION := .out
 endif
 #---------------------------------------------------------------------
