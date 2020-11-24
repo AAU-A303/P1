@@ -36,6 +36,25 @@
 
 /* Structs */
 
+// --------------------- Her fra og til næste streg er nye og refereres til i present.c
+typedef struct
+{
+    double night, day; 
+}Day_or_night;
+
+typedef struct {
+    Energy_price today;
+    Energy_price tomorrow;
+    int access_tomorrow;
+} Price_data;
+
+typedef struct {
+    Date date;
+    float prices[DAY_HOURS];
+} Energy_price; 
+
+// --------------------
+
 typedef struct {
     int day;
     int month;
