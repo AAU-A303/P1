@@ -22,12 +22,13 @@
 
 void get_data(User_data *user_data, Date target_date) {
     float price;
+    float co2_emission;
     char date_string[64];
     char line[128];
     int index_today = 0, index_tomorrow = 0;
     Date current_date = {0};
-    Energy_price today = {0};
-    Energy_price tomorrow = {0};
+    Energy_data today = {0};
+    Energy_data tomorrow = {0};
     FILE* file;
     /*
         "fopen" opens a file given a "DATA_FILE" and the "mode" of which to open the file.
@@ -45,9 +46,9 @@ void get_data(User_data *user_data, Date target_date) {
         while (fgets(line, sizeof(line), file)) {
             /*
                 split up the line into the format:
-                char[]: "string_date" and float: "price"
+                char[]: "string_date" and float: "price", "co2_emission";
             */
-            sscanf(line, "%s %f", date_string, &price);
+            sscanf(line, "%s %f %f", date_string, &price, &co2_emission);
             /*
                 split up the "date_string" int to the format:
                 int: day
@@ -65,11 +66,13 @@ void get_data(User_data *user_data, Date target_date) {
             if(date_equals(&current_date, &target_date)){
                 date_set(&today.date, date_string);
                 today.prices[index_today] = price;
+                today.co2_emissions[index_today] = co2_emission;
                 index_today++;
             } else {
                 if(date_diffrence_in_days(&target_date, &current_date) == 1){
                     date_set(&tomorrow.date, date_string);
                     tomorrow.prices[index_tomorrow] = price;
+                    tomorrow.co2_emissions[index_tomorrow] = co2_emission;
                     index_tomorrow++;
                 }
             }
@@ -78,7 +81,7 @@ void get_data(User_data *user_data, Date target_date) {
         printf("Failed to open file \"%s\"\n\n", DATA_FILE);
     }
     /*
-        Now that we have populated the "Energy_price" struct "today" and "tomorrow".
+        Now that we have populated the "Energy_data" struct "today" and "tomorrow".
         we can add them to "user_data->today" and "user_data->tomorrow".
     */
     user_data->today = today;
@@ -129,13 +132,13 @@ int date_equals(Date *date_a, Date *date_b){
     } return FALSE;
 }
 
-void reset_energy_price(Energy_price *energy_price){
+void reset_energy_price(Energy_data *energy_data){
     int i = 0;
-    energy_price->date.year = 0;
-    energy_price->date.month = 0;
-    energy_price->date.day = 0;
+    energy_data->date.year = 0;
+    energy_data->date.month = 0;
+    energy_data->date.day = 0;
     for(i = 0; i < DAY_HOURS; i++){
-        energy_price->prices[i] = 0;
+        energy_data->prices[i] = 0;
     }
 }
 
@@ -143,18 +146,18 @@ void print_date(Date date){
     printf("%d/%d/%d ", date.day, date.month, date.year);
 }
 
-void print_energy_price(Energy_price energy_price){
+void print_energy_data(Energy_data energy_data){
     int j = 0;
     printf("Date: ");
-    print_date(energy_price.date);
+    print_date(energy_data.date);
     printf("\n");
     for(j = 0; j < DAY_HOURS; j++){
-        printf("\tHour: %d Price: %.2f\n", j, energy_price.prices[j]);
+        printf("\tHour: %d Price: %.2f Co2 emission: %.2f\n", j, energy_data.prices[j], energy_data.co2_emissions[j]);
     }
 }
 
 void print_user_data(User_data user_data){
-    print_energy_price(user_data.today);
-    print_energy_price(user_data.tomorrow);
+    print_energy_data(user_data.today);
+    print_energy_data(user_data.tomorrow);
     printf("Access to tomorrow: %d \n",user_data.access_tomorrow);
 }

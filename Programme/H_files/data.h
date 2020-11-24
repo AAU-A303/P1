@@ -46,11 +46,18 @@ typedef struct {
 typedef struct {
     Date date;
     float prices[DAY_HOURS];
-} Energy_price;
+    float co2_emissions[DAY_HOURS];
+} Energy_data; 
 
 typedef struct {
-    Energy_price today;
-    Energy_price tomorrow;
+    Energy_data today;
+    Energy_data tomorrow;
+    int access_tomorrow;
+} Price_data;
+
+typedef struct {
+    Energy_data today;
+    Energy_data tomorrow;
     int access_tomorrow;
     enum languages language;
 } User_data;
@@ -61,10 +68,10 @@ void get_data(User_data*, Date);
 void date_set(Date*, char[]);
 int date_equals(Date*, Date*);
 int date_diffrence_in_days(Date*, Date*);
-void reset_energy_price(Energy_price*);
+void reset_energy_price(Energy_data*);
 
 void print_date(Date);
-void print_energy_price(Energy_price);
+void print_energy_data(Energy_data);
 void print_user_data(User_data);
 
 #endif /* DATA_H */

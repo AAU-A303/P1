@@ -18,11 +18,6 @@
  ===============================================================================
  */
 
-// To do:
-// Vi skal lave sådan at vi får filerne(priserne) fra Lokes del og sortere dem pænt enten i en
-// graf eller andet visuelt måske. Fortæl brugeren om hvorvidt prisen er billig
-// eller dyr og anvende de functioner som allerede er lavet!!!
-
 #include "./H_files/data.h"
 
 #define LOW_PRICE 4
@@ -68,19 +63,6 @@ int main(void)
 }
 */
 
-/*
-typedef struct {
-    Energy_price today;
-    Energy_price tomorrow;
-    int access_tomorrow;
-} Price_data;
-
-typedef struct {
-    Date date;
-    float prices[DAY_HOURS];
-} Energy_price;
-*/
-
 /* CHECK THIS OUT */
 void present_price_data(Price_data data)
 {
@@ -124,4 +106,29 @@ double average_price(float prices[])
     average = average / DAY_HOURS;
 
     return average;
+}  
+
+/** below function will need a struct of type "data" and a member "time" */
+
+
+void CheckpriceNightTime(Day_or_night time)
+{   /*nighttime is defined as between 00:00 and 07:00 am*/
+    /*load in a struct with the given parameter "time"*/
+  
+    if(time.night >= 0.00 && time.night <= 7.00) 
+    {
+         
+    }
+}
+
+void CheckpriceDayTime(Day_or_night day)
+{   /*daytime is defined as between 07:00 am to 23:00 pm*/
+    /*load in a struct with the given parameter "time"*/
+   Day_or_night time;
+    if(time.day >= 7.00 && time.day <= 0.00) 
+    {
+        
+    }
+   
+    
 }
