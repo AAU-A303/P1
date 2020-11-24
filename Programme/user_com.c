@@ -28,7 +28,7 @@ void get_user_input(User_data *data)
     set_date(data);
     set_time(&hour, data);
 
-    get_data("./Programme/dataset/prices_2020_hourly_dkk.txt", data, data->today.date);
+    get_data("./Programme/dataset/prices_and_co2_emissions_2020_hourly_dk1.txt", data, data->today.date);
     
     if (hour >= DAY_AHEAD) { data->access_tomorrow = TRUE; }
     else { data->access_tomorrow = FALSE; }
