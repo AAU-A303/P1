@@ -33,7 +33,7 @@
 #define FALSE 0                 /* boolean value for false */
 #define DAY_HOURS 24            /* the amount of hours in a day */
 #define DAY_IN_SECONDS 86400    /* the amount of seconds in a day */
-#define DATA_FILE "./Programme/dataset/prices_2020_hourly_dkk.txt"
+#define DATA_FILE "./Programme/dataset/prices_and_co2_emissions_2020_hourly_dk1.txt"
 
 /* Structs */
 
