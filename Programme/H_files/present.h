@@ -38,8 +38,8 @@ void print_price_string(char intput_data_1[]);
 void graph(float prices[], Date date);
 void find_extremes(float prices[], float *min_price, float *max_price);
 void make_y_axis(float y_axis[], float min_price, float max_price, float *max_y, float *step);
-void round_prices(float prices[], float step);
 void make_graph(float prices[], float y_axis[], Date date, float max_y, float step);
 void print_graph(float y_axis[], char a[DAY_HOURS][Y_AXIS_LENGTH], Date date);
+void make_graph_to_lines(char graph_points[DAY_HOURS][Y_AXIS_LENGTH]);
 
 #endif /* PRESENT_H */
