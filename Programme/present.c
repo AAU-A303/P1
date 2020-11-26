@@ -72,8 +72,6 @@ void graph(float prices[], Date date)
     find_extremes(prices, &min_price, &max_price);
 
     make_y_axis(y_axis, min_price, max_price, &max_y, &step);
-    
-    round_prices(prices, step);
 
     make_graph(prices, y_axis, date, max_y, step);
 }
@@ -108,14 +106,6 @@ void make_y_axis(float y_axis[], float min_price, float max_price, float *max_y,
     }
 }
 
-void round_prices(float prices[], float step)
-{   
-    int i;
-
-    for(i = 0; i < DAY_HOURS; i++)
-        prices[i] = (prices[i] / step) * step;
-} 
-
 void make_graph(float prices[], float y_axis[], Date date, float max_y, float step)
 {
     int i, j;
@@ -124,12 +114,15 @@ void make_graph(float prices[], float y_axis[], Date date, float max_y, float st
     float current_step;
     char points[Y_AXIS_LENGTH] = "                    ";
     char graph_points[DAY_HOURS][Y_AXIS_LENGTH];
+    int graph_line[DAY_HOURS];
     
     for(i = 0; i < DAY_HOURS; i++)
     {
         for(j = 0; j < Y_AXIS_LENGTH; j++)
+        {
             graph_points[i][j] = points[j];
-    } 
+        }
+    }
 
     for(i = 0; i < DAY_HOURS; i++)
     {
@@ -139,13 +132,31 @@ void make_graph(float prices[], float y_axis[], Date date, float max_y, float st
             if(prices[i] - current_step >= step/2 && prices[i] - current_step <= step)
             {
                 graph_points[i][j-1] = '*';
+                graph_line[i] = j-1;
             }
-            else if(prices[i] - current_step <= step/2 && prices[i] - current_step >= 0){
+            else if(prices[i] - current_step <= step/2 && prices[i] - current_step >= 0)
+            {
                 graph_points[i][j] = '*';
+                graph_line[i] = j;
             }
-            current_step -= step; 
+            current_step -= step;
         }
-    } 
+    }
+
+    for(i = 0; i < DAY_HOURS; i++)
+        {
+            if(graph_line[i] < graph_line[i+1])
+            {
+                graph_points[i][graph_line[i]+1] = '\\';
+                graph_points[i][graph_line[i]] = ' ';
+            }
+
+            else if(graph_line[i+1] < graph_line[i])
+                graph_points[i][graph_line[i]] = '/';
+
+            else
+                graph_points[i][graph_line[i]] = '_';
+        }
 
     print_graph(y_axis, graph_points, date);
 }
