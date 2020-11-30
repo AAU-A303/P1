@@ -60,7 +60,9 @@ void present(User_data *data)
 {
     /* TODO: Present the data */
     graph(data->today.prices, data->today.date);
+    present_price_data(data, 0);
     if(data->access_tomorrow){
         graph(data->tomorrow.prices, data->tomorrow.date);
+        present_price_data(data, 1);
     }
 }
