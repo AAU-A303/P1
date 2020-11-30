@@ -26,14 +26,13 @@
 #include "data.h"
 #include "present.h"
 
-#define LOW_PRICE 4
 #define Y_AXIS_LENGTH 20
 
-void present_price_data(Price_data data);
+void present_price_data(User_data *data, int check);
 void print_prices(Energy_data prices);
-void print_date_2(Date date);
+void highest_prices(float prices[]);
 double average_price(float prices[]);
-void print_price_string(char intput_data_1[]);
+void cmpr_tdy_tmrw(float prices_tdy[], float prices_tmrw[]);
 
 void graph(float prices[], Date date);
 void find_extremes(float prices[], float *min_price, float *max_price);
@@ -41,5 +40,5 @@ void make_y_axis(float y_axis[], float min_price, float max_price, float *max_y,
 void make_graph(float prices[], float y_axis[], Date date, float max_y, float step);
 void print_graph(float y_axis[], char a[DAY_HOURS][Y_AXIS_LENGTH], Date date);
 void make_graph_to_lines(char graph_points[DAY_HOURS][Y_AXIS_LENGTH]);
-
+int compare_intergers(const void* int1, const void* int2);
 #endif /* PRESENT_H */
