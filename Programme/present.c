@@ -143,22 +143,28 @@ void make_graph(float prices[], float y_axis[], Date date, float max_y, float st
         }
     }
 
-    for(i = 0; i < DAY_HOURS; i++)
-        {
-            if(graph_line[i] < graph_line[i+1])
-            {
-                graph_points[i][graph_line[i]+1] = '\\';
-                graph_points[i][graph_line[i]] = ' ';
-            }
-
-            else if(graph_line[i+1] < graph_line[i])
-                graph_points[i][graph_line[i]] = '/';
-
-            else
-                graph_points[i][graph_line[i]] = '_';
-        }
+    format_graph(graph_points, graph_line);
 
     print_graph(y_axis, graph_points, date);
+}
+
+void format_graph(char graph_points[DAY_HOURS][Y_AXIS_LENGTH], int graph_line[])
+{
+    int i;
+    for(i = 0; i < DAY_HOURS; i++)
+    {
+        if(graph_line[i] < graph_line[i+1])
+        {
+            graph_points[i][graph_line[i]+1] = '\\';
+            graph_points[i][graph_line[i]] = ' ';
+        }
+
+        else if(graph_line[i+1] < graph_line[i])
+            graph_points[i][graph_line[i]] = '/';
+
+        else
+            graph_points[i][graph_line[i]] = '_';
+     }
 }
 
 void print_graph(float y_axis[], char a[DAY_HOURS][Y_AXIS_LENGTH], Date date)

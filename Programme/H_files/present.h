@@ -39,7 +39,7 @@ void graph(float prices[], Date date);
 void find_extremes(float prices[], float *min_price, float *max_price);
 void make_y_axis(float y_axis[], float min_price, float max_price, float *max_y, float *step);
 void make_graph(float prices[], float y_axis[], Date date, float max_y, float step);
+void format_graph(char graph_points[DAY_HOURS][Y_AXIS_LENGTH], int graph_line[]);
 void print_graph(float y_axis[], char a[DAY_HOURS][Y_AXIS_LENGTH], Date date);
-void make_graph_to_lines(char graph_points[DAY_HOURS][Y_AXIS_LENGTH]);
 
 #endif /* PRESENT_H */
