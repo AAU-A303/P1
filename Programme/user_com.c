@@ -53,7 +53,8 @@ void set_language(User_data *data)
     do {
         print_string_from_id(data->language, "Select_language", 0);
         scanf(" %d", &answer);
-        if(answer >= 0 && answer < language_count) is_valid = TRUE;
+        if(answer >= 0 && answer < language_count)
+            is_valid = TRUE;
     } while (!is_valid);
 
     data->language = answer;
