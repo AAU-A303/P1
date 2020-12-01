@@ -92,10 +92,10 @@ void find_extremes(float prices[], float *min_price, float *max_price)
 void make_y_axis(float y_axis[], float min_price, float max_price, float *max_y, float *step)
 {
     int i;
-    float min_y = (int)(min_price / 1);
+    float min_y = ((double)((int)(min_price * 2))) / 2;
     float current_step = 0;
 
-    *max_y = ((int)(max_price / 1) + 1);
+    *max_y = ((double)((int)((max_price + 0.5) * 2))) / 2;
     current_step = *max_y;
     *step = (*max_y - min_y) / Y_AXIS_LENGTH;
 
