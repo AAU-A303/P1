@@ -156,10 +156,10 @@ void find_extremes(float prices[], float *min_price, float *max_price)
 void make_y_axis(float y_axis[], float min_price, float max_price, float *max_y, float *step)
 {
     int i;
-    float min_y = (int)(min_price / 1);
+    float min_y = ((double)((int)(min_price * 2))) / 2;
     float current_step = 0;
 
-    *max_y = ((int)(max_price / 1) + 1);
+    *max_y = ((double)((int)((max_price + 0.5) * 2))) / 2;
     current_step = *max_y;
     *step = (*max_y - min_y) / Y_AXIS_LENGTH;
 
@@ -207,22 +207,28 @@ void make_graph(float prices[], float y_axis[], Date date, float max_y, float st
         }
     }
 
-    for(i = 0; i < DAY_HOURS; i++)
-        {
-            if(graph_line[i] < graph_line[i+1])
-            {
-                graph_points[i][graph_line[i]+1] = '\\';
-                graph_points[i][graph_line[i]] = ' ';
-            }
-
-            else if(graph_line[i+1] < graph_line[i])
-                graph_points[i][graph_line[i]] = '/';
-
-            else
-                graph_points[i][graph_line[i]] = '_';
-        }
+    format_graph(graph_points, graph_line);
 
     print_graph(y_axis, graph_points, date);
+}
+
+void format_graph(char graph_points[DAY_HOURS][Y_AXIS_LENGTH], int graph_line[])
+{
+    int i;
+    for(i = 0; i < DAY_HOURS; i++)
+    {
+        if(graph_line[i] < graph_line[i+1])
+        {
+            graph_points[i][graph_line[i]+1] = '\\';
+            graph_points[i][graph_line[i]] = ' ';
+        }
+
+        else if(graph_line[i+1] < graph_line[i])
+            graph_points[i][graph_line[i]] = '/';
+
+        else
+            graph_points[i][graph_line[i]] = '_';
+     }
 }
 
 void print_graph(float y_axis[], char a[DAY_HOURS][Y_AXIS_LENGTH], Date date)
