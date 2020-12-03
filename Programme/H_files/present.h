@@ -30,9 +30,10 @@
 
 void present_price_data(User_data *data, int check);
 void print_prices(Energy_data prices);
-void highest_prices(float prices[]);
+void highest_prices(float prices[], float average);
 double average_price(float prices[]);
 void cmpr_tdy_tmrw(float prices_tdy[], float prices_tmrw[]);
+int less_than_step(float prices[], float average);
 
 void graph(float prices[], Date date);
 void find_extremes(float prices[], float *min_price, float *max_price);

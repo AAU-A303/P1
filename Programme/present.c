@@ -44,7 +44,7 @@ void print_prices(Energy_data value)
     int i;         
 
     printf("\n╭─────────────────────────────────────────────╮\n");
-    printf("│   The prices are cheap in these intervals   │\n");
+      printf("│     The prices are cheap in these times     │\n");
     for(i = 5; i < DAY_HOURS; i++)
     {
         if(prices[i] < average)
@@ -75,12 +75,12 @@ void print_prices(Energy_data value)
             }
         }
     }
-    printf("╰─────────────────────────────────────────────╯\n");
-    
-    highest_prices(prices);
+                printf("╰─────────────────────────────────────────────╯\n");
+
+    highest_prices(prices, average);
 }
 
-void highest_prices(float prices[])
+void highest_prices(float prices[], float average)
 {
     int i;
     int hour[] = {0, 0, 0};
@@ -97,16 +97,26 @@ void highest_prices(float prices[])
             hour[2] = i;
         }
     }
+
     qsort(hour, 3, sizeof(int), compare_intergers);
 
-    printf("\n╭─────────────────────────────────────────────╮\n");
-    printf("│ The prices are expensive in these intervals │\n");
-    for(i = 0; i < 3; i++){
-        printf("├─────────────────────────────────────────────┤\n");
-        printf("│            %02d:00 ─> %.2f DKK/kWh            │\n", hour[i], prices[hour[i]]);
+    if(less_than_step(prices, average))
+    { 
+        printf("\n╭─────────────────────────────────────────────╮\n");
+        printf("│           Today the price is flat           │\n");
+        printf("╰─────────────────────────────────────────────╯\n");
     }
-    printf("╰─────────────────────────────────────────────╯\n");
-    
+    else
+    {
+        printf("\n╭─────────────────────────────────────────────╮\n");
+        printf("│   The price are expensive in these times!   │\n");
+        for(i = 0; i < 3; i++)
+        {
+            printf("├─────────────────────────────────────────────┤\n");
+            printf("│            %02d:00 ─> %.2f DKK/kWh            │\n", hour[i], prices[hour[i]]);
+        }
+        printf("╰─────────────────────────────────────────────╯\n");
+    }
 }
 
 /* Calculates the average price */
@@ -140,8 +150,6 @@ void cmpr_tdy_tmrw(float prices_tdy[], float prices_tmrw[])
                "╰─────────────────────────────────────────────╯\n\n",relative_devation);
     }
 }
-
-/*___________________________________________________________________________________________________________*/
 
 void graph(float prices[], Date date)
 {
@@ -252,7 +260,7 @@ void format_graph(char graph_points[DAY_HOURS][Y_AXIS_LENGTH], int graph_line[])
 void print_graph(float y_axis[], char a[DAY_HOURS][Y_AXIS_LENGTH], Date date)
 {
     int i, j;
-    printf("DKK / kWh %21s ENERGY PRICES %d/%d/%d\n", " ", date.day, date.month, date.year);
+    printf("\nDKK / kWh %21s ENERGY PRICES %d/%d/%d\n", " ", date.day, date.month, date.year);
     for(i = 0; i < Y_AXIS_LENGTH; i++)
     {
         printf("%.2f │", y_axis[i]);
@@ -278,4 +286,23 @@ int compare_floats(float f1, float f2){
 
 int compare_intergers(const void* int1, const void* int2){
     return *((int*)int1)-*((int*)int2);
+}
+
+int less_than_step(float prices[], float average)
+{   
+    float max_price, min_price, step;
+    float min_y = 0, max_y = 0;
+
+    find_extremes(prices, &min_price, &max_price);
+
+    max_y = ((double)((int)((max_price + 0.5) * 2))) / 2;
+    min_y = ((double)((int)(min_price * 2))) / 2;
+    step = (max_y - min_y) / Y_AXIS_LENGTH;
+
+    if(step < 0.05)
+    {
+        step = 0.05;
+    }
+
+    return ((max_price - average) < step);
 }
