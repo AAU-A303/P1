@@ -53,12 +53,6 @@ typedef struct {
     Energy_data today;
     Energy_data tomorrow;
     int access_tomorrow;
-} Price_data;
-
-typedef struct {
-    Energy_data today;
-    Energy_data tomorrow;
-    int access_tomorrow;
     enum languages language;
 } User_data;
 
