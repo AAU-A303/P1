@@ -19,13 +19,13 @@
  */
 
 #include "./H_files/data.h"
+#include <stdio.h>
 
 void get_data(User_data *user_data, Date target_date) {
     float current_price;
     float current_co2_emission;
     char date_string[64];
-    char line[128];
-    int index_today = 0, index_tomorrow = 0;
+    int index_today = 0, index_tomorrow = 0, scan_res = 0;
     Date current_date = {0};
     Energy_data today = {0};
     Energy_data tomorrow = {0};
@@ -43,12 +43,19 @@ void get_data(User_data *user_data, Date target_date) {
         /*
             While there's still a new line, fill the char array with its contents.
         */
-        while (fgets(line, sizeof(line), file)) {
+        while (scan_res != -1) {
             /*
                 split up the line into the format:
                 char[]: "string_date", float: "current_price" and float: "current_co2_emission";
             */
-            sscanf(line, "%s %f %f", date_string, &current_price, &current_co2_emission);
+            scan_res = fscanf(file, "%s %f %f", date_string, &current_price, &current_co2_emission);
+            /*
+                Check if we havent scanned in the correct amount of items and if we havent reached the end of the file.
+                If both are true we print an error message. 
+            */
+            if(scan_res != 3 && scan_res != -1){
+                printf("Incorrectly formatted dataset: %s\n", DATA_FILE);
+            }
             /*
                 split up the "date_string" int to the format:
                 int: day
