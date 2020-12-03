@@ -274,7 +274,7 @@ int compare_floats(float f1, float f2){
 
     return fabs(f1 - f2) < epsilon;
 }
-/*____________________________________________*/
+/*____________________________________________________________________________________*/
 
 int compare_intergers(const void* int1, const void* int2){
     return *((int*)int1)-*((int*)int2);
