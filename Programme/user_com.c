@@ -18,6 +18,8 @@
  */
 
 #include "./H_files/user_com.h"
+#include <ctype.h>
+#include <stdio.h>
 
 /* Constants */
 char* language_names[] = {"English","Dansk","Française","Suomen kieli"};
@@ -52,10 +54,17 @@ void set_language(User_data *data)
     }
     do {
         print_string_from_id(data->language, "Select_language", 0);
-        scanf(" %d", &answer);
-        if(answer >= 0 && answer < language_count)
-            is_valid = TRUE;
-    } while (!is_valid);
+        if(scanf(" %d", &answer) != 1)
+        {
+            printf("Try again! Please only the number as listed above\n\n");
+            fflush(stdin);
+        }
+        else
+        {
+            if(answer >= 0 && answer < language_count)
+                is_valid = TRUE;
+        }
+    } while(!is_valid);
 
     data->language = answer;
 }
@@ -69,16 +78,23 @@ void set_date(User_data *data)
     do {
         print_string_from_id(data->language, "Select_date", 0);
         /* printf("Please enter the current date (DD/MM format)> "); */
-        scanf(" %d/%d", &day, &month);
         
-        /* TODO: remove the first two if statements after Jan 1st */
-        if(month <= 11)
+        if(scanf(" %d/%d", &day, &month) != 2)
         {
-            if (month == 11 && day > 5) { continue; }
-            
-            if (day <= days_in_month(month, CURRENT_YEAR) && day > 0)
-                is_valid = TRUE;
+            printf("Try again! and use the format DD/MM and only use numbers!\n\n");
+            fflush(stdin);
         }
+        else
+        {
+            /* TODO: remove the first two if statements after Jan 1st */
+            if(month <= 11)
+            {
+                if (month == 11 && day > 5) { continue; }
+                if (day <= days_in_month(month, CURRENT_YEAR) && day > 0)
+                    is_valid = TRUE;
+            }
+        }
+        
     } while (!is_valid);
 
     data->today.date.day = day; 
@@ -94,8 +110,13 @@ void set_time(int *hour, User_data *data)
     do {
         print_string_from_id(data->language, "Select_hour", 0);
         /* printf("Please enter the current hour (HH format)> "); */
-        scanf(" %d", hour);
-        if(*hour < DAY_HOURS && *hour >= 0) is_valid = TRUE;
+        if(scanf(" %d", hour) != 1)
+        {
+            printf("Try again! Please use the format HH and only use numbers\n\n");
+            fflush(stdin);
+        }
+        else
+            if(*hour < DAY_HOURS && *hour >= 0) is_valid = TRUE;
     } while (!is_valid);
 }
 
