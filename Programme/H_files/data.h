@@ -61,7 +61,7 @@ typedef struct {
 void get_data(User_data*, Date);
 void date_set(Date*, char[]);
 int date_equals(Date*, Date*);
-int date_diffrence_in_days(Date*, Date*);
+int date_difference_in_days(Date*, Date*);
 void reset_energy_price(Energy_data*);
 
 void print_date(Date);

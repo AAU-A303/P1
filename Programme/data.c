@@ -76,13 +76,11 @@ void get_data(User_data *user_data, Date target_date) {
                 today.prices[index_today] = current_price;
                 today.co2_emissions[index_today] = current_co2_emission;
                 index_today++;
-            } else {
-                if(date_diffrence_in_days(&target_date, &current_date) == 1){
-                    date_set(&tomorrow.date, date_string);
-                    tomorrow.prices[index_tomorrow] = current_price;
-                    tomorrow.co2_emissions[index_tomorrow] = current_co2_emission;
-                    index_tomorrow++;
-                }
+            } else if(date_difference_in_days(&target_date, &current_date) == 1){
+                date_set(&tomorrow.date, date_string);
+                tomorrow.prices[index_tomorrow] = current_price;
+                tomorrow.co2_emissions[index_tomorrow] = current_co2_emission;
+                index_tomorrow++;
             }
         }
     } else {
@@ -106,7 +104,7 @@ void date_set(Date *date, char date_string[]){
     sscanf(date_string, "%d/%d/%d", &date->day, &date->month, &date->year);
 }
 
-int date_diffrence_in_days(Date *date_a, Date *date_b){
+int date_difference_in_days(Date *date_a, Date *date_b){
     struct tm current_date = { 0 };
     struct tm next_date = { 0 };
     double current_date_seconds;
