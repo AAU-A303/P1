@@ -28,12 +28,11 @@ endif
 build_folder = Build/
 program_folder = Programme/
 target = main
-dependencies = data energy localisation con_manager present user_com
+dependencies = data energy localisation present user_com
 obj = \
 	$(build_folder)data.o \
 	$(build_folder)energy.o \
 	$(build_folder)localisation.o \
-	$(build_folder)con_manager.o \
 	$(build_folder)present.o \
 	$(build_folder)user_com.o
 #---------------------------------------------------------------------
