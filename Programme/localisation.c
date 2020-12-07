@@ -20,34 +20,29 @@
 #include "./H_files/localisation.h"
 
 void print_string_from_id(enum languages language, char target_id[], int needs_newline){
-    int language_index = 0;
     int language_indexes[language_count+1];
     char id[LINE_LENGTH];
-    char languages[language_count][LINE_LENGTH];
+    char result[LINE_LENGTH];
     char line[LINE_LENGTH];
 
-    int current_index = 0;
-    int next_index = 0;
-    int translation_length = 0;
+    int start = 0;
+    int end = 0;
     
-    FILE *stream = fopen(LOCALISATION_FILE, "r");
-    if(stream != NULL){
-        while (fgets(line, LINE_LENGTH, stream)){
-            get_localisation_indexes(language_indexes, line);
+    FILE *file = fopen(LOCALISATION_FILE, "r");
+    if(file != NULL){
+        while (fgets(line, LINE_LENGTH, file)){
             sscanf(line, "%[^;];", id);
             if (strcmp(target_id, id) == 0){
-                for(language_index = 0; language_index < language_count; language_index++){
-                    current_index = language_indexes[language_index]+1;
-                    next_index = language_indexes[language_index+1];
-                    translation_length = (next_index - current_index);
-                    strncpy(languages[language_index], &line[current_index], translation_length);
-                    languages[language_index][translation_length] = '\0';
-                }
-                print_string(languages[language], needs_newline);
+                get_localisation_indexes(language_indexes, line);
+                start = language_indexes[language]+1;
+                end = language_indexes[language+1];
+                strncpy(result, &line[start], end-start);
+                result[end-start] = '\0';
+                print_string(result, needs_newline);
             }
         }
     } else { printf("Failed to open file \"%s\"\n\n", LOCALISATION_FILE); }
-    fclose(stream);
+    fclose(file);
 }
 
 void get_localisation_indexes(int indexes[], char localisation_string[]){
