@@ -23,7 +23,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "con_manager.h"
 
 #define LINE_LENGTH 2048
 

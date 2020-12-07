@@ -38,7 +38,7 @@ void print_string_from_id(enum languages language, char target_id[], int needs_n
                 end = language_indexes[language+1];
                 strncpy(result, &line[start], end-start);
                 result[end-start] = '\0';
-                print_string(result, needs_newline);
+                if (needs_newline) {printf("%s\n", result);} else {printf("%s", result);};
             }
         }
     } else { printf("Failed to open file \"%s\"\n\n", LOCALISATION_FILE); }

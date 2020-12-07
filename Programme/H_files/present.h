@@ -24,7 +24,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "data.h"
-#include "present.h"
 
 #define Y_AXIS_LENGTH 20
 
