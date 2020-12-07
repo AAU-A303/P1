@@ -46,6 +46,8 @@ void setup(User_data*);                      /* input: data, output: none */
 void do_calculations(User_data*);      		 /* input: data, output: none */
 void convert_kwh(float*);                    /* input: price, output: none */
 void add_fees(float*);                       /* input: price, output: none */
+void add_vat(float*);                        /* input: price, output: none */
 void present(User_data*);                    /* input: data, output: none */
+
 
 #endif /* ENERGY_H */
