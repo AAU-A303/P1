@@ -216,7 +216,18 @@ void CuAssertDblEquals_LineMsg(CuTest* tc, const char* file, int line, const cha
 {
 	char buf[STRING_MAX];
 	if (fabs(expected - actual) <= delta) return;
-/*	sprintf(buf, "expected <%lf> but was <%lf>", expected, actual); */
+    /*	sprintf(buf, "expected <%lf> but was <%lf>", expected, actual); */
+	sprintf(buf, "expected <%f> but was <%f>", expected, actual); 
+
+	CuFail_Line(tc, file, line, message, buf);
+}
+
+void CuAssertFlEquals_LineMsg(CuTest* tc, const char* file, int line, const char* message, 
+	float expected, float actual, float delta)
+{
+	char buf[STRING_MAX];
+	if (fabs(expected - actual) <= delta) return;
+    /*	sprintf(buf, "expected <%lf> but was <%lf>", expected, actual); */
 	sprintf(buf, "expected <%f> but was <%f>", expected, actual); 
 
 	CuFail_Line(tc, file, line, message, buf);
@@ -308,33 +319,27 @@ void CuSuiteDetails(CuSuite* testSuite, CuString* details)
 	int i;
 	int failCount = 0;
 
-	if (testSuite->failCount == 0)
-	{
-		int passCount = testSuite->count - testSuite->failCount;
-		const char* testWord = passCount == 1 ? "test" : "tests";
-		CuStringAppendFormat(details, "OK (%d %s)\n", passCount, testWord);
-	}
-	else
-	{
-		if (testSuite->failCount == 1)
-			CuStringAppend(details, "There was 1 failure:\n");
-		else
-			CuStringAppendFormat(details, "There were %d failures:\n", testSuite->failCount);
+    if (testSuite->failCount == 1)
+        CuStringAppend(details, "\nThere was 1 failure:\n\n");
+    else
+        CuStringAppendFormat(details, "\nThere were %d failures:\n\n", testSuite->failCount);
 
-		for (i = 0 ; i < testSuite->count ; ++i)
-		{
-			CuTest* testCase = testSuite->list[i];
-			if (testCase->failed)
-			{
-				failCount++;
-				CuStringAppendFormat(details, "%d) %s: %s\n",
-					failCount, testCase->name, testCase->message);
-			}
-		}
-		CuStringAppend(details, "\n!!!FAILURES!!!\n");
+    for (i = 0 ; i < testSuite->count ; ++i){
+        CuTest* testCase = testSuite->list[i];
+        if (testCase->failed){
+            failCount++;
+            CuStringAppendFormat(details, "%d) %s: %s\n",
+                i+1, testCase->name, testCase->message);
+        } else {
+            CuStringAppendFormat(details, "%d) %s: %s\n",
+                i+1, strupr(testCase->name),"Passed");
+        }
+    }
+    CuStringAppend(details, "\n");
 
-		CuStringAppendFormat(details, "Runs: %d ",   testSuite->count);
-		CuStringAppendFormat(details, "Passes: %d ", testSuite->count - testSuite->failCount);
-		CuStringAppendFormat(details, "Fails: %d\n",  testSuite->failCount);
-	}
+    if (testSuite->failCount >= 1)
+        CuStringAppend(details, "\n!!!FAILURES!!!\n");
+    CuStringAppendFormat(details, "Runs: %d ",   testSuite->count);
+    CuStringAppendFormat(details, "Passes: %d ", testSuite->count - testSuite->failCount);
+    CuStringAppendFormat(details, "Fails: %d\n",  testSuite->failCount);
 }

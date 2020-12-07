@@ -7,6 +7,8 @@ void test_convert_kwh(CuTest* testContext);
 void test_add_fees(CuTest* testContext);
 void test_add_vat(CuTest* testContext);
 void test_do_calculations(CuTest* testContext);
+void test_get_localisation_indexes(CuTest* testContext);
+void test_print_string_from_id(CuTest* testContext);
 
 int main(void)
 {
@@ -16,12 +18,11 @@ int main(void)
 
 void all_tests() {
 	CuString *output = CuStringNew();
-	CuSuite* suite = CuSuiteNew();
+	CuSuite *suite = CuSuiteNew();
 
 	CuSuiteAddSuite(suite, test_suite());
 
 	CuSuiteRun(suite);
-	CuSuiteSummary(suite, output);
 	CuSuiteDetails(suite, output);
 	printf("%s\n", output->buffer);
 }
@@ -69,16 +70,16 @@ void test_day(CuTest* testContext){
     
     get_data(&userdata, date);
     for(i = 0; i < 24; i++){
-        CuAssertDblEquals(testContext, (double)correct_array[0][i], (double)(userdata.today.prices[i]), 0);
+        CuAssertFlEquals(testContext, correct_array[0][i], (userdata.today.prices[i]), 0);
     }
     for(i = 0; i < 24; i++){
-        CuAssertDblEquals(testContext, (double)correct_array[1][i], (double)(userdata.today.co2_emissions[i]), 0);
+        CuAssertFlEquals(testContext, correct_array[1][i], (userdata.today.co2_emissions[i]), 0);
     }
     for(i = 0; i < 24; i++){
-        CuAssertDblEquals(testContext, (double)correct_array[2][i], (double)(userdata.tomorrow.prices[i]), 0);
+        CuAssertFlEquals(testContext, correct_array[2][i], (userdata.tomorrow.prices[i]), 0);
     }
     for(i = 0; i < 24; i++){
-        CuAssertDblEquals(testContext, (double)correct_array[3][i], (double)(userdata.tomorrow.co2_emissions[i]), 0);
+        CuAssertFlEquals(testContext, correct_array[3][i], (userdata.tomorrow.co2_emissions[i]), 0);
     }
 }
 
@@ -100,7 +101,7 @@ void test_convert_kwh(CuTest* testContext){
     for(i = 0; i < 24; i++){
         temp = input_array[i];
         convert_kwh(&temp);
-        CuAssertDblEquals(testContext, (double)temp, (double)correct_array[i], 0.0001);
+        CuAssertFlEquals(testContext, temp, correct_array[i], 0.0001);
     }
 
 }
@@ -121,7 +122,7 @@ void test_add_fees(CuTest* testContext){
     for(i = 0; i < 24; i++){
         temp = input_array[i];
         add_fees(&temp);
-        CuAssertDblEquals(testContext, (double)temp, (double)correct_array[i], 0.0001);
+        CuAssertFlEquals(testContext, temp, correct_array[i], 0.0001);
     }
 }
 
@@ -142,7 +143,7 @@ void test_add_vat(CuTest* testContext){
     for(i = 0; i < 24; i++){
         temp = input_array[i];
         add_vat(&temp);
-        CuAssertDblEquals(testContext, (double)temp, (double)correct_array[i], 0.0001);
+        CuAssertFlEquals(testContext, temp, correct_array[i], 0.0001);
     }
 }
 
@@ -165,7 +166,6 @@ void test_do_calculations(CuTest* testContext){
         299.78,282.52,237.02,193.6,189.64,188.15,184.64,243.97,276.1,
         284.24,257.72,202.5,197.34,182.62,165.88
     };
-
     float tomorrow_prices[24] = {
         2.99,23.24,70.39,70.91,70.17,64.79,76.07,86.38,97.07,104.69,92.36,74.5,
         50.14,69.12,69.34,69.64,39.01,91.54,104.02,95.5,60.23,55.15,77.79,71.06
@@ -179,7 +179,15 @@ void test_do_calculations(CuTest* testContext){
     }
     do_calculations(&userdata);
     for(i = 0; i < 24; i++){
-        CuAssertDblEquals(testContext, userdata.today.prices[i], correct_array_today[i],0.0001);
-        CuAssertDblEquals(testContext, userdata.tomorrow.prices[i], correct_array_tomorrow[i],0.0001);
+        CuAssertFlEquals(testContext, userdata.today.prices[i], correct_array_today[i],0.0001);
+        CuAssertFlEquals(testContext, userdata.tomorrow.prices[i], correct_array_tomorrow[i],0.0001);
     }
+}
+
+void test_get_localisation_indexes(CuTest* testContext){
+
+}
+
+void test_print_string_from_id(CuTest* testContext){
+
 }
