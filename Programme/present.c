@@ -151,109 +151,92 @@ void cmpr_tdy_tmrw(float prices_tdy[], float prices_tmrw[])
     }
 }
 
-void graph(float prices[], Date date)
+void graph(float prices[], Graph *graph, Date date)
 {
-    float min_price, max_price, max_y, step;
-    float y_axis[Y_AXIS_LENGTH];
-
-    find_extremes(prices, &min_price, &max_price);
-
-    make_y_axis(y_axis, min_price, max_price, &max_y, &step);
-
-    make_graph(prices, y_axis, date, max_y, step);
+    find_extremes(prices, graph);
+    make_y_axis(graph);
+    make_graph(prices, graph, date);
 }
 
-void find_extremes(float prices[], float *min_price, float *max_price)
+void find_extremes(float prices[], Graph *graph)
 {
     int i;
-    *min_price = prices[0], *max_price = prices[0];
+    graph->min_price = prices[0], graph->max_price = prices[0];
     for(i = 0; i < DAY_HOURS; i++)
     {
-        if(prices[i] < *min_price)
-            *min_price = prices[i];
-        else if(prices[i] > *max_price)
-            *max_price = prices[i];
+        if(prices[i] < graph->min_price)
+            graph->min_price = prices[i];
+        else if(prices[i] > graph->max_price)
+            graph->max_price = prices[i];
     }
 }
 
-void make_y_axis(float y_axis[], float min_price, float max_price, float *max_y, float *step)
+void make_y_axis(Graph *graph)
 {
     int i;
-    float min_y = ((double)((int)(min_price * 2))) / 2;
+    float min_y = ((double)((int)(graph->min_price * 2))) / 2;
     float current_step = 0;
 
-    *max_y = ((double)((int)((max_price + 0.5) * 2))) / 2;
-    current_step = *max_y;
-    *step = (*max_y - min_y) / Y_AXIS_LENGTH;
+    graph->max_y = ((double)((int)((graph->max_price + 0.5) * 2))) / 2;
+    current_step = graph->max_y;
+    graph->step = (graph->max_y - min_y) / Y_AXIS_LENGTH;
 
     for(i = 0; i < Y_AXIS_LENGTH; i++)
     {
-        y_axis[i] = current_step;
-        current_step -= *step;
+        graph->y_axis[i] = current_step;
+        current_step -= graph->step;
     }
 }
 
-void make_graph(float prices[], float y_axis[], Date date, float max_y, float step)
+/*  */
+void make_graph(float prices[], Graph *graph, Date date)
 {
     int i, j;
     /* We make 24 empty string with 20 characters each and put them in an array. 
        Each string works as an hour's y-axis. */ 
     float current_step;
-    char points[Y_AXIS_LENGTH] = "                    ";
-    char graph_points[DAY_HOURS][Y_AXIS_LENGTH];
     int graph_line[DAY_HOURS];
-    
-    for(i = 0; i < DAY_HOURS; i++)
-    {
-        for(j = 0; j < Y_AXIS_LENGTH; j++)
-        {
-            graph_points[i][j] = points[j];
-        }
-    }
 
     for(i = 0; i < DAY_HOURS; i++)
     {
-        current_step = max_y;
+        current_step = graph->max_y;
         for(j = 0; j < Y_AXIS_LENGTH; j++)
         {
-            if(prices[i] - current_step >= step/2 && prices[i] - current_step <= step)
+            if(prices[i] - current_step >= graph->step/2 && prices[i] - current_step <= graph->step)
             {
-                graph_points[i][j-1] = '*';
                 graph_line[i] = j-1;
             }
-            else if(prices[i] - current_step <= step/2 && prices[i] - current_step >= 0)
+            else if(prices[i] - current_step <= graph->step/2 && prices[i] - current_step >= 0)
             {
-                graph_points[i][j] = '*';
                 graph_line[i] = j;
             }
-            current_step -= step;
+            current_step -= graph->step;
         }
     }
 
-    format_graph(graph_points, graph_line);
-
-    print_graph(y_axis, graph_points, date);
+    format_graph(graph, graph_line);
 }
-
-void format_graph(char graph_points[DAY_HOURS][Y_AXIS_LENGTH], int graph_line[])
+/*void format_graph(char graph_points[DAY_HOURS][Y_AXIS_LENGTH], int graph_line[])*/
+void format_graph(Graph *graph, int graph_line[])
 {
     int i;
-
+    char temp[] = "                    ";
     for(i = 0; i < DAY_HOURS; i++)
     {
         if(graph_line[i] < graph_line[i+1])
         {
-            graph_points[i][graph_line[i]+1] = '\\';
-        
-            graph_points[i][graph_line[i]] = ' ';
+            temp[graph_line[i]+1] = '\\';
+            temp[graph_line[i]] = ' ';
         }
 
         else if(graph_line[i+1] < graph_line[i]){
-            graph_points[i][graph_line[i]] = '/';
+           temp[graph_line[i]] = '/';
         }
         else {
-            graph_points[i][graph_line[i]] = '_';
+            temp[graph_line[i]] = '_';
         }
+        strings_append_format(&(graph->graph),"%s", temp);
+        strcpy(temp, "                    ");
     }
 }
 
@@ -261,6 +244,7 @@ void print_graph(float y_axis[], char a[DAY_HOURS][Y_AXIS_LENGTH], Date date)
 {
     int i, j;
     printf("\nDKK / kWh %21s ENERGY PRICES %d/%d/%d\n", " ", date.day, date.month, date.year);
+
     for(i = 0; i < Y_AXIS_LENGTH; i++)
     {
         printf("%.2f │", y_axis[i]);
@@ -268,9 +252,31 @@ void print_graph(float y_axis[], char a[DAY_HOURS][Y_AXIS_LENGTH], Date date)
             printf(" %c ", a[j][i]);
         printf("\n");
     }
-
+    
     printf("     ╰────────────────────────────────────────────────────────────────────────\n");
     printf("       00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23  HOUR\n");
+}
+
+void print_graphs(Graph *today, Graph *tomorrow, User_data *data){
+    int i, j;
+    printf("\nDKK / kWh %21s ENERGY PRICES %d/%d/%d", " ", data->today.date.day, data->today.date.month, data->today.date.year);
+    printf("%33sDKK / kWh %21s ENERGY PRICES %d/%d/%d\n", " ", "",data->tomorrow.date.day, data->tomorrow.date.month, data->tomorrow.date.year);
+    for(i = 0; i < Y_AXIS_LENGTH; i++){
+        printf("%.2f │", today->y_axis[i]);
+        for(j = 0; j < DAY_HOURS; j++){
+            printf(" %c ", today->graph.buffer[j][i]);
+        }
+        printf("          ");
+        printf("%.2f │", tomorrow->y_axis[i]);
+        for(j = 0; j < DAY_HOURS; j++){
+            printf(" %c ", tomorrow->graph.buffer[j][i]);
+        }
+        printf("\n");
+    }
+    printf("     ╰────────────────────────────────────────────────────────────────────────");
+    printf("               ╰────────────────────────────────────────────────────────────────────────\n");
+    printf("       00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23  HOUR");
+    printf("           00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23  HOUR\n\n");
 }
 
 /*https://www.geeksforgeeks.org/rounding-floating-point-number-two-decimal-places-c-c/*/
@@ -282,7 +288,6 @@ int compare_floats(float f1, float f2){
 
     return fabs(f1 - f2) < epsilon;
 }
-/*____________________________________________________________________________________*/
 
 int compare_intergers(const void* int1, const void* int2){
     return *((int*)int1)-*((int*)int2);
@@ -293,7 +298,7 @@ int less_than_step(float prices[], float average)
     float max_price, min_price, step;
     float min_y = 0, max_y = 0;
 
-    find_extremes(prices, &min_price, &max_price);
+    /*find_extremes(prices, &min_price, &max_price);*/
 
     max_y = ((double)((int)((max_price + 0.5) * 2))) / 2;
     min_y = ((double)((int)(min_price * 2))) / 2;

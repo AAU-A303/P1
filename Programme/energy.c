@@ -60,12 +60,16 @@ void add_vat(float *price) { *price = *price * VAT; }
 
 /* This presents the received data to the user. */
 void present(User_data *data)
-{
+{   
+    Graph today = {0};
+    Graph tomorrow = {0};
     /* TODO: Present the data */
-    graph(data->today.prices, data->today.date);
-    present_price_data(data, 0);
+    graph(data->today.prices, &today, data->today.date);
+
+    /*present_price_data(data, 0);*/
     if(data->access_tomorrow){
-        graph(data->tomorrow.prices, data->tomorrow.date);
-        present_price_data(data, 1);
+        graph(data->tomorrow.prices, &tomorrow, data->tomorrow.date);
+        /*present_price_data(data, 1);*/
     }
+    print_graphs(&today, &tomorrow, data);
 }
