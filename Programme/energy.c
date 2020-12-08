@@ -29,6 +29,8 @@ void setup(User_data *data)
     get_user_input(data);
     
     do_calculations(data);
+
+    present(data);
 }
 
 /* Does the calculations on the received data, takes in a day struct. */
@@ -37,13 +39,14 @@ void do_calculations(User_data *data)
     int i;    
     
     for (i = 0; i < DAY_HOURS; i++) {
-        convert_kwh(&data->today.prices[i]); add_fees(&data->today.prices[i]);
+        convert_kwh(&data->today.prices[i]);
+        add_fees(&data->today.prices[i]);
+        add_vat(&data->today.prices[i]);
         
         convert_kwh(&data->tomorrow.prices[i]);
         add_fees(&data->tomorrow.prices[i]);
+        add_vat(&data->tomorrow.prices[i]);
     }
-
-    present(data);
 }
 
 /* This is responsible for coverting the current price to kwh */

@@ -27,6 +27,7 @@ endif
 #---------------------------------------------------------------------
 build_folder = Build/
 program_folder = Programme/
+libary_folder = Programme/libaries/
 target = main
 dependencies = data energy localisation present user_com
 obj = \
@@ -43,8 +44,13 @@ all: $(target)
 main: $(dependencies)
 	$(CC) $(CFLAGS) $(obj) $(program_folder)$@.c -o $(build_folder)$@$(EXTENSION)
 
+cutest: $(dependencies) CuTest
+	$(CC) $(CFLAGS) $(build_folder)CuTest.o $(obj) $(program_folder)$@.c -o $(build_folder)$@$(EXTENSION)
+
 $(dependencies):
 	$(CC) $(CFLAGS) -c $(program_folder)$@.c -o $(build_folder)$@.o -lm
 
+CuTest:
+	$(CC) $(CFLAGS) -c $(libary_folder)$@.c -o $(build_folder)$@.o
 clean:	
 	$(RM)
