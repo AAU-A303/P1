@@ -25,5 +25,6 @@
 #include "../libaries/CuTest.h"
 #include "data.h"
 #include "energy.h"
+#include "localisation.h"
 
 #endif /* CUTEST_H */

@@ -329,7 +329,7 @@ void CuSuiteDetails(CuSuite* testSuite, CuString* details)
         if (testCase->failed){
             failCount++;
             CuStringAppendFormat(details, "%d) %s: %s\n",
-                i+1, testCase->name, testCase->message);
+                i+1, strupr(testCase->name), testCase->message);
         } else {
             CuStringAppendFormat(details, "%d) %s: %s\n",
                 i+1, strupr(testCase->name),"Passed");

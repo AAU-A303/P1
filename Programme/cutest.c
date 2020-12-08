@@ -2,13 +2,12 @@
 
 void all_tests();
 CuSuite* test_suite();
-void test_day(CuTest* testContext);
+void test_load_data(CuTest* testContext);
 void test_convert_kwh(CuTest* testContext);
 void test_add_fees(CuTest* testContext);
 void test_add_vat(CuTest* testContext);
 void test_do_calculations(CuTest* testContext);
 void test_get_localisation_indexes(CuTest* testContext);
-void test_print_string_from_id(CuTest* testContext);
 
 int main(void)
 {
@@ -29,15 +28,16 @@ void all_tests() {
 
 CuSuite* test_suite() {
   CuSuite* suite = CuSuiteNew();
-  SUITE_ADD_TEST(suite, test_day);
+  SUITE_ADD_TEST(suite, test_load_data);
   SUITE_ADD_TEST(suite, test_convert_kwh);
   SUITE_ADD_TEST(suite, test_add_fees);
   SUITE_ADD_TEST(suite, test_add_vat);
   SUITE_ADD_TEST(suite, test_do_calculations);
+  SUITE_ADD_TEST(suite, test_get_localisation_indexes);
   return suite;
 }
 
-void test_day(CuTest* testContext){
+void test_load_data(CuTest* testContext){
     int i;
     User_data userdata = {0};
     Date date = {0};
@@ -185,9 +185,37 @@ void test_do_calculations(CuTest* testContext){
 }
 
 void test_get_localisation_indexes(CuTest* testContext){
+    int i, j;
+    char input[7][256] = {
+        "Welcome;Welcome to our prototype!;Velkommen til vores prototype!;Bienvenue dans notre prototype!;Tervetuloa prototyyppiin!;",
+        "Supported_languages;Supported languages: ;Tilgængelige sprog: ;Langues prises en charge: ;Tuetut kielet: ;",
+        "Select_language;Please select a language> ;Vælg et sprog> ;Veuillez sélectionner une langue> ;Valitse kieli> ;",
+        "Continue;Would you like to check another day? Enter Y or N> ;Vil du teste en anden dag? Tast Y for ja og N for nej> ;Souhaitez-vous vérifier un autre jour? Entrez Y ou N> ;Haluatko tarkistaa toisen päivän? Syötä Y tai N> ;",
+        "Select_date;Please enter the current date (DD/MM format)> ;Indtast den nuværende dato (DD/MM format)> ;Veuillez saisir la date actuelle (format JJ / MM)> ;Anna nykyinen päivämäärä (PP / KK-muoto)> ;",
+        "Select_hour;Please enter the current hour (HH format)> ;Indtast den nuværende time (TT format)> ;Veuillez saisir l'heure actuelle (format HH)> ;Anna nykyinen tunti (HH-muoto)> ;",
+        "Goodbye;Thank you for trying out our prototype!;Tak fordi du tog dig tid til at teste vores prototype!;Merci d'avoir essayé notre prototype!;Kiitos kokeilemisesta!;",
+    };
+    int correct_array[7][5] = {
+        {7, 33, 64, 96, 122},
+        {19, 41, 63, 90, 106},
+        {15, 42, 59, 95, 111},
+        {8, 60, 116, 172, 226},
+        {11, 58, 103, 155, 203},
+        {11, 55, 97, 144, 177},
+        {7, 47, 102, 141, 164},
+    };
+    int temp[7][5];
+    get_localisation_indexes(temp[0], input[0]);
+    get_localisation_indexes(temp[1], input[1]);
+    get_localisation_indexes(temp[2], input[2]);
+    get_localisation_indexes(temp[3], input[3]);
+    get_localisation_indexes(temp[4], input[4]);
+    get_localisation_indexes(temp[5], input[5]);
+    get_localisation_indexes(temp[6], input[6]);
 
-}
-
-void test_print_string_from_id(CuTest* testContext){
-
+    for(i = 0; i < 7; i++){
+        for(j = 0; j < 5; j++){
+            CuAssertIntEquals(testContext,correct_array[i][j], temp[i][j]);
+        }
+    }
 }
