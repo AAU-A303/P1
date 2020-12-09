@@ -62,7 +62,7 @@ void average_prices_table(Strings *table, float prices[])
         {
             prices_cheap[i] = 0;
         }
-        if(prices_cheap[i] > 0 && i > 5)
+        if(prices_cheap[i] > 0)
         {   
             hour_1 = i;
             while(i < DAY_HOURS){
@@ -176,10 +176,10 @@ void compare_prices_table(Strings *table, float today[], float tomorrow[])
 }
 
 /* */
-void graph(float prices[], Graph *graph, Date date)
+void graph(float prices[], Graph *graph, Date date, int price_flag)
 {
     find_extremes(prices, graph);
-    make_y_axis(graph);
+    make_y_axis(graph, price_flag);
     make_graph(prices, graph, date);
 }
 
@@ -201,13 +201,22 @@ void find_extremes(float prices[], Graph *graph)
 }
 
 /* */
-void make_y_axis(Graph *graph)
+void make_y_axis(Graph *graph, int price_flag)
 {
     int i;
-    float min_y = ((double)((int)(graph->min_price * 2))) / 2;
-    float current_step = 0;
+    float min_y, current_step = 0;
 
-    graph->max_y = ((double)((int)((graph->max_price + 0.5) * 2))) / 2;
+    if(price_flag == 1)
+    {
+        min_y = ((double)((int)(graph->min_price * 2))) / 2;
+        graph->max_y = ((double)((int)((graph->max_price + 0.5) * 2))) / 2;
+    }
+    else
+    {
+        min_y = (int)(graph->min_price / 50) * 50;
+        graph->max_y = (int)((graph->max_price + 50) / 50) * 50;
+    }
+
     current_step = graph->max_y;
     graph->step = (graph->max_y - min_y) / Y_AXIS_LENGTH;
 
@@ -277,23 +286,23 @@ void print_graphs(Graph *today, Graph *tomorrow, User_data *data)
 {
     int i, j;
     printf("\nDKK / kWh %21s ENERGY PRICES %d/%d/%d", " ", data->today.date.day, data->today.date.month, data->today.date.year);
-    printf("%33sDKK / kWh %21s ENERGY PRICES %d/%d/%d\n", " ", "",data->tomorrow.date.day, data->tomorrow.date.month, data->tomorrow.date.year);
+    printf("%33sg / kWh %21s CARBON EMISSIONS %d/%d/%d\n", " ", "",data->today.date.day, data->today.date.month, data->today.date.year);
     for(i = 0; i < Y_AXIS_LENGTH; i++){
         printf("%.2f │", today->y_axis[i]);
         for(j = 0; j < DAY_HOURS; j++){
             printf(" %c ", today->graph.buffer[j][i]);
         }
         printf("          ");
-        printf("%.2f │", tomorrow->y_axis[i]);
+        printf("%3.0f │", tomorrow->y_axis[i]);
         for(j = 0; j < DAY_HOURS; j++){
             printf(" %c ", tomorrow->graph.buffer[j][i]);
         }
         printf("\n");
     }
     printf("     ╰────────────────────────────────────────────────────────────────────────");
-    printf("               ╰────────────────────────────────────────────────────────────────────────\n");
+    printf("              ╰────────────────────────────────────────────────────────────────────────\n");
     printf("       00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23  HOUR");
-    printf("           00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23  HOUR\n\n");
+    printf("          00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23  HOUR\n\n");
 }
 
 /* */

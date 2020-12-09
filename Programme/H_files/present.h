@@ -51,9 +51,9 @@ double average_price(float prices[]);
 void compare_prices_table(Strings *table, float today[], float tomorrow[]);
 int less_than_step(float prices[], float average);
 
-void graph(float prices[], Graph *graph, Date date);
+void graph(float prices[], Graph *graph, Date date, int flag_price);
 void find_extremes(float prices[], Graph *graph);
-void make_y_axis(Graph *graph);
+void make_y_axis(Graph *graph, int flag_price);
 void make_graph(float prices[], Graph *graph, Date date);
 void format_graph(Graph *graph, int graph_line[]);
 
