@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include "data.h"
 #include "../libaries/strings.h"
-#include "./user_com.h"
+#include "user_com.h"
 
 #define Y_AXIS_LENGTH 20
 
@@ -51,16 +51,16 @@ double average_price(float prices[]);
 void compare_prices_table(Strings *table, float today[], float tomorrow[]);
 int less_than_step(float prices[], float average);
 
-void graph(float prices[], Graph *graph, Date date, int flag_price);
+void graph(float prices[], Graph *graph, int flag_price);
 void find_extremes(float prices[], Graph *graph);
 void make_y_axis(Graph *graph, int flag_price);
-void make_graph(float prices[], Graph *graph, Date date);
+void make_graph(float prices[], Graph *graph);
 void format_graph(Graph *graph, int graph_line[]);
 
 int compare_floats(float f1, float f2);
 int compare_intergers(const void* int1, const void* int2);
 
-void print_graphs(Graph *today, Graph *tomorrow, User_data *data);
+void print_graphs(Graph *today, Graph *tomorrow, Date *date);
 void print_tables(Tables* prices, Tables* co2);
 
 #endif /* PRESENT_H */

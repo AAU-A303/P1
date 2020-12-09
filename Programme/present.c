@@ -176,11 +176,11 @@ void compare_prices_table(Strings *table, float today[], float tomorrow[])
 }
 
 /* */
-void graph(float prices[], Graph *graph, Date date, int price_flag)
+void graph(float prices[], Graph *graph, int price_flag)
 {
     find_extremes(prices, graph);
     make_y_axis(graph, price_flag);
-    make_graph(prices, graph, date);
+    make_graph(prices, graph);
 }
 
 /* */
@@ -228,7 +228,7 @@ void make_y_axis(Graph *graph, int price_flag)
 }
 
 /*  */
-void make_graph(float prices[], Graph *graph, Date date)
+void make_graph(float prices[], Graph *graph)
 {
     int i, j;
     /* We make 24 empty string with 20 characters each and put them in an array. 
@@ -282,11 +282,11 @@ void format_graph(Graph *graph, int graph_line[])
 }
 
 /* */
-void print_graphs(Graph *today, Graph *tomorrow, User_data *data)
+void print_graphs(Graph *today, Graph *tomorrow, Date *date)
 {
     int i, j;
-    printf("\nDKK / kWh %21s ENERGY PRICES %d/%d/%d", " ", data->today.date.day, data->today.date.month, data->today.date.year);
-    printf("%33sg / kWh %21s CARBON EMISSIONS %d/%d/%d\n", " ", "",data->today.date.day, data->today.date.month, data->today.date.year);
+    printf("\nDKK / kWh %21s ENERGY PRICES %d/%d/%d", " ", date->day, date->month, date->year);
+    printf("%33sg / kWh %21s CARBON EMISSIONS %d/%d/%d\n", " ", "", date->day, date->month, date->year);
     for(i = 0; i < Y_AXIS_LENGTH; i++){
         printf("%.2f │", today->y_axis[i]);
         for(j = 0; j < DAY_HOURS; j++){
@@ -309,20 +309,23 @@ void print_graphs(Graph *today, Graph *tomorrow, User_data *data)
 void print_tables(Tables* prices, Tables* co2)
 {
     int i;
-    int longest_table = prices->average.index > co2->average.index ? 
+    int longest_table_a = prices->average.index > co2->average.index ? 
         prices->average.index : co2->average.index;
 
-    for(i = 0; i < longest_table; i++){
+    int longest_table_h = prices->highest.index > co2->highest.index ? 
+        prices->highest.index : co2->highest.index;
+
+    for(i = 0; i < longest_table_a; i++){
         if(prices->average.index > i){
             printf("%16s%s%30s", "", prices->average.buffer[i], "");
         }
-        if(prices->average.index == longest_table && co2->average.index <= i){
+        if(prices->average.index == longest_table_a && co2->average.index <= i){
             printf("\n");
         }
 
         if(co2->average.index > i && prices->average.index > i){
             printf("%16s%s\n", "", co2->average.buffer[i]);
-        } else if (co2->average.index == longest_table){
+        } else if (co2->average.index == longest_table_a){
             printf("%109s%s\n", "", co2->average.buffer[i]);
         }
     }
@@ -331,9 +334,19 @@ void print_tables(Tables* prices, Tables* co2)
         printf("%16s%s%30s\n", "", co2->compare.buffer[i], "");
     }
 
-    for(i = 0; i < prices->highest.index; i++){
-        printf("%16s%s%30s", "",prices->highest.buffer[i], "");
-        printf("%16s%s%30s\n", "",co2->highest.buffer[i], "");
+    for(i = 0; i < longest_table_h; i++){
+       if(prices->highest.index > i){
+            printf("%16s%s%30s", "", prices->highest.buffer[i], "");
+        }
+        if(prices->highest.index == longest_table_h && co2->highest.index <= i){
+            printf("\n");
+        }
+
+        if(co2->highest.index > i && prices->highest.index > i){
+            printf("%16s%s\n", "", co2->highest.buffer[i]);
+        } else if (co2->highest.index == longest_table_h){
+            printf("%109s%s\n", "", co2->highest.buffer[i]);
+        }
     }
 }
 
