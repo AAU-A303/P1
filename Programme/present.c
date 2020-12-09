@@ -219,7 +219,7 @@ void make_graph(float prices[], Graph *graph, Date date)
     /* We make 24 empty string with 20 characters each and put them in an array. 
        Each string works as an hour's y-axis. */ 
     float current_step;
-    int graph_line[DAY_HOURS];
+    int graph_line[DAY_HOURS] = {0};
 
     for(i = 0; i < DAY_HOURS; i++)
     {
@@ -262,7 +262,6 @@ void format_graph(Graph *graph, int graph_line[])
         strings_append_format(&(graph->graph),"%s", temp);
         strcpy(temp, "                    ");
     }
-    printf(" ");
 }
 
 void print_graphs(Graph *today, Graph *tomorrow, User_data *data){
@@ -294,18 +293,21 @@ void print_tables(Tables* prices, Tables* co2){
 
     for(i = 0; i < longest_table; i++){
         if(prices->average.index > i){
-            printf("%16s%s%30s", "",prices->average.buffer[i],"");
+            printf("%16s%s%30s", "", prices->average.buffer[i], "");
         }
+        if(prices->average.index == longest_table && co2->average.index <= i){
+            printf("\n");
+        }
+
         if(co2->average.index > i && prices->average.index > i){
-            printf("%16s%s\n", "",co2->average.buffer[i]);
-        } else if(co2->average.index > i){
+            printf("%16s%s\n", "", co2->average.buffer[i]);
+        } else if (co2->average.index == longest_table){
             printf("%109s%s\n", "", co2->average.buffer[i]);
         }
     }
     for(i = 0; i < prices->compare.index; i++){
         printf("%16s%s%30s", "", prices->compare.buffer[i], "");
-        printf("%16s%s%30s", "", co2->compare.buffer[i], "");
-        printf("\n");
+        printf("%16s%s%30s\n", "", co2->compare.buffer[i], "");
     }
 
     for(i = 0; i < prices->highest.index; i++){
