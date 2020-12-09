@@ -23,22 +23,14 @@
 #include "./H_files/present.h"
 
 /* */
-void present_price_data(Tables* prices, Tables* co2, User_data *data, int check)
+void present_data(Tables* prices, Tables* co2, Energy_data *data)
 {
-    if(check == 0){
-        average_prices_table(&(prices->average), data->today.prices);
-        average_prices_table(&(co2->average), data->today.co2_emissions);
-        highest_prices_table(&prices->highest, data->today.prices);
-        highest_prices_table(&co2->highest, data->today.co2_emissions);
-    }
-    if(data->access_tomorrow && check == 0){
-        compare_prices_table(&prices->compare, data->today.prices, data->today.prices);
-        compare_prices_table(&co2->compare, data->today.co2_emissions, data->today.co2_emissions);
-    }
-    if(check == 1){
-        highest_prices_table(&prices->highest, data->today.prices);
-        highest_prices_table(&co2->highest, data->today.co2_emissions);
-    }
+    average_prices_table(&(prices->average), data->prices);
+    average_prices_table(&(co2->average), data->co2_emissions);
+    highest_prices_table(&prices->highest, data->prices);
+    highest_prices_table(&co2->highest, data->co2_emissions);
+    compare_prices_table(&prices->compare, data->prices, data->prices);
+    compare_prices_table(&co2->compare, data->co2_emissions, data->co2_emissions);
 }
 
 /* If prices are given as an array of doubles */

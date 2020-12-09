@@ -30,7 +30,9 @@ void setup(User_data *data)
     
     do_calculations(data);
 
-    present(data);
+    present(&data->today);
+    if (data->access_tomorrow && want_data_for_tommorow(*data))
+        present(&data->tomorrow);
 }
 
 /* Does the calculations on the received data, takes in a day struct. */
@@ -59,40 +61,19 @@ void add_fees(float *price) { *price += TRANSPORT_FEE; }
 void add_vat(float *price) { *price = *price * VAT; }
 
 /* This presents the received data to the user. */
-void present(User_data *data)
-{   
-    Graph today_prices_g = {0};
-    Graph today_co2_g = {0};
+void present(Energy_data *data){
+    Graph prices_graph = {0};
+    Graph co2_graph = {0};
 
-    Graph tomorrow_prices_g = {0};
-    Graph tomorrow_co2_g = {0};
-
-    Tables today_prices_t = {0};
-    Tables today_co2_t = {0};
-
-    Tables tomorrow_prices_t = {0};
-    Tables tomorrow_co2_t = {0};
+    Tables prices_table = {0};
+    Tables co2_table = {0};
             
+    graph(data->prices, &prices_graph, 1);
+    graph(data->co2_emissions, &co2_graph,  0);
 
-    /* TODO: Present the data */
-    graph(data->today.prices, &today_prices_g, 1);
-    graph(data->today.co2_emissions, &today_co2_g,  0);
+    present_data(&prices_table, &co2_table, data);
 
-    present_price_data(&today_prices_t, &today_co2_t, data, 0);
-    if(data->access_tomorrow){
-        graph(data->tomorrow.prices, &tomorrow_prices_g, 1);
-        graph(data->tomorrow.co2_emissions, &tomorrow_co2_g, 0);
-        present_price_data(&tomorrow_prices_t, &tomorrow_co2_t, data, 0);
-    }
-    print_graphs(&today_prices_g, &today_co2_g, &data->today.date);
-    print_tables(&today_prices_t, &today_co2_t);
+    print_graphs(&prices_graph, &co2_graph, &data->date);
+    print_tables(&prices_table, &co2_table);
 
-    if (data->access_tomorrow)
-    {
-        if (want_data_for_tommorow(*data))
-        {
-            print_graphs(&tomorrow_prices_g, &tomorrow_co2_g, &data->tomorrow.date);
-            print_tables(&tomorrow_prices_t, &tomorrow_co2_t);
-        }
-    }
 }

@@ -25,7 +25,6 @@
 #include <stdlib.h>
 #include "data.h"
 #include "../libaries/strings.h"
-#include "user_com.h"
 
 #define Y_AXIS_LENGTH 20
 
@@ -44,7 +43,7 @@ typedef struct _Tables {
     Strings highest;
 } Tables;
 
-void present_price_data(Tables* prices, Tables* co2, User_data *data, int check);
+void present_data(Tables* prices, Tables* co2, Energy_data *data);
 void average_prices_table(Strings *table, float prices[]);
 void highest_prices_table(Strings *table,float prices[]);
 double average_price(float prices[]);
