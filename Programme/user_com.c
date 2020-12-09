@@ -22,7 +22,7 @@
 #include <stdio.h>
 
 /* Constants */
-char* language_names[] = {"English","Dansk","Française","Suomen kieli"};
+char* language_names[] = {"English","Dansk"};
 
 /* Gets the user input for date and time. */
 void get_user_input(User_data *data)
@@ -143,6 +143,24 @@ int is_leap_year(int year)
     else return FALSE;
 }
 
+/* Returns whether the user wants to see the data for tomorrow, when it is available. */
+int want_data_for_tommorow(User_data data)
+{
+    char input;
+    int wrong_input = TRUE;
+    
+    do
+    {
+        printf("\n"); print_string_from_id(data.language, "Tomorrow", 0);
+        scanf(" %c", &input);
+        
+        if ((input != 'y') || (input != 'Y') ||
+            (input != 'n') || (input != 'N')) { wrong_input = FALSE; }
+    } while (wrong_input);
+    
+    printf("\n"); return (input == 'y' || input == 'Y');
+}
+
 /* Returns whether the user wants to check another day or exit the programme. */
 int has_new_inquiry(User_data data)
 {
@@ -152,7 +170,6 @@ int has_new_inquiry(User_data data)
     do
     {
         print_string_from_id(data.language, "Continue", 0);
-        /* printf("\nWould you like to check another day? Enter Y or N> "); */
         scanf(" %c", &input);
         
         if ((input != 'y') || (input != 'Y') ||

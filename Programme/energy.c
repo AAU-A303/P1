@@ -68,13 +68,13 @@ void present(User_data *data)
     Tables today_co2 = {0};
 
     /*
-
+    
     Graph tomorrow_prices_g = {0};
     Graph tomorrow_co2_g = {0};
 
     Tables tomorrow_prices_t = {0};
     Tables tomorrow_co2_t = {0};
-    
+            
     */
 
     /* TODO: Present the data */
@@ -88,4 +88,18 @@ void present(User_data *data)
     }*/
     print_graphs(&prices, &co2, data);
     print_tables(&today_prices, &today_co2);
+
+    if (data->access_tomorrow)
+    {
+        if (want_data_for_tommorow(*data))
+        {
+            printf("Hell yeah, the user would love to see the data for tomorrow! Imagine some crazy stuff here...\n");
+             /* TODO: insert printy spinny stuff here */
+        }
+        else
+        {
+            /* TODO: after debugging, this whole else statement can be removed */
+            printf("Hell nah, the user would hate to see the data for tomorrow! ...Moving on.\n");
+        }
+    }
 }
