@@ -12,10 +12,10 @@ ifeq ($(OS),Windows_NT)
 	EXTENSION := .exe
 else
 	UNAME_S := $(shell uname -s)
-    ifeq ($(UNAME_S),Linux)
+    ifeq ($(UNAME_S), Linux)
         CC := gcc
     endif
-    ifeq ($(UNAME_S),Darwin)
+    ifeq ($(UNAME_S), Darwin)
         CC := gcc-10
     endif
 	MD := mkdir
@@ -41,8 +41,8 @@ obj = \
 #---------------------------------------------------------------------
 all: $(target)
 
-main: $(dependencies)
-	$(CC) $(CFLAGS) $(obj) $(program_folder)$@.c -o $(build_folder)$@$(EXTENSION)
+main: $(dependencies) strings
+	$(CC) $(CFLAGS) $(obj) $(build_folder)strings.o $(program_folder)$@.c -o $(build_folder)$@$(EXTENSION)
 
 cutest: $(dependencies) CuTest
 	$(CC) $(CFLAGS) $(build_folder)CuTest.o $(obj) $(program_folder)$@.c -o $(build_folder)$@$(EXTENSION)
@@ -50,7 +50,11 @@ cutest: $(dependencies) CuTest
 $(dependencies):
 	$(CC) $(CFLAGS) -c $(program_folder)$@.c -o $(build_folder)$@.o -lm
 
+strings:
+	$(CC) $(CFLAGS) -c $(libary_folder)$@.c -o $(build_folder)$@.o -lm
+
 CuTest:
 	$(CC) $(CFLAGS) -c $(libary_folder)$@.c -o $(build_folder)$@.o
+
 clean:	
 	$(RM)

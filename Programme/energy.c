@@ -60,12 +60,32 @@ void add_vat(float *price) { *price = *price * VAT; }
 
 /* This presents the received data to the user. */
 void present(User_data *data)
-{
+{   
+    Graph prices = {0};
+    Graph co2 = {0};
+    
+    Tables today_prices = {0};
+    Tables today_co2 = {0};
+
+    /*
+
+    Graph tomorrow_prices_g = {0};
+    Graph tomorrow_co2_g = {0};
+
+    Tables tomorrow_prices_t = {0};
+    Tables tomorrow_co2_t = {0};
+    
+    */
+
     /* TODO: Present the data */
-    graph(data->today.prices, data->today.date);
-    present_price_data(data, 0);
-    if(data->access_tomorrow){
-        graph(data->tomorrow.prices, data->tomorrow.date);
-        present_price_data(data, 1);
-    }
+    graph(data->today.prices, &prices, data->today.date);
+    graph(data->today.co2_emissions, &co2, data->today.date);
+
+    present_price_data(&today_prices, &today_co2, data, 0);
+    /*if(data->access_tomorrow){
+        graph(data->tomorrow.prices, &tomorrow, data->tomorrow.date);
+        present_price_data(&tomorrow_prices, &tomorrow_co2,data, 1);
+    }*/
+    print_graphs(&prices, &co2, data);
+    print_tables(&today_prices, &today_co2);
 }
