@@ -169,7 +169,7 @@ int has_new_inquiry(User_data data)
     
     do
     {
-        print_string_from_id(data.language, "Continue", 0);
+        printf("\n"); print_string_from_id(data.language, "Continue", 0);
         scanf(" %c", &input);
         
         if ((input != 'y') || (input != 'Y') ||
