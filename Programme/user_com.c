@@ -151,7 +151,7 @@ int want_data_for_tommorow(User_data data)
     
     do
     {
-        print_string_from_id(data.language, "Tomorrow", 0);
+        printf("\n"); print_string_from_id(data.language, "Tomorrow", 0);
         scanf(" %c", &input);
         
         if ((input != 'y') || (input != 'Y') ||

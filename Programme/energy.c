@@ -93,13 +93,13 @@ void present(User_data *data)
     {
         if (want_data_for_tommorow(*data))
         {
-            printf("Hell yeah, the user would love to see the data for tomorrow!");
-             /* TODO: insert printy stuff here */
+            printf("Hell yeah, the user would love to see the data for tomorrow! Imagine some crazy stuff here...\n");
+             /* TODO: insert printy spinny stuff here */
         }
         else
         {
             /* TODO: after debugging, this whole else statement can be removed */
-            printf("Hell nah, the user would hate to see the data for tomorrow!");
+            printf("Hell nah, the user would hate to see the data for tomorrow! ...Moving on.\n");
         }
     }
 }
