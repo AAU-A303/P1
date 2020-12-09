@@ -22,6 +22,7 @@
 
 #include "./H_files/present.h"
 
+/* */
 void present_price_data(Tables* prices, Tables* co2, User_data *data, int check)
 {
     if(check == 0){
@@ -88,6 +89,7 @@ void average_prices_table(Strings *table, float prices[])
     strings_append(table, "╰─────────────────────────────────────────────╯");
 }
 
+/* */
 void highest_prices_table(Strings *table, float values[])
 {
     int i;
@@ -138,7 +140,7 @@ void highest_prices_table(Strings *table, float values[])
     }
 }
 
-/* Calculates the average price */
+/* Calculates and returns the average price of the day */
 double average_price(float prices[])
 {
     double average = 0;
@@ -152,6 +154,7 @@ double average_price(float prices[])
     return average;
 }
 
+/* */
 void compare_prices_table(Strings *table, float today[], float tomorrow[])
 {
     float relative_devation = (average_price(tomorrow) - average_price(today)) / average_price(today) * 100;
@@ -172,6 +175,7 @@ void compare_prices_table(Strings *table, float today[], float tomorrow[])
     }
 }
 
+/* */
 void graph(float prices[], Graph *graph, Date date, int price_flag)
 {
     find_extremes(prices, graph);
@@ -179,6 +183,7 @@ void graph(float prices[], Graph *graph, Date date, int price_flag)
     make_graph(prices, graph, date);
 }
 
+/* */
 void find_extremes(float prices[], Graph *graph)
 {
     int i;
@@ -195,6 +200,7 @@ void find_extremes(float prices[], Graph *graph)
     }
 }
 
+/* */
 void make_y_axis(Graph *graph, int price_flag)
 {
     int i;
@@ -249,6 +255,8 @@ void make_graph(float prices[], Graph *graph, Date date)
 
     format_graph(graph, graph_line);
 }
+
+/* */
 /*void format_graph(char graph_points[DAY_HOURS][Y_AXIS_LENGTH], int graph_line[])*/
 void format_graph(Graph *graph, int graph_line[])
 {
@@ -273,7 +281,9 @@ void format_graph(Graph *graph, int graph_line[])
     }
 }
 
-void print_graphs(Graph *today, Graph *tomorrow, User_data *data){
+/* */
+void print_graphs(Graph *today, Graph *tomorrow, User_data *data)
+{
     int i, j;
     printf("\nDKK / kWh %21s ENERGY PRICES %d/%d/%d", " ", data->today.date.day, data->today.date.month, data->today.date.year);
     printf("%33sg / kWh %21s CARBON EMISSIONS %d/%d/%d\n", " ", "",data->today.date.day, data->today.date.month, data->today.date.year);
@@ -295,7 +305,9 @@ void print_graphs(Graph *today, Graph *tomorrow, User_data *data){
     printf("          00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23  HOUR\n\n");
 }
 
-void print_tables(Tables* prices, Tables* co2){
+/* */
+void print_tables(Tables* prices, Tables* co2)
+{
     int i;
     int longest_table = prices->average.index > co2->average.index ? 
         prices->average.index : co2->average.index;
@@ -325,8 +337,10 @@ void print_tables(Tables* prices, Tables* co2){
     }
 }
 
+/* */
 /*https://www.geeksforgeeks.org/rounding-floating-point-number-two-decimal-places-c-c/*/
-int compare_floats(float f1, float f2){
+int compare_floats(float f1, float f2)
+{
     float epsilon = 0.001f;
 
     f1 = (float)((int)(f1 * 100 + 0.5)) / 100;
@@ -335,10 +349,10 @@ int compare_floats(float f1, float f2){
     return fabs(f1 - f2) < epsilon;
 }
 
-int compare_intergers(const void* int1, const void* int2){
-    return *((int*)int1)-*((int*)int2);
-}
+/* */
+int compare_intergers(const void* int1, const void* int2) { return *((int*)int1)-*((int*)int2); }
 
+/* */
 int less_than_step(float prices[], float average)
 {   
     Graph graph = {0};

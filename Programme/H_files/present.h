@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include "data.h"
 #include "../libaries/strings.h"
+#include "./user_com.h"
 
 #define Y_AXIS_LENGTH 20
 
