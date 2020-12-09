@@ -31,8 +31,6 @@
 enum languages {
     english,
     danish,
-    french,
-    finnish,
     language_count
 };
 
