@@ -145,6 +145,7 @@ void reset_energy_price(Energy_data *energy_data){
     energy_data->date.day = 0;
     for(i = 0; i < DAY_HOURS; i++){
         energy_data->prices[i] = 0;
+        energy_data->co2_emissions[i] = 0;
     }
 }
 
