@@ -78,8 +78,8 @@ void present(User_data *data)
     */
 
     /* TODO: Present the data */
-    graph(data->today.prices, &prices, data->today.date);
-    graph(data->today.co2_emissions, &co2, data->today.date);
+    graph(data->today.prices, &prices, data->today.date, 1);
+    graph(data->today.co2_emissions, &co2, data->today.date, 0);
 
     present_price_data(&today_prices, &today_co2, data, 0);
     /*if(data->access_tomorrow){
