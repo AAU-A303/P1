@@ -13,14 +13,16 @@ void strings_append(Strings* strings, char* append) {
 void strings_append_format(Strings* strings, const char* format, ...){
     int length;
     char* buffer;
-    va_list args;
+    va_list args, argsc;
     
     va_start(args, format);
+    va_start(argsc, format);
 
-    length = vsnprintf(NULL, 0, format, args) + 1;
-    buffer = malloc((length+1) * sizeof(char));
+    length = vsnprintf(NULL, 0, format, argsc) + 2;
+    buffer = calloc(length, sizeof(char));
     vsnprintf(buffer, length, format, args);
 
+    va_end(argsc);
     va_end(args);
     
     strings_append(strings, buffer);
