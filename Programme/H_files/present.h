@@ -29,7 +29,6 @@
 #define Y_AXIS_LENGTH 20
 
 typedef struct _Graph {
-    char* title;
     float y_axis[Y_AXIS_LENGTH];
     float min_price;
     float max_price;
@@ -38,11 +37,17 @@ typedef struct _Graph {
     Strings graph;
 } Graph;
 
-void present_price_data(User_data *data, int check);
-void print_prices(Energy_data prices);
-void highest_prices(float prices[], float average);
+typedef struct _Tables {
+    Strings average;
+    Strings compare;
+    Strings highest;
+} Tables;
+
+void present_price_data(Tables* prices, Tables* co2, User_data *data, int check);
+void average_prices_table(Strings *table, float prices[]);
+void highest_prices_table(Strings *table,float prices[]);
 double average_price(float prices[]);
-void cmpr_tdy_tmrw(float prices_tdy[], float prices_tmrw[]);
+void compare_prices_table(Strings *table, float today[], float tomorrow[]);
 int less_than_step(float prices[], float average);
 
 void graph(float prices[], Graph *graph, Date date);
@@ -50,9 +55,11 @@ void find_extremes(float prices[], Graph *graph);
 void make_y_axis(Graph *graph);
 void make_graph(float prices[], Graph *graph, Date date);
 void format_graph(Graph *graph, int graph_line[]);
-void print_graph(float y_axis[], char a[DAY_HOURS][Y_AXIS_LENGTH], Date date);
-void print_graphs(Graph *today, Graph *tomorrow, User_data *data);
+
 int compare_floats(float f1, float f2);
 int compare_intergers(const void* int1, const void* int2);
+
+void print_graphs(Graph *today, Graph *tomorrow, User_data *data);
+void print_tables(Tables* prices, Tables* co2);
 
 #endif /* PRESENT_H */
