@@ -23,44 +23,57 @@
 #include "./H_files/present.h"
 
 /* */
-void present_data(Tables* prices, Tables* co2, Energy_data *dataset_1, Energy_data *dataset_2)
+void present_data(Tables* prices, Tables* co2, User_data* data, int today)
 {
-    average_prices_table(&(prices->average), dataset_1->prices);
-    average_prices_table(&(co2->average), dataset_1->co2_emissions);
-    
-    highest_prices_table(&prices->highest, dataset_1->prices);
-    highest_prices_table(&co2->highest, dataset_1->co2_emissions);
-    
-    compare_prices_table(&prices->compare, dataset_1->prices, dataset_2->prices);
-    compare_prices_table(&co2->compare, dataset_1->co2_emissions, dataset_2->co2_emissions);
+    Energy_data target = today ? data->today : data->tomorrow;
+    average_prices_table(&(prices->average), target.prices, 1, data->language);
+    average_prices_table(&(co2->average), target.co2_emissions, 0, data->language);
+
+    highest_prices_table(&prices->highest, target.prices, 1, data->language);
+    highest_prices_table(&co2->highest, target.co2_emissions, 0, data->language);
+
+    if(data->access_tomorrow && today){
+        compare_prices_table(&prices->compare, target.prices, data->tomorrow.prices, 1, data->language);
+        compare_prices_table(&co2->compare, target.co2_emissions, data->tomorrow.co2_emissions, 0, data->language);
+    }
 }
 
 /* If prices are given as an array of doubles */
-void average_prices_table(Strings *table, float prices[])
+void average_prices_table(Strings *table, float values[], int is_prices, enum languages language)
 {
-    float prices_cheap[DAY_HOURS];
-    float average = average_price(prices);
+    float values_low[DAY_HOURS];
+    float average = average_price(values);
     int hour_1 = 0, hour_2 = 0;
-    int i;
+    int i, *length;
+
+    char* header;
+    
+    if(is_prices){
+        header = get_string_from_id(language, "Table_prices_low", 1);
+    } else {
+        header = get_string_from_id(language, "Table_CO2_low", 1);
+    }
+    length = fill_table_width(header);
+
 
     strings_append(table, "╭─────────────────────────────────────────────╮");
-    strings_append(table, "│     The prices are cheap in these times     │");
-
+    strings_append_format(table, "│%*s%s%*s│", length[0], "", header, length[1], "");
+    
     for(i = 0; i < DAY_HOURS; i++)
     {
-        if(prices[i] < average)
+        if(values[i] < average)
         {
-            prices_cheap[i] = prices[i]; 
+            values_low[i] = values[i]; 
         }
         else
         {
-            prices_cheap[i] = 0;
+            values_low[i] = 0;
         }
-        if(prices_cheap[i] > 0)
+        if(values_low[i] > 0)
         {   
             hour_1 = i;
             while(i < DAY_HOURS){
-                if(compare_floats(prices[hour_1], prices[i+1])){
+                if(compare_floats(values[hour_1], values[i+1])){
                     hour_2 = i+1;
                     i = hour_2;
                 } else{
@@ -70,43 +83,46 @@ void average_prices_table(Strings *table, float prices[])
             if(hour_2 > hour_1){
                 strings_append(table, "├─────────────────────────────────────────────┤");
                 strings_append_format(table,
-                    "│    %02d:00 - %02d:00 -> %.2f DKK/kWh            │", 
-                    hour_1, hour_2, prices_cheap[hour_1]);
+                    "│    %02d:00 - %02d:00 -> % 3.2f %*s           │", 
+                    hour_1, hour_2, values_low[hour_1], values_low[hour_1] >= 100?5:6,is_prices ? "DKK/kWh" : "g/kWh");
             } else {
                 strings_append(table, "├─────────────────────────────────────────────┤");
                 strings_append_format(table,
-                    "│            %02d:00 -> %.2f DKK/kWh            │",
-                    hour_1, prices_cheap[hour_1]);
+                    "│            %02d:00 -> % 3.2f %*s           │",
+                    hour_1, values_low[hour_1], values_low[hour_1] >= 100?5:6,is_prices ? "DKK/kWh" : "g/kWh");
             }
         }
     }
     strings_append(table, "╰─────────────────────────────────────────────╯");
+    free(length);
+    free(header);
 }
 
 /* */
-void highest_prices_table(Strings *table, float values[])
+void highest_prices_table(Strings *table, float values[], int is_prices, enum languages language)
 {
-    int i;
+    int i, *length;
     int hour[] = {-1, -1, -1};
     float average = average_price(values);
+    char* header;
     for(i = 0; i < DAY_HOURS; i++)
-    {
+    {   
         if(hour[0] == -1){
-            hour[0] = values[i];
+            hour[0] = i;
         } else if(hour[1] == -1){
-            hour[1] = values[i];
+            hour[1] = i;
         } else if(hour[2] == -1){
-            hour[2] = values[i];
+            hour[2] = i;
         }
-        
+
         if(values[i] > values[hour[0]]) {
             hour[2] = hour[1];
             hour[1] = hour[0];
             hour[0] = i;
-        } else if (values[i] > values[hour[1]]){
+        } else if (hour[1] != -1 && values[i] > values[hour[1]]){
             hour[2] = hour[1];
             hour[1] = i;
-        } else if (values[i] > values[hour[2]]){
+        } else if (hour[2] != -1 && values[i] > values[hour[2]]){
             hour[2] = i;
         }
     }
@@ -115,23 +131,38 @@ void highest_prices_table(Strings *table, float values[])
 
     if(less_than_step(values, average))
     { 
+        if(is_prices){
+            header = get_string_from_id(language, "Table_prices_neutral", 1);
+        } else {
+            header = get_string_from_id(language, "Table_CO2_neutral", 1);
+        }
+        length = fill_table_width(header);
         strings_append(table, "╭─────────────────────────────────────────────╮");
-        strings_append(table, "│           Today the price is flat           │");
+        strings_append_format(table, "│%*s%s%*s│",length[0], "", header, length[1], "");
         strings_append(table, "╰─────────────────────────────────────────────╯");
     }
     else
     {
-        strings_append(table, "╭─────────────────────────────────────────────╮");
-        strings_append(table, "│   The price are expensive in these times!   │");
+        if(is_prices){
+            header = get_string_from_id(language, "Table_prices_high", 1);
+        } else {
+            header = get_string_from_id(language, "Table_CO2_high", 1);
+        }
+        length = fill_table_width(header);
+        
+        strings_append_format(table, "╭─────────────────────────────────────────────╮");
+        strings_append_format(table, "│%*s%s%*s│",length[0], "", header, length[1], "");
         for(i = 0; i < 3; i++)
         {
             strings_append(table, "├─────────────────────────────────────────────┤");
             strings_append_format(table,
-                "│            %02d:00 ─> %.2f DKK/kWh            │",
-                hour[i], values[hour[i]]);
+                "│            %02d:00 ─> %3.2f %*s            │",
+                hour[i], values[hour[i]], values[hour[i]] >= 100?5:7, is_prices ? "DKK/kWh": "g/kWh");
         }
         strings_append(table, "╰─────────────────────────────────────────────╯");
     }
+    free(length);
+    free(header);
 }
 
 /* Calculates and returns the average price of the day */
@@ -149,25 +180,52 @@ double average_price(float prices[])
 }
 
 /* */
-void compare_prices_table(Strings *table, float today[], float tomorrow[])
+void compare_prices_table(Strings *table, float today[], float tomorrow[], int is_prices, enum languages language)
 {
-    float relative_devation = (average_price(tomorrow) - average_price(today)) / average_price(today) * 100;
-    printf("relative_devation: %.2f\n", relative_devation);
-    if(relative_devation > 1)
+    float relative_deviation = (average_price(tomorrow) - average_price(today)) / average_price(today) * 100;
+    char* header;
+    char* body;
+    int* length;
+
+    if(relative_deviation > 1)
     {
+        if(is_prices){
+            header = get_string_from_id(language, "Price_compare_positive",0);
+        } else {
+            header = get_string_from_id(language, "Price_compare_negative",0);
+        }
+
+        body = calloc(strlen(header)*2, sizeof(char));
+        sprintf(body, header, relative_deviation);
+        length = fill_table_width(body);
+        
         strings_append(table, "╭─────────────────────────────────────────────╮");
         strings_append_format(table, 
-            "|  The price tomorrow is %.1f%% more expensive |", relative_devation);
+            "|%*s%s%*s|", length[0], "", body, length[1], "");
         strings_append(table, "╰─────────────────────────────────────────────╯");
     }
-    else if(relative_devation < (-1))
+    else if(relative_deviation < (-1))
     {
-        relative_devation *= (-1);
+        relative_deviation *= (-1);
+
+        if(is_prices){
+            header = get_string_from_id(language, "CO2_compare_positive",0);
+        } else {
+            header = get_string_from_id(language, "CO2_compare_negative",0);
+        }
+
+        body = calloc(strlen(header)*2, sizeof(char));
+        sprintf(body, header, relative_deviation);
+        length = fill_table_width(body);
+
         strings_append(table, "╭─────────────────────────────────────────────╮");
         strings_append_format(table,
-            "|     The price tomorrow is %.1f%% cheaper     |", relative_devation);
+            "|%*s%s%*s|", length[0], "", body, length[1], "");
         strings_append(table, "╰─────────────────────────────────────────────╯");
     }
+    free(length);
+    free(body);
+    free(header);
 }
 
 /* */
@@ -225,7 +283,7 @@ void make_y_axis(Graph *graph, int price_flag)
 /*  */
 void make_graph(float prices[], Graph *graph)
 {
-    int i, j;
+    int i, j, is_set = 0;
     /* We make 24 empty string with 20 characters each and put them in an array. 
        Each string works as an hour's y-axis. */ 
     float current_step;
@@ -239,12 +297,19 @@ void make_graph(float prices[], Graph *graph)
             if(prices[i] - current_step >= graph->step/2 && prices[i] - current_step <= graph->step)
             {
                 graph_line[i] = j-1;
+                is_set = 1;
             }
             else if(prices[i] - current_step <= graph->step/2 && prices[i] - current_step >= 0)
             {
                 graph_line[i] = j;
+                is_set = 1;
             }
             current_step -= graph->step;
+        }
+        if(is_set == 0){
+            graph_line[i] = j - 1;
+        } else {
+            is_set = 0;
         }
     }
 
@@ -252,7 +317,6 @@ void make_graph(float prices[], Graph *graph)
 }
 
 /* */
-/*void format_graph(char graph_points[DAY_HOURS][Y_AXIS_LENGTH], int graph_line[])*/
 void format_graph(Graph *graph, int graph_line[])
 {
     int i;
@@ -277,11 +341,19 @@ void format_graph(Graph *graph, int graph_line[])
 }
 
 /* */
-void print_graphs(Graph *today, Graph *tomorrow, Date *date)
+void print_graphs(Graph *today, Graph *tomorrow, Date *date, enum languages language)
 {
     int i, j;
-    printf("\nDKK / kWh %21s ENERGY PRICES %d/%d/%d", " ", date->day, date->month, date->year);
-    printf("%33sg / kWh %21s CARBON EMISSIONS %d/%d/%d\n", " ", "", date->day, date->month, date->year);
+    char* co2_header;
+    char* prices_header;
+    char* hour;
+    prices_header = get_string_from_id(language, "Graph_price", 0);
+    co2_header = get_string_from_id(language, "Graph_CO2", 0);
+
+    
+    hour = get_string_from_id(language, "Time", 0);
+    printf("\nDKK / kWh %21s %12s%d/%d/%d", " ", prices_header, date->day, date->month, date->year);
+    printf("%33sg / kWh %21s %12s%d/%d/%d\n", " ", "", co2_header, date->day, date->month, date->year);
     for(i = 0; i < Y_AXIS_LENGTH; i++){
         printf("%.2f │", today->y_axis[i]);
         for(j = 0; j < DAY_HOURS; j++){
@@ -296,52 +368,37 @@ void print_graphs(Graph *today, Graph *tomorrow, Date *date)
     }
     printf("     ╰────────────────────────────────────────────────────────────────────────");
     printf("              ╰────────────────────────────────────────────────────────────────────────\n");
-    printf("       00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23  HOUR");
-    printf("          00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23  HOUR\n\n");
+    printf("       00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23  %s", hour);
+    printf("          00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23  %s\n\n", hour);
 }
 
 /* */
 void print_tables(Tables* prices, Tables* co2)
 {
+    print_table(&prices->average, &co2->average);
+    print_table(&prices->highest, &co2->highest);
+    print_table(&prices->compare, &co2->compare);
+}
+
+/* */
+void print_table(Strings* table_1, Strings* table_2){
     int i;
-    int longest_table_a = prices->average.index > co2->average.index ? 
-        prices->average.index : co2->average.index;
 
-    int longest_table_h = prices->highest.index > co2->highest.index ? 
-        prices->highest.index : co2->highest.index;
-
-    for(i = 0; i < longest_table_a; i++){
-        if(prices->average.index > i){
-            printf("%16s%s%30s", "", prices->average.buffer[i], "");
+    int longest_table = table_1->index > table_2->index ? 
+        table_1->index : table_2->index;
+    for(i = 0; i < longest_table; i++){
+        if(table_1->index > i){
+            printf("%19s%s%24s", "", table_1->buffer[i], "");
         }
-        if(prices->average.index == longest_table_a && co2->average.index <= i){
+        if(table_1->index == longest_table && table_2->index <= i){
             printf("\n");
         }
 
-        if(co2->average.index > i && prices->average.index > i){
-            printf("%16s%s\n", "", co2->average.buffer[i]);
-        } else if (co2->average.index == longest_table_a){
-            printf("%109s%s\n", "", co2->average.buffer[i]);
+        if(table_2->index > i && table_1->index > i){
+            printf("%16s%s\n", "", table_2->buffer[i]);
+        } else if (table_2->index == longest_table){
+            printf("%106s%s\n", "", table_2->buffer[i]);
         }
-    }
-
-    for(i = 0; i < longest_table_h; i++){
-       if(prices->highest.index > i){
-            printf("%16s%s%30s", "", prices->highest.buffer[i], "");
-        }
-        if(prices->highest.index == longest_table_h && co2->highest.index <= i){
-            printf("\n");
-        }
-
-        if(co2->highest.index > i && prices->highest.index > i){
-            printf("%16s%s\n", "", co2->highest.buffer[i]);
-        } else if (co2->highest.index == longest_table_h){
-            printf("%109s%s\n", "", co2->highest.buffer[i]);
-        }
-    }
-    for(i = 0; i < prices->compare.index; i++){
-        printf("%16s%s%30s", "", prices->compare.buffer[i], "");
-        printf("%16s%s%30s\n", "", co2->compare.buffer[i], "");
     }
 }
 
@@ -378,4 +435,35 @@ int less_than_step(float prices[], float average)
     }
 
     return ((graph.max_price - average) < graph.step);
+}
+
+int* fill_table_width(char* string){
+    int width1;
+    int width2;
+    int length = utf8len(string);
+    int* result = malloc(sizeof(int) * 2);
+    int total_length = 0;
+
+    width1 = ((TABLE_INNER_SIZE-length)/2);
+    width2 = width1;
+    total_length = width1 + width2 + length;
+
+    if(total_length < TABLE_INNER_SIZE){
+        width2 += TABLE_INNER_SIZE - total_length;
+    }
+    if(total_length > TABLE_INNER_SIZE){
+        width2 -= TABLE_INNER_SIZE - total_length;
+    }
+    result[0] = width1;
+    result[1] = width2;
+    return result;
+}
+
+/* https://www.drk.com.ar/code/count-characters-in-utf8-string-c-utf8len.php */
+size_t utf8len(const char *s)
+{
+  size_t len = 0;
+  while(*s)
+    len += (*(s++)&0xC0)!=0x80;
+  return len;
 }
