@@ -29,10 +29,10 @@ void setup(User_data *data)
     get_user_input(data);
     
     do_calculations(data);
-
-    present(&data->today);
+    
+    present(data, 1);
     if (data->access_tomorrow && want_data_for_tommorow(*data))
-        present(&data->tomorrow);
+        present(data, 0);
 }
 
 /* Does the calculations on the received data, takes in a day struct. */
@@ -61,19 +61,31 @@ void add_fees(float *price) { *price += TRANSPORT_FEE; }
 void add_vat(float *price) { *price = *price * VAT; }
 
 /* This presents the received data to the user. */
-void present(Energy_data *data){
+void present(User_data *data, int today){
     Graph prices_graph = {0};
     Graph co2_graph = {0};
 
     Tables prices_table = {0};
     Tables co2_table = {0};
-            
-    graph(data->prices, &prices_graph, 1);
-    graph(data->co2_emissions, &co2_graph,  0);
+    if(today){
+        graph(data->today.prices, &prices_graph, 1);
+        graph(data->today.co2_emissions, &co2_graph,  0);
+        
+        if(data->access_tomorrow){
+            present_data(&prices_table, &co2_table, &data->today, &data->tomorrow);
+        } else {
+            present_data(&prices_table, &co2_table, &data->today, &data->today);
+        }
 
-    present_data(&prices_table, &co2_table, data);
+        print_graphs(&prices_graph, &co2_graph, &data->today.date);
+        print_tables(&prices_table, &co2_table);
+    } else {
+        graph(data->tomorrow.prices, &prices_graph, 1);
+        graph(data->tomorrow.co2_emissions, &co2_graph,  0);
 
-    print_graphs(&prices_graph, &co2_graph, &data->date);
-    print_tables(&prices_table, &co2_table);
+        present_data(&prices_table, &co2_table, &data->tomorrow, &data->tomorrow);
 
+        print_graphs(&prices_graph, &co2_graph, &data->tomorrow.date);
+        print_tables(&prices_table, &co2_table);
+    }
 }

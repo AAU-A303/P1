@@ -23,14 +23,16 @@
 #include "./H_files/present.h"
 
 /* */
-void present_data(Tables* prices, Tables* co2, Energy_data *data)
+void present_data(Tables* prices, Tables* co2, Energy_data *dataset_1, Energy_data *dataset_2)
 {
-    average_prices_table(&(prices->average), data->prices);
-    average_prices_table(&(co2->average), data->co2_emissions);
-    highest_prices_table(&prices->highest, data->prices);
-    highest_prices_table(&co2->highest, data->co2_emissions);
-    compare_prices_table(&prices->compare, data->prices, data->prices);
-    compare_prices_table(&co2->compare, data->co2_emissions, data->co2_emissions);
+    average_prices_table(&(prices->average), dataset_1->prices);
+    average_prices_table(&(co2->average), dataset_1->co2_emissions);
+    
+    highest_prices_table(&prices->highest, dataset_1->prices);
+    highest_prices_table(&co2->highest, dataset_1->co2_emissions);
+    
+    compare_prices_table(&prices->compare, dataset_1->prices, dataset_2->prices);
+    compare_prices_table(&co2->compare, dataset_1->co2_emissions, dataset_2->co2_emissions);
 }
 
 /* If prices are given as an array of doubles */
@@ -150,6 +152,7 @@ double average_price(float prices[])
 void compare_prices_table(Strings *table, float today[], float tomorrow[])
 {
     float relative_devation = (average_price(tomorrow) - average_price(today)) / average_price(today) * 100;
+    printf("relative_devation: %.2f\n", relative_devation);
     if(relative_devation > 1)
     {
         strings_append(table, "╭─────────────────────────────────────────────╮");
@@ -321,10 +324,6 @@ void print_tables(Tables* prices, Tables* co2)
             printf("%109s%s\n", "", co2->average.buffer[i]);
         }
     }
-    for(i = 0; i < prices->compare.index; i++){
-        printf("%16s%s%30s", "", prices->compare.buffer[i], "");
-        printf("%16s%s%30s\n", "", co2->compare.buffer[i], "");
-    }
 
     for(i = 0; i < longest_table_h; i++){
        if(prices->highest.index > i){
@@ -339,6 +338,10 @@ void print_tables(Tables* prices, Tables* co2)
         } else if (co2->highest.index == longest_table_h){
             printf("%109s%s\n", "", co2->highest.buffer[i]);
         }
+    }
+    for(i = 0; i < prices->compare.index; i++){
+        printf("%16s%s%30s", "", prices->compare.buffer[i], "");
+        printf("%16s%s%30s\n", "", co2->compare.buffer[i], "");
     }
 }
 
