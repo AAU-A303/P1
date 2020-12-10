@@ -43,7 +43,7 @@ typedef struct _Tables {
     Strings highest;
 } Tables;
 
-void present_data(Tables* prices, Tables* co2, Energy_data *data);
+void present_data(Tables* prices, Tables* co2, Energy_data *dataset_1, Energy_data *dataset_2);
 void average_prices_table(Strings *table, float prices[]);
 void highest_prices_table(Strings *table,float prices[]);
 double average_price(float prices[]);
