@@ -36,6 +36,6 @@ enum languages {
 
 void print_string_from_id(enum languages, char[], int);
 void get_localisation_indexes(int[], char[]);
-
+char* get_string_from_id(enum languages language, char target_id[], int needs_newline);
 
 #endif /* LOCALISATION_H */

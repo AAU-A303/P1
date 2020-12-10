@@ -1,9 +1,8 @@
 /*
  ===============================================================================
  * File: energy.c                   Date completed: 16th of November, 2020
- ===============================================================================
  * Programmers: Anders G.           E-mail: ageert20@student.aau.dk
- *              Christoffer J.              cjanss20@student.aau.dk
+ *              Christoffer J.              cjanss20@student.aau.dk 
  *              Dennis L.                   dbla19@student.aau.dk
  *              Jamie H.                    jhamme20@student.aau.dk
  *              Loke W.                     lwalst20@student.aau.dk
@@ -22,15 +21,16 @@
 
 /* Responsible for doing all of the calculations. */
 void setup(User_data *data)
-{    
+{   
     reset_energy_price(&data->today);
     reset_energy_price(&data->tomorrow);
 
     get_user_input(data);
     
     do_calculations(data);
-    
+
     present(data, 1);
+
     if (data->access_tomorrow && want_data_for_tommorow(*data))
         present(data, 0);
 }
@@ -71,21 +71,22 @@ void present(User_data *data, int today){
         graph(data->today.prices, &prices_graph, 1);
         graph(data->today.co2_emissions, &co2_graph,  0);
         
-        if(data->access_tomorrow){
-            present_data(&prices_table, &co2_table, &data->today, &data->tomorrow);
-        } else {
-            present_data(&prices_table, &co2_table, &data->today, &data->today);
-        }
+        present_data(&prices_table, &co2_table, data, today);
 
-        print_graphs(&prices_graph, &co2_graph, &data->today.date);
+        print_graphs(&prices_graph, &co2_graph, &data->today.date, data->language);
         print_tables(&prices_table, &co2_table);
     } else {
         graph(data->tomorrow.prices, &prices_graph, 1);
         graph(data->tomorrow.co2_emissions, &co2_graph,  0);
 
-        present_data(&prices_table, &co2_table, &data->tomorrow, &data->tomorrow);
-
-        print_graphs(&prices_graph, &co2_graph, &data->tomorrow.date);
+        present_data(&prices_table, &co2_table, data, today);
+        
+        print_graphs(&prices_graph, &co2_graph, &data->tomorrow.date, 1);
         print_tables(&prices_table, &co2_table);
     }
+    free_strings(&prices_table.average);
+    free_strings(&prices_table.highest);
+    free_strings(&prices_table.compare);
+    free_strings(&prices_graph.graph);
+    free_strings(&co2_graph.graph);
 }

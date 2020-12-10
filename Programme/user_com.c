@@ -34,7 +34,6 @@ void get_user_input(User_data *data)
     set_time(&hour, data);
 
     get_data(data, data->today.date);
-    
     if (hour >= DAY_AHEAD) { data->access_tomorrow = TRUE; }
     else { data->access_tomorrow = FALSE; }
 }
@@ -54,13 +53,13 @@ void set_language(User_data *data)
         print_string_from_id(data->language, "Select_language", 0);
         if(scanf(" %d", &answer) != 1)
         {
-            printf("Try again! Please only the number as listed above\n\n");
+            print_string_from_id(data->language, "Fail_message_language", 1); printf("\n");
             fflush(stdin);
         }
         else
         {
-            if(answer >= 0 && answer < language_count)
-                is_valid = TRUE;
+            if(answer >= 0 && answer < language_count) { is_valid = TRUE; }
+            else { print_string_from_id(data->language, "Fail_message_language", 1); printf("\n"); }
         }
     } while(!is_valid);
 
@@ -75,11 +74,10 @@ void set_date(User_data *data)
     
     do {
         print_string_from_id(data->language, "Select_date", 0);
-        /* printf("Please enter the current date (DD/MM format)> "); */
         
         if(scanf(" %d/%d", &day, &month) != 2)
         {
-            printf("Try again! and use the format DD/MM and only use numbers!\n\n");
+            print_string_from_id(data->language, "Fail_message_general", 1); printf("\n");
             fflush(stdin);
         }
         else
@@ -88,8 +86,9 @@ void set_date(User_data *data)
             if(month <= 11)
             {
                 if (month == 11 && day > 5) { continue; }
-                if (day <= days_in_month(month, CURRENT_YEAR) && day > 0)
-                    is_valid = TRUE;
+
+                if (day <= days_in_month(month, CURRENT_YEAR) && day > 0) { is_valid = TRUE; }
+                else { print_string_from_id(data->language, "Fail_message_general", 1); printf("\n"); }
             }
         }
         
@@ -107,31 +106,27 @@ void set_time(int *hour, User_data *data)
     
     do {
         print_string_from_id(data->language, "Select_hour", 0);
-        /* printf("Please enter the current hour (HH format)> "); */
         if(scanf(" %d", hour) != 1)
         {
-            printf("Try again! Please use the format HH and only use numbers\n\n");
+            print_string_from_id(data->language, "Fail_message_general", 1); printf("\n");
             fflush(stdin);
         }
-        else
-            if(*hour < DAY_HOURS && *hour >= 0) is_valid = TRUE;
+        else{
+            if(*hour < DAY_HOURS && *hour >= 0){ is_valid = TRUE; }
+            else { print_string_from_id(data->language, "Fail_message_general", 1); printf("\n"); }
+        }
     } while (!is_valid);
 }
 
 /* Checks and returns the amount of days in the currently selected month. */
 int days_in_month(int month, int year)
 {
-    int days;
     switch(month){
-        case JAN: case MAR: case MAY: case JUL: case AUG: case OCT: case DEC:
-            days = 31; break;
-        case APR: case JUN: case SEP: case NOV:
-            days = 30; break;
-        case FEB:
-            if (is_leap_year(year)) days = 29; else days = 28; break;
+        case JAN: case MAR: case MAY: case JUL: case AUG: case OCT: case DEC: return 31; break;
+        case APR: case JUN: case SEP: case NOV: return 30; break;
+        case FEB: if (is_leap_year(year)) return 29; else return 28; break;
         default: exit(-1);
     }
-    return days;
 }
 
 /* Checks and returns whether the current year is a leap year or not. */

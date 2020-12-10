@@ -20,9 +20,17 @@
 #include "./H_files/localisation.h"
 
 void print_string_from_id(enum languages language, char target_id[], int needs_newline){
+    char* result;
+
+    result = get_string_from_id(language, target_id, needs_newline);
+
+    if (needs_newline) {printf("%s\n", result);} else {printf("%s", result);};
+}
+
+char* get_string_from_id(enum languages language, char target_id[], int needs_newline){
     int language_indexes[language_count+1];
     char id[LINE_LENGTH];
-    char result[LINE_LENGTH];
+    char* result;
     char line[LINE_LENGTH];
 
     int start = 0;
@@ -36,13 +44,14 @@ void print_string_from_id(enum languages language, char target_id[], int needs_n
                 get_localisation_indexes(language_indexes, line);
                 start = language_indexes[language]+1;
                 end = language_indexes[language+1];
+                result = malloc(LINE_LENGTH * sizeof(char));
                 strncpy(result, &line[start], end-start);
                 result[end-start] = '\0';
-                if (needs_newline) {printf("%s\n", result);} else {printf("%s", result);};
             }
         }
     } else { printf("Failed to open file \"%s\"\n\n", LOCALISATION_FILE); }
     fclose(file);
+    return result;
 }
 
 void get_localisation_indexes(int indexes[], char localisation_string[]){

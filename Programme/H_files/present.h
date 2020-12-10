@@ -27,6 +27,8 @@
 #include "../libaries/strings.h"
 
 #define Y_AXIS_LENGTH 20
+#define TABLE_INNER_SIZE 45
+#define GRAPH_SIZE 84
 
 typedef struct _Graph {
     float y_axis[Y_AXIS_LENGTH];
@@ -43,11 +45,11 @@ typedef struct _Tables {
     Strings highest;
 } Tables;
 
-void present_data(Tables* prices, Tables* co2, Energy_data *dataset_1, Energy_data *dataset_2);
-void average_prices_table(Strings *table, float prices[]);
-void highest_prices_table(Strings *table,float prices[]);
+void present_data(Tables* prices, Tables* co2, User_data* data, int today);
+void average_prices_table(Strings *table, float values[], int is_prices, enum languages language);
+void highest_prices_table(Strings *table,float prices[], int is_prices, enum languages language);
 double average_price(float prices[]);
-void compare_prices_table(Strings *table, float today[], float tomorrow[]);
+void compare_prices_table(Strings *table, float today[], float tomorrow[], int is_prices, enum languages language);
 int less_than_step(float prices[], float average);
 
 void graph(float prices[], Graph *graph, int flag_price);
@@ -59,7 +61,10 @@ void format_graph(Graph *graph, int graph_line[]);
 int compare_floats(float f1, float f2);
 int compare_intergers(const void* int1, const void* int2);
 
-void print_graphs(Graph *today, Graph *tomorrow, Date *date);
-void print_tables(Tables* prices, Tables* co2);
 
+int* fill_table_width(char* string);
+void print_graphs(Graph *today, Graph *tomorrow, Date *date, enum languages language);
+void print_tables(Tables* prices, Tables* co2);
+void print_table(Strings* table_1, Strings* table_2);
+size_t utf8len(const char *s);
 #endif /* PRESENT_H */
