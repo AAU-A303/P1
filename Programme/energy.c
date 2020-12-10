@@ -29,6 +29,7 @@ void setup(User_data *data)
     
     do_calculations(data);
 
+    system("cls || clear");
     present(data, 1);
 
     if (data->access_tomorrow && want_data_for_tommorow(*data))
