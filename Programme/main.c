@@ -31,9 +31,11 @@ int main(void)
 {
     User_data data = { 0 };
     SET_CONSOLE();
+    system("cls || clear");
     print_string_from_id(data.language, "Welcome", 1);
     
     do {
+        system("cls || clear");
         setup(&data);
     } while (has_new_inquiry(data));
     
