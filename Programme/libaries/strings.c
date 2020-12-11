@@ -18,7 +18,7 @@ void strings_append_format(Strings* strings, const char* format, ...){
     va_start(args, format);
     va_start(argsc, format);
 
-    length = vsnprintf(NULL, 0, format, argsc)*2;
+    length = vsnprintf(NULL, 0, format, argsc)+2;
     buffer = calloc(length, sizeof(char));
     vsnprintf(buffer, length, format, args);
 

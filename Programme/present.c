@@ -462,8 +462,21 @@ int* fill_table_width(char* string){
 /* https://www.drk.com.ar/code/count-characters-in-utf8-string-c-utf8len.php */
 size_t utf8len(const char *s)
 {
-  size_t len = 0;
-  while(*s)
-    len += (*(s++)&0xC0)!=0x80;
-  return len;
+    size_t len = 0;
+    /* 
+        We use the & operator it works by going through each bit of the character
+        and checking if it existis in both *(strings) AND 0xC0.
+        Example 'ø':
+            'ø' is made of two parts the byte 0xC3 and the byte 0xB8
+            C3: 11100101 B8: 10111000 
+            C0: 11000000 C0: 11000000
+                --------     --------
+            C0: 11000000 80: 1000000
+        this makes it so we only count 'ø' as a single character because we ignore 0xB8.
+        UTF-8 chars can be up to 4 bytes long but in any case we only count
+        the first character as we see in the example above.
+    */
+    while(*s)
+        len += (*(s++)&0xC0)!=0x80;
+    return len;
 }
