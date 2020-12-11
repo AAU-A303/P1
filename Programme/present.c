@@ -192,7 +192,7 @@ void compare_prices_table(Strings *table, float today[], float tomorrow[], int i
         if(is_prices){
             header = get_string_from_id(language, "Price_compare_positive",0);
         } else {
-            header = get_string_from_id(language, "Price_compare_negative",0);
+            header = get_string_from_id(language, "CO2_compare_positive",0);
         }
 
         body = calloc(strlen(header)*2, sizeof(char));
@@ -209,7 +209,7 @@ void compare_prices_table(Strings *table, float today[], float tomorrow[], int i
         relative_deviation *= (-1);
 
         if(is_prices){
-            header = get_string_from_id(language, "CO2_compare_positive",0);
+            header = get_string_from_id(language, "Price_compare_negative",0);
         } else {
             header = get_string_from_id(language, "CO2_compare_negative",0);
         }
