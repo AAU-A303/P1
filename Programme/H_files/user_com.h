@@ -13,8 +13,9 @@
  * Study Group: A303
  * Supervisor: Kamal Shahid         Class: P1, Computer Science - Fall Semester
  ===============================================================================
- * Description: This is our main header file. This holds all of our prototypes,
- *              symbolic constants and included libraries.
+ * Description: This is a header file for the user communication file. This
+ *              holds all of our prototypes, symbolic constants and included
+ *              libraries.
  ===============================================================================
  */
 
@@ -28,6 +29,7 @@
 #include "data.h"
 #include "present.h"
 #include "localisation.h"
+#include <ctype.h>
 
 /* Symbolic Constants */
 
@@ -53,12 +55,13 @@
 
 /* Function Prototypes */
 
-void get_user_input(User_data*);	    /* input: data, output: none */
-void set_language(User_data*);		    /* input: data, output: none */
-void set_date(User_data*); 			    /* input: data, output: none */
-void set_time(int*, User_data*);	    /* input: hour, data, output: none */
-int days_in_month(int, int);    	    /* input: month, year, output: num of days */
-int is_leap_year(int);          	    /* input: year, output: whether is leap year */
+void setup_user_data(User_data*);	/* input: data, output: none */
+void set_language(User_data*);		/* input: data, output: none */
+void set_date(User_data*); 			/* input: data, output: none */
+void set_time(int*, User_data*);	/* input: hour, data, output: none */
+int days_in_month(int, int);    	/* input: month, year, output: num of days */
+int is_leap_year(int);          	/* input: year, output: whether is leap year */
+
 int want_data_for_tommorow(User_data);  /* input: data, output: user response */
 int has_new_inquiry(User_data);         /* input: data, output: user response */
 
