@@ -1,7 +1,7 @@
 #---------------------------------------------------------------------
 # Flags
 #---------------------------------------------------------------------
-CFLAGS = -ansi -pedantic -Wall
+CFLAGS = -ansi -pedantic -Wall -O3
 #---------------------------------------------------------------------
 # executables
 #---------------------------------------------------------------------
@@ -42,10 +42,10 @@ obj = \
 all: $(target)
 
 main: $(dependencies) strings
-	$(CC) $(CFLAGS) $(obj) $(build_folder)strings.o $(program_folder)$@.c -o $(build_folder)$@$(EXTENSION)
+	$(CC) $(CFLAGS) $(build_folder)strings.o $(obj) $(program_folder)$@.c -o $(build_folder)$@$(EXTENSION)
 
-cutest: $(dependencies) CuTest
-	$(CC) $(CFLAGS) $(build_folder)CuTest.o $(obj) $(program_folder)$@.c -o $(build_folder)$@$(EXTENSION)
+cutest: $(dependencies) CuTest strings
+	$(CC) $(CFLAGS) $(build_folder)CuTest.o $(build_folder)strings.o $(obj) $(program_folder)$@.c -o $(build_folder)$@$(EXTENSION)
 
 $(dependencies):
 	$(CC) $(CFLAGS) -c $(program_folder)$@.c -o $(build_folder)$@.o -lm
