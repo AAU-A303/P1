@@ -84,16 +84,19 @@ void average_values_table(Strings *table, float values[], int is_prices, enum la
                 strings_append(table, "├─────────────────────────────────────────────┤");
                 strings_append_format(table,
                     "│    %02d:00 - %02d:00 -> % 3.2f %*s           │", 
-                    hour_1, hour_2, values_low[hour_1],
-                                      values_low[hour_1] >= 100?5:6,is_prices ?
-                                      "DKK/kWh" : "g/kWh");
+                    hour_1,
+                    hour_2,
+                    values_low[hour_1],
+                    values_low[hour_1] >= 100 ? 5 : 6,
+                    is_prices ? "DKK/kWh" : "g/kWh");
             } else {
                 strings_append(table, "├─────────────────────────────────────────────┤");
                 strings_append_format(table,
                     "│            %02d:00 -> % 3.2f %*s           │",
-                    hour_1, values_low[hour_1],
-                                      values_low[hour_1] >= 100?5:6,is_prices ?
-                                      "DKK/kWh" : "g/kWh");
+                    hour_1,
+                    values_low[hour_1],
+                    values_low[hour_1] >= 100 ? 5 : 6,
+                    is_prices ? "DKK/kWh" : "g/kWh");
             }
         }
     }
@@ -166,9 +169,10 @@ void highest_values_table(Strings *table, float values[], int is_prices, enum la
                            "├─────────────────────────────────────────────┤");
             strings_append_format(table,
                 "│            %02d:00 ─> %3.2f %*s            │",
-                hour[i], values[hour[i]],
-                                  values[hour[i]] >= 100?5:7, is_prices ?
-                                  "DKK/kWh": "g/kWh");
+                hour[i],
+                values[hour[i]],
+                values[hour[i]] >= 100 ? 5 : 7,
+                is_prices ? "DKK/kWh": "g/kWh");
         }
         strings_append(table, "╰─────────────────────────────────────────────╯");
     }
@@ -177,11 +181,10 @@ void highest_values_table(Strings *table, float values[], int is_prices, enum la
 }
 
 /* Calculates and returns the average values of the day */
-float average_values(float values[])
+float average_value(float values[])
 {
     float average = 0;
     int i;
-
     for(i = 0; i < DAY_HOURS; i++)
         average += values[i];
     
@@ -252,15 +255,15 @@ void graph(float values[], Graph *graph, int is_price)
 void find_extremes(float values[], Graph *graph)
 {
     int i;
-    graph->min_price = values[0];
-    graph->max_price = values[0];
+    graph->min_value = values[0];
+    graph->max_value = values[0];
     for(i = 0; i < DAY_HOURS; i++)
     {
-        if(values[i] < graph->min_price){
-            graph->min_price = values[i];
+        if(values[i] < graph->min_value){
+            graph->min_value = values[i];
         }
-        else if(values[i] > graph->max_price){
-            graph->max_price = values[i];
+        else if(values[i] > graph->max_value){
+            graph->max_value = values[i];
         }
     }
 }
@@ -273,13 +276,13 @@ void make_y_axis(Graph *graph, int is_price)
 
     if(is_price)
     {
-        min_y = ((double)((int)(graph->min_price * 2))) / 2;
-        graph->max_y = ((double)((int)((graph->max_price + 0.5) * 2))) / 2;
+        min_y = ((double)((int)(graph->min_value * 2))) / 2;
+        graph->max_y = ((double)((int)((graph->max_value + 0.5) * 2))) / 2;
     }
     else
     {
-        min_y = (int)(graph->min_price / 50) * 50;
-        graph->max_y = (int)((graph->max_price + 50) / 50) * 50;
+        min_y = (int)(graph->min_value / 50) * 50;
+        graph->max_y = (int)((graph->max_value + 50) / 50) * 50;
     }
 
     current_step = graph->max_y;
@@ -354,14 +357,15 @@ void format_graph(Graph *graph, int graph_line[])
 
 /* Responsible for printing the graph to the screen. */
 void print_graphs(Graph *today, Graph *tomorrow, Date *date,
-                  enum languages language)
+ enum languages language)
 {
     int i, j;
     char* co2_header;
     char* prices_header;
     char* hour;
-    
-    hour = get_string_from_id(language, "Time", 0);
+    prices_header = get_string_from_id(language, "Graph_price");
+    co2_header = get_string_from_id(language, "Graph_CO2");
+    hour = get_string_from_id(language, "Time");
     printf("\nDKK / kWh %21s %12s%d/%d/%d", " ", prices_header, date->day,
            date->month, date->year);
     printf("%33sg / kWh %21s %12s%d/%d/%d\n", " ", "", co2_header, date->day,
@@ -447,8 +451,8 @@ int less_than_step(float values[], float average)
 
     find_extremes(values, &graph);
 
-    max_y = ((double)((int)((graph.max_price + 0.5) * 2))) / 2;
-    min_y = ((double)((int)(graph.min_price * 2))) / 2;
+    max_y = ((double)((int)((graph.max_value + 0.5) * 2))) / 2;
+    min_y = ((double)((int)(graph.min_value * 2))) / 2;
     graph.step = (max_y - min_y) / Y_AXIS_LENGTH;
 
     if(graph.step < 0.05)
@@ -456,7 +460,7 @@ int less_than_step(float values[], float average)
         graph.step = 0.05;
     }
 
-    return ((graph.max_price - average) < graph.step);
+    return ((graph.max_value - average) < graph.step);
 }
 
 /* Responsiible for dynamically fitting the table width. */
