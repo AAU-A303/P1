@@ -1,19 +1,5 @@
 #include "./H_files/cutest.h"
 
-void all_tests();
-CuSuite* test_suite();
-void test_load_data(CuTest*);
-void test_convert_kwh(CuTest*);
-void test_add_fees(CuTest*);
-void test_add_vat(CuTest*);
-void test_do_calculations(CuTest*);
-void test_get_localisation_indexes(CuTest*);
-void test_get_string_from_id(CuTest*);
-void test_utf8_length(CuTest*);
-void test_fill_table_width(CuTest*);
-void test_average_price(CuTest*);
-void test_find_extremes(CuTest*);
-
 int main(void)
 {
   all_tests();
@@ -117,7 +103,7 @@ void test_convert_kwh(CuTest* testContext){
     for(i = 0; i < 24; i++){
         temp = input_array[i];
         convert_kwh(&temp);
-        CuAssertFlEquals(testContext, temp, correct_array[i], 0.0001);
+        CuAssertFlEquals(testContext, correct_array[i], temp, 0.0001);
     }
 
 }
@@ -141,7 +127,7 @@ void test_add_fees(CuTest* testContext){
     for(i = 0; i < 24; i++){
         temp = input_array[i];
         add_fees(&temp);
-        CuAssertFlEquals(testContext, temp, correct_array[i], 0.0001);
+        CuAssertFlEquals(testContext, correct_array[i], temp, 0.0001);
     }
 }
 
@@ -165,7 +151,7 @@ void test_add_vat(CuTest* testContext){
     for(i = 0; i < 24; i++){
         temp = input_array[i];
         add_vat(&temp);
-        CuAssertFlEquals(testContext, temp, correct_array[i], 0.0001);
+        CuAssertFlEquals(testContext, correct_array[i], temp, 0.0001);
     }
 }
 
@@ -208,8 +194,8 @@ void test_do_calculations(CuTest* testContext){
     do_calculations(&userdata);
 
     for(i = 0; i < 24; i++){
-        CuAssertFlEquals(testContext, userdata.today.prices[i], correct_array_today[i],0.0001);
-        CuAssertFlEquals(testContext, userdata.tomorrow.prices[i], correct_array_tomorrow[i],0.0001);
+        CuAssertFlEquals(testContext, correct_array_today[i], userdata.today.prices[i], 0.0001);
+        CuAssertFlEquals(testContext, correct_array_tomorrow[i], userdata.tomorrow.prices[i], 0.0001);
     }
 }
 
@@ -267,14 +253,14 @@ void test_get_string_from_id(CuTest* testContext){
         "The cheapest prices of the day",
         "The most expensive prices of the day",
         "Today, the prices are relatively stable",
-        "Tomorrow's prices are %3.1f%% cheaper",
         "Tomorrow's prices are %3.1f%% more expensive",
+        "Tomorrow's prices are %3.1f%% cheaper",
         "CARBON EMISSIONS ",
         "The most environmental hours",
         "The least eco friendly hours",
         "Today, the emissions are relatively stable",
-        "Tomorrow's emissions are %3.1f%% lower",
         "Tomorrow's emissions are %3.1f%% higher",
+        "Tomorrow's emissions are %3.1f%% lower",
         "HOUR",
         "Would you like to see the data for tomorrow? Enter Y or N> ",
         "Would you like to check another day? Enter Y or N> ",
@@ -290,14 +276,14 @@ void test_get_string_from_id(CuTest* testContext){
         "Dagens billigste tidspunkter",
         "Dagens dyreste tidspunkter",
         "I dag er priserne relativt stabile",
-        "Priserne for i morgen er %3.1f%% billigere",
         "Priserne for i morgen er %3.1f%% dyrere",
+        "Priserne for i morgen er %3.1f%% billigere",
         " CO2 UDSLIP ",
         " Dagens mest miljøvenlige tider ",
         " Dagens mindst miljørigtige tider ",
         "I dag er CO2 udslippet relativt stabilt",
-        "Udslippet for i morgen er %3.1f%% lavere",
         "Udslippet for i morgen er %3.1f%% højere",
+        "Udslippet for i morgen er %3.1f%% lavere",
         "TIME",
         "Vil du se datasættet for i morgen også? Tast Y for ja og N for nej> ",
         "Vil du teste endnu en dag? Tast Y for ja og N for nej> ",
@@ -388,25 +374,87 @@ void test_fill_table_width(CuTest* testContext){
 
 void test_average_price(CuTest* testContext){
     int i;
-    float input_array[5][5] = {
-        {192.73,61.33,134.27,72.91,111.41},
-        {29.93,112.91,25.72,74.18,132.64},
-        {125.11,133.52,95.88,134.09,87.84},
-        {85.74,24.94,68.54,87.84,122.51},
-        {85.54,40.95,120.49,134.71,74.16}
+    float input_array[5][24] = {
+        {
+            138.2,142.01,74.27,181.57,52.08,112.3,92.18,101.87,27.75,95.02,
+            86.57,116.32,44.1,179.82,67.54,166.45,97.88,129.38,171.45,29.83,
+            187.23,140.17,4.79,16.29
+        },
+        {
+            148.55,12.44,181.59,54.29,132.29,94.36,94.16,164.48,150.65,108.99,
+            181.85,12.55,178.89,66.94,83.64,50.35,120.09,63.68,121.85,154.92,
+            98.16,35.49,120.08,40.46
+        },
+        {
+            96.51,128.45,134.56,50.96,156.5,74.14,196.57,85.8,134.93,75.61,
+            106.58,77.26,37.55,61.85,56.79,119.87,96.19,149.84,193.23,65.18,
+            180.8,199.58,95.9,190.34
+        },
+        {
+            96.55,163.37,71.5,104.67,123.62,97.02,75.03,182.14,94.81,87,196.65,
+            92.33,176.8,103.36,26.22,111.28,101.17,43.84,111.17,103.9,97.8,
+            94.06,70.5,49.31
+        },
+        {
+            195.72,51.64,61.73,47.38,117.32,132.9,90.54,84.54,84.53,194.58,
+            158.32,136.59,156.03,168.05,72.46,103.77,157.93,126.75,17.45,118.11,
+            47.28,41.21,140.73,102.49
+        }
     };
+
     float correct_array[5] = {
-        114.53,
-        75.076,
-        115.288,
-        77.914,
-        91.17
+        102.29458,
+        102.94792,
+        115.20792,
+        103.0875,
+        108.66875
     };
+
     for(i = 0; i < 5; i++){
         CuAssertFlEquals(testContext, correct_array[i], average_value(input_array[i]), 0.001);
     }
 }
 
 void test_find_extremes(CuTest* testContext){
-
+    int i = 0;
+    Graph temp;
+    float input_array[5][24] = {
+        {
+            98.38,1.72,97.61,83.31,91.06,176.49,199.97,102.19,52.71,98.51,
+            116.19,132.45,38.95,74.36,78.64,83.07,171.35,131.13,164.71,104.18,
+            29.35,134.97,155.92,117.94
+        },
+        {
+            80.99,107.15,195.5,143.21,92.24,77.31,106.26,29.85,144.18,89.76,
+            99.72,100.33,62.8,106.7,156.46,93.32,111,88.11,195.14,83.26,173.31,
+            176.05,124.71,102.42
+        },
+        {
+            198.84,159.59,153.63,190.28,162.35,17.43,28.52,110.68,84.55,154.59,
+            166.23,83.01,81.73,170.18,195.82,127.26,81.47,182.39,36.57,135.45,
+            55.95,176.54,162.1,55.37
+        },
+        {
+            54.1,98.72,178.03,96.66,117.09,103.47,79.69,10.22,74,124.18,121.69,
+            21.7,26.14,99.67,103.43,60.65,64.75,94.37,135.43,36.97,42.56,91.25,
+            113.81,125.08
+        },
+        {
+            77.33,1.7,194.02,49.67,62.75,117.97,61.09,184.56,79.04,115.4,45.59,
+            88.51,88.92,83.76,106.11,99.48,114.41,192.79,198.41,85.72,141.77,
+            31.15,45.35,13.2
+        }
+    };
+    float correct_array[5][2] = {
+        {199.97, 1.72},
+        {195.5,29.85},
+        {198.84, 17.43},
+        {178.03, 10.22},
+        {198.41, 1.7}
+    };
+    for(i = 0; i < 5; i++){
+        find_extremes(input_array[i], &temp);
+        CuAssertFlEquals(testContext,correct_array[i][0], temp.max_value, 0.001);
+        CuAssertFlEquals(testContext,correct_array[i][1], temp.min_value, 0.001);
+    }
 }
