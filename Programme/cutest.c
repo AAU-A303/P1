@@ -6,7 +6,9 @@ int main(void)
   return 0;
 }
 
-void all_tests() {
+/* Runs all the tests and prints the result. */
+void all_tests()
+{
 	CuString *output = CuStringNew();
 	CuSuite *suite = CuSuiteNew();
 
@@ -17,23 +19,29 @@ void all_tests() {
 	printf("%s\n", output->buffer);
 }
 
-CuSuite* test_suite() {
-  CuSuite* suite = CuSuiteNew();
-  SUITE_ADD_TEST(suite, test_load_data);
-  SUITE_ADD_TEST(suite, test_convert_kwh);
-  SUITE_ADD_TEST(suite, test_add_fees);
-  SUITE_ADD_TEST(suite, test_add_vat);
-  SUITE_ADD_TEST(suite, test_do_calculations);
-  SUITE_ADD_TEST(suite, test_get_localisation_indexes);
-  SUITE_ADD_TEST(suite, test_get_string_from_id);
-  SUITE_ADD_TEST(suite, test_utf8_length);
-  SUITE_ADD_TEST(suite, test_fill_table_width);
-  SUITE_ADD_TEST(suite, test_average_price);
-  SUITE_ADD_TEST(suite, test_find_extremes);
-  return suite;
+/* Add all the tests to the test suite. */
+CuSuite* test_suite()
+{
+    CuSuite* suite = CuSuiteNew();
+
+    SUITE_ADD_TEST(suite, test_load_data);
+    SUITE_ADD_TEST(suite, test_convert_kwh);
+    SUITE_ADD_TEST(suite, test_add_fees);
+    SUITE_ADD_TEST(suite, test_add_vat);
+    SUITE_ADD_TEST(suite, test_do_calculations);
+    SUITE_ADD_TEST(suite, test_get_localisation_indexes);
+    SUITE_ADD_TEST(suite, test_get_string_from_id);
+    SUITE_ADD_TEST(suite, test_utf8_length);
+    SUITE_ADD_TEST(suite, test_fill_table_width);
+    SUITE_ADD_TEST(suite, test_average_price);
+    SUITE_ADD_TEST(suite, test_find_extremes);
+
+    return suite;
 }
 
-void test_load_data(CuTest* testContext){
+/* Tests the load_data function. */
+void test_load_data(CuTest* test_context)
+{
     int i;
     User_data userdata = {0};
     Date date = {0};
@@ -69,20 +77,22 @@ void test_load_data(CuTest* testContext){
     get_data(&userdata, date);
 
     for(i = 0; i < 24; i++){
-        CuAssertFlEquals(testContext, correct_array[0][i], (userdata.today.prices[i]), 0);
+        CuAssertFlEquals(test_context, correct_array[0][i], (userdata.today.prices[i]), 0);
     }
     for(i = 0; i < 24; i++){
-        CuAssertFlEquals(testContext, correct_array[1][i], (userdata.today.co2_emissions[i]), 0);
+        CuAssertFlEquals(test_context, correct_array[1][i], (userdata.today.co2_emissions[i]), 0);
     }
     for(i = 0; i < 24; i++){
-        CuAssertFlEquals(testContext, correct_array[2][i], (userdata.tomorrow.prices[i]), 0);
+        CuAssertFlEquals(test_context, correct_array[2][i], (userdata.tomorrow.prices[i]), 0);
     }
     for(i = 0; i < 24; i++){
-        CuAssertFlEquals(testContext, correct_array[3][i], (userdata.tomorrow.co2_emissions[i]), 0);
+        CuAssertFlEquals(test_context, correct_array[3][i], (userdata.tomorrow.co2_emissions[i]), 0);
     }
 }
 
-void test_convert_kwh(CuTest* testContext){
+/* Tests the convert_kwh function. */
+void test_convert_kwh(CuTest* test_context)
+{
     int i;
     float temp;
     
@@ -103,12 +113,14 @@ void test_convert_kwh(CuTest* testContext){
     for(i = 0; i < 24; i++){
         temp = input_array[i];
         convert_kwh(&temp);
-        CuAssertFlEquals(testContext, correct_array[i], temp, 0.0001);
+        CuAssertFlEquals(test_context, correct_array[i], temp, 0.0001);
     }
 
 }
 
-void test_add_fees(CuTest* testContext){
+/* Tests the add_fees function. */
+void test_add_fees(CuTest* test_context)
+{
     int i;
     float temp;
 
@@ -127,11 +139,13 @@ void test_add_fees(CuTest* testContext){
     for(i = 0; i < 24; i++){
         temp = input_array[i];
         add_fees(&temp);
-        CuAssertFlEquals(testContext, correct_array[i], temp, 0.0001);
+        CuAssertFlEquals(test_context, correct_array[i], temp, 0.0001);
     }
 }
 
-void test_add_vat(CuTest* testContext){
+/* Tests the add_vat function. */
+void test_add_vat(CuTest* test_context)
+{
     int i;
     float temp;
 
@@ -151,11 +165,13 @@ void test_add_vat(CuTest* testContext){
     for(i = 0; i < 24; i++){
         temp = input_array[i];
         add_vat(&temp);
-        CuAssertFlEquals(testContext, correct_array[i], temp, 0.0001);
+        CuAssertFlEquals(test_context, correct_array[i], temp, 0.0001);
     }
 }
 
-void test_do_calculations(CuTest* testContext){
+/* Tests the do_calculations function. */
+void test_do_calculations(CuTest* test_context)
+{
     int i;
 
     float correct_array_today[24] = {
@@ -194,12 +210,14 @@ void test_do_calculations(CuTest* testContext){
     do_calculations(&userdata);
 
     for(i = 0; i < 24; i++){
-        CuAssertFlEquals(testContext, correct_array_today[i], userdata.today.prices[i], 0.0001);
-        CuAssertFlEquals(testContext, correct_array_tomorrow[i], userdata.tomorrow.prices[i], 0.0001);
+        CuAssertFlEquals(test_context, correct_array_today[i], userdata.today.prices[i], 0.0001);
+        CuAssertFlEquals(test_context, correct_array_tomorrow[i], userdata.tomorrow.prices[i], 0.0001);
     }
 }
 
-void test_get_localisation_indexes(CuTest* testContext){
+/* Tests the get_localisation_indexes function. */
+void test_get_localisation_indexes(CuTest* test_context)
+{
     int i, j;
 
     char input[7][256] = {
@@ -234,12 +252,14 @@ void test_get_localisation_indexes(CuTest* testContext){
 
     for(i = 0; i < 7; i++){
         for(j = 0; j < 3; j++){
-            CuAssertIntEquals(testContext, correct_array[i][j], temp[i][j]);
+            CuAssertIntEquals(test_context, correct_array[i][j], temp[i][j]);
         }
     }
 }
 
-void test_get_string_from_id(CuTest* testContext){
+/* Tests the get_string_from_id function. */
+void test_get_string_from_id(CuTest* test_context)
+{
     int i, j;
     char correct_array[46][256] = {
         "Welcome to our prototype!",
@@ -317,13 +337,15 @@ void test_get_string_from_id(CuTest* testContext){
 
     for(i = 0; i < 2; i++){
         for(j = 0; j < 23; j++){
-            CuAssertStrEquals(testContext, correct_array[j + (23*i)], get_string_from_id(i, input_array[j]));
+            CuAssertStrEquals(test_context, correct_array[j + (23*i)], get_string_from_id(i, input_array[j]));
         }
     }
     
 }
 
-void test_utf8_length(CuTest* testContext){
+/* Tests the utf8_length function. */
+void test_utf8_length(CuTest* test_context)
+{
     int i;
     char input_array[7][256] = {
         "hællo",
@@ -338,11 +360,13 @@ void test_utf8_length(CuTest* testContext){
         5,3,6,47,10,46,4
     };
     for(i = 0; i < 7; i++){
-        CuAssertIntEquals(testContext, correct_array[i], utf8_length(input_array[i]));
+        CuAssertIntEquals(test_context, correct_array[i], utf8_length(input_array[i]));
     }
 }
 
-void test_fill_table_width(CuTest* testContext){
+/* Tests the fill_table_width function. */
+void test_fill_table_width(CuTest* test_context)
+{
     int i;
     int *temp;
     char input_array[7][256] = {
@@ -367,12 +391,14 @@ void test_fill_table_width(CuTest* testContext){
 
     for(i = 0; i < 7; i++){
         temp = fill_table_width(input_array[i]);
-        CuAssertIntEquals(testContext, correct_array[i][0], temp[0]);
-        CuAssertIntEquals(testContext, correct_array[i][1], temp[1]);
+        CuAssertIntEquals(test_context, correct_array[i][0], temp[0]);
+        CuAssertIntEquals(test_context, correct_array[i][1], temp[1]);
     }
 }
 
-void test_average_price(CuTest* testContext){
+/* Tests the average_price function. */
+void test_average_price(CuTest* test_context)
+{
     int i;
     float input_array[5][24] = {
         {
@@ -411,11 +437,13 @@ void test_average_price(CuTest* testContext){
     };
 
     for(i = 0; i < 5; i++){
-        CuAssertFlEquals(testContext, correct_array[i], average_value(input_array[i]), 0.001);
+        CuAssertFlEquals(test_context, correct_array[i], average_value(input_array[i]), 0.001);
     }
 }
 
-void test_find_extremes(CuTest* testContext){
+/* Tests the find_extremes function. */
+void test_find_extremes(CuTest* test_context)
+{
     int i = 0;
     Graph temp;
     float input_array[5][24] = {
@@ -454,7 +482,7 @@ void test_find_extremes(CuTest* testContext){
     };
     for(i = 0; i < 5; i++){
         find_extremes(input_array[i], &temp);
-        CuAssertFlEquals(testContext,correct_array[i][0], temp.max_value, 0.001);
-        CuAssertFlEquals(testContext,correct_array[i][1], temp.min_value, 0.001);
+        CuAssertFlEquals(test_context,correct_array[i][0], temp.max_value, 0.001);
+        CuAssertFlEquals(test_context,correct_array[i][1], temp.min_value, 0.001);
     }
 }

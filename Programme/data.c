@@ -21,7 +21,9 @@
 #include "./H_files/data.h"
 #include <stdio.h>
 
-void get_data(User_data *user_data, Date target_date) {
+/* Gets needed data from our dataset based on a given date in the dataset. */
+void get_data(User_data *user_data, Date target_date)
+{
     float current_price;
     float current_co2_emission;
     char date_string[64];
@@ -39,7 +41,8 @@ void get_data(User_data *user_data, Date target_date) {
     /*
         If the "file" is "NULL", then we were unable to either find or open the file.
     */
-    if(file != NULL){
+    if(file != NULL)
+    {
         /*
             While there's still a new line, fill the char array with its contents.
         */
@@ -53,9 +56,8 @@ void get_data(User_data *user_data, Date target_date) {
                 Check if we havent scanned in the correct amount of items and if we havent reached the end of the file.
                 If both are true we print an error message. 
             */
-            if(scan_res != 3 && scan_res != -1){
+            if(scan_res != 3 && scan_res != -1)
                 printf("Incorrectly formatted dataset: %s\n", DATA_FILE);
-            }
             /*
                 split up the "date_string" int to the format:
                 int: day
@@ -71,21 +73,23 @@ void get_data(User_data *user_data, Date target_date) {
                 If the check fails we check if its the next day instead.
                 And if it is the next day we set the "tomorrow.date" and "tomorrow.price" at "index_tomorrow".
             */
-            if(date_equals(&current_date, &target_date)){
+            if(date_equals(&current_date, &target_date))
+            {
                 date_set(&today.date, date_string);
                 today.prices[index_today] = current_price;
                 today.co2_emissions[index_today] = current_co2_emission;
                 index_today++;
-            } else if(date_difference_in_days(&target_date, &current_date) == 1){
+            }
+            else if(date_difference_in_days(&target_date, &current_date) == 1)
+            {
                 date_set(&tomorrow.date, date_string);
                 tomorrow.prices[index_tomorrow] = current_price;
                 tomorrow.co2_emissions[index_tomorrow] = current_co2_emission;
                 index_tomorrow++;
             }
         }
-    } else {
-        printf("Failed to open file \"%s\"\n\n", DATA_FILE);
-    }
+    } 
+    else { printf("Failed to open file \"%s\"\n\n", DATA_FILE); }
     /*
         Now that we have populated the "Energy_data" struct "today" and "tomorrow".
         we can add them to "user_data->today" and "user_data->tomorrow".
@@ -100,11 +104,15 @@ void get_data(User_data *user_data, Date target_date) {
     fclose(file);
 }
 
-void date_set(Date *date, char date_string[]){
+/* Fills a given date struct based on a date string */
+void date_set(Date *date, char date_string[])
+{
     sscanf(date_string, "%d/%d/%d", &date->day, &date->month, &date->year);
 }
 
-int date_difference_in_days(Date *date_a, Date *date_b){
+/* Calculates the diffrence between two given dates */
+int date_difference_in_days(Date *date_a, Date *date_b)
+{
     struct tm current_date = { 0 };
     struct tm next_date = { 0 };
     double current_date_seconds;
@@ -128,17 +136,24 @@ int date_difference_in_days(Date *date_a, Date *date_b){
     return (next_date_seconds - current_date_seconds) / DAY_IN_SECONDS; 
 }
 
-int date_equals(Date *date_a, Date *date_b){
-    if(date_a->year == date_b->year){
-        if(date_a->month == date_b->month){
-            if(date_a->day == date_b->day){
+/* Checks if two given dates are equal */
+int date_equals(Date *date_a, Date *date_b)
+{
+    if(date_a->year == date_b->year)
+    {
+        if(date_a->month == date_b->month)
+        {
+            if(date_a->day == date_b->day)
+            {
                 return TRUE;
             }
         }
     } return FALSE;
 }
 
-void reset_energy_price(Energy_data *energy_data){
+/* Resets the values in a given Energy_data struct */
+void reset_energy_data(Energy_data *energy_data)
+{
     int i = 0;
     energy_data->date.year = 0;
     energy_data->date.month = 0;
@@ -147,24 +162,4 @@ void reset_energy_price(Energy_data *energy_data){
         energy_data->prices[i] = 0;
         energy_data->co2_emissions[i] = 0;
     }
-}
-
-void print_date(Date date){
-    printf("%d/%d/%d ", date.day, date.month, date.year);
-}
-
-void print_energy_data(Energy_data energy_data){
-    int j = 0;
-    printf("Date: ");
-    print_date(energy_data.date);
-    printf("\n");
-    for(j = 0; j < DAY_HOURS; j++){
-        printf("\tHour: %d Price: %.2f Co2 emission: %.2f\n", j, energy_data.prices[j], energy_data.co2_emissions[j]);
-    }
-}
-
-void print_user_data(User_data user_data){
-    print_energy_data(user_data.today);
-    print_energy_data(user_data.tomorrow);
-    printf("Access to tomorrow: %d \n",user_data.access_tomorrow);
 }

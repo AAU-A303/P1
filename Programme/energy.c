@@ -22,8 +22,8 @@
 /* Responsible for doing all of the calculations. */
 void setup(User_data *data)
 {   
-    reset_energy_price(&data->today);
-    reset_energy_price(&data->tomorrow);
+    reset_energy_data(&data->today);
+    reset_energy_data(&data->tomorrow);
 
     setup_user_data(data);
     
@@ -62,7 +62,8 @@ void add_fees(float *price) { *price += TRANSPORT_FEE; }
 void add_vat(float *price) { *price = *price * VAT; }
 
 /* This presents the received data to the user. */
-void present(User_data *data, int today){
+void present(User_data *data, int today)
+{
     Graph prices_graph = {0}; Graph co2_graph = {0};
     Tables prices_table = {0}; Tables co2_table = {0};
     

@@ -19,7 +19,9 @@
 
 #include "./H_files/localisation.h"
 
-void print_string_from_id(enum languages language, char target_id[], int needs_newline){
+/* Prints string from a given id in a given language. */
+void print_string_from_id(enum languages language, char target_id[], int needs_newline)
+{
     char* result;
 
     result = get_string_from_id(language, target_id);
@@ -27,15 +29,19 @@ void print_string_from_id(enum languages language, char target_id[], int needs_n
     if (needs_newline) {printf("%s\n", result);} else {printf("%s", result);};
 }
 
-char* get_string_from_id(enum languages language, char target_id[]){
+/* Gets string from a given id in a given language. */
+char* get_string_from_id(enum languages language, char target_id[])
+{
     int language_indexes[language_count+1], start = 0, end = 0;
     char id[LINE_LENGTH], line[LINE_LENGTH], *result = {0};
     
     FILE *file = fopen(LOCALISATION_FILE, "r");
-    if(file != NULL){
+    if(file != NULL)
+    {
         while (fgets(line, LINE_LENGTH, file)){
             sscanf(line, "%[^;];", id);
-            if (strcmp(target_id, id) == 0){
+            if (strcmp(target_id, id) == 0)
+            {
                 get_localisation_indexes(language_indexes, line);
                 start = language_indexes[language]+1;
                 end = language_indexes[language+1];
@@ -49,10 +55,12 @@ char* get_string_from_id(enum languages language, char target_id[]){
     return result;
 }
 
+/* Gets the indexs of each localisation based on a given string */
 void get_localisation_indexes(int indexes[], char localisation_string[]){
     int i = 0, j = 0;
     for(i = 0; i < LINE_LENGTH && j <= language_count; i++){
-        if (localisation_string[i] == ';'){
+        if (localisation_string[i] == ';')
+        {
             indexes[j] = i;
             j++;
         }

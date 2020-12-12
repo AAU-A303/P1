@@ -52,19 +52,19 @@ void compare_values_table(Strings*, float[], float[], int, enum languages); /* i
 float average_value(float[]);                                               /* input: values output: average */
 int less_than_step(float[], float);                                         /* input: values, average output: boolean */
 
-void graph(float[], Graph*, int);                                           /* input: values, graph, is_prime output: none */
-void find_extremes(float[], Graph*);                                        /* input: values, graph output: none */
-void make_y_axis(Graph*, int);                                              /* input: graph, is_price output: none */
-void make_graph(float[], Graph*);                                           /* input: values, graph output: none */
-void format_graph(Graph*, int[]);                                           /* input: graph, graph_line output: none */
+void graph(float[], Graph*, int);       /* input: values, graph, is_prime output: none */
+void find_extremes(float[], Graph*);    /* input: values, graph output: none */
+void make_y_axis(Graph*, int);          /* input: graph, is_price output: none */
+void make_graph(float[], Graph*);       /* input: values, graph output: none */
+void format_graph(Graph*, int[]);       /* input: graph, graph_line output: none */
 
-int compare_floats(float, float);                                           /* input: f1, f1 output: boolean */
-int compare_intergers(const void*, const void*);                            /* input: int1, int2 output: boolean */
+int compare_floats(float, float);                   /* input: f1, f1 output: boolean */
+int compare_intergers(const void*, const void*);    /* input: int1, int2 output: boolean */
 
-int* fill_table_width(char*);                                               /* input: string output: none */
-void print_graphs(Graph*, Graph*, Date*, enum languages);                   /* input: prices, co2, date, language output: none */
-void print_tables(Tables*, Tables*);                                        /* input: prices, co2 output: none */
-void print_table(Strings*, Strings*);                                       /* input: prices, co2 output: none */
-size_t utf8_length(const char*);                                            /* input: string, today output: size */
+int* fill_table_width(char*);                               /* input: string output: width1, width2 */
+void print_graphs(Graph*, Graph*, Date*, enum languages);   /* input: prices, co2, date, language output: none */
+void print_tables(Tables*, Tables*);                        /* input: prices, co2 output: none */
+void print_table(Strings*, Strings*);                       /* input: prices, co2 output: none */
+size_t utf8_length(const char*);                            /* input: string, today output: length */
 
 #endif /* PRESENT_H */
