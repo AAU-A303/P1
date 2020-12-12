@@ -82,7 +82,7 @@ void present(User_data *data, int today){
 
         present_data(&prices_table, &co2_table, data, today);
         
-        print_graphs(&prices_graph, &co2_graph, &data->tomorrow.date, 1);
+        print_graphs(&prices_graph, &co2_graph, &data->tomorrow.date, data->language);
         print_tables(&prices_table, &co2_table);
     }
     free_strings(&prices_table.average);
