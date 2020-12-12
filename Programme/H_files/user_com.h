@@ -61,7 +61,8 @@ void set_date(User_data*); 			/* input: data, output: none */
 void set_time(int*, User_data*);	/* input: hour, data, output: none */
 int days_in_month(int, int);    	/* input: month, year, output: num of days */
 int is_leap_year(int);          	/* input: year, output: whether is leap year */
+
 int want_data_for_tommorow(User_data);  /* input: data, output: user response */
-int has_new_inquiry(User_data);    /* input: data, output: user response */
+int has_new_inquiry(User_data);         /* input: data, output: user response */
 
 #endif /* USER_COM_H */

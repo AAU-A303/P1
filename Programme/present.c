@@ -24,36 +24,33 @@
 void present_data(Tables* prices, Tables* co2, User_data* data, int today)
 {
     Energy_data target = today ? data->today : data->tomorrow;
-    average_prices_table(&(prices->average), target.prices, 1, data->language);
-    average_prices_table(&(co2->average), target.co2_emissions, 0,
-                         data->language);
+    average_values_table(&(prices->average), target.prices, 1, data->language);
+    average_values_table(&(co2->average), target.co2_emissions, 0, data->language);
 
-    highest_prices_table(&prices->highest, target.prices, 1, data->language);
-    highest_prices_table(&co2->highest, target.co2_emissions, 0, data->language);
+    highest_values_table(&prices->highest, target.prices, 1, data->language);
+    highest_values_table(&co2->highest, target.co2_emissions, 0, data->language);
 
     if(data->access_tomorrow && today){
-        compare_prices_table(&prices->compare, target.prices,
-                             data->tomorrow.prices, 1, data->language);
-        compare_prices_table(&co2->compare, target.co2_emissions,
-                             data->tomorrow.co2_emissions, 0, data->language);
+
+        compare_values_table(&prices->compare, target.prices, data->tomorrow.prices, 1, data->language);
+        compare_values_table(&co2->compare, target.co2_emissions, data->tomorrow.co2_emissions, 0, data->language);
     }
 }
 
-/* Handles the logic of the best prices table. */
-void average_prices_table(Strings *table, float values[], int is_prices,
-                          enum languages language)
+/* If prices are given as an array of floats */
+void average_values_table(Strings *table, float values[], int is_prices, enum languages language)
 {
     float values_low[DAY_HOURS];
-    float average = average_price(values);
+    float average = average_value(values);
     int hour_1 = 0, hour_2 = 0;
     int i, *length;
 
     char* header;
     
     if(is_prices){
-        header = get_string_from_id(language, "Table_prices_low", 1);
+        header = get_string_from_id(language, "Table_prices_low");
     } else {
-        header = get_string_from_id(language, "Table_CO2_low", 1);
+        header = get_string_from_id(language, "Table_CO2_low");
     }
     length = fill_table_width(header);
 
@@ -87,16 +84,19 @@ void average_prices_table(Strings *table, float values[], int is_prices,
                 strings_append(table, "├─────────────────────────────────────────────┤");
                 strings_append_format(table,
                     "│    %02d:00 - %02d:00 -> % 3.2f %*s           │", 
-                    hour_1, hour_2, values_low[hour_1],
-                                      values_low[hour_1] >= 100?5:6,is_prices ?
-                                      "DKK/kWh" : "g/kWh");
+                    hour_1,
+                    hour_2,
+                    values_low[hour_1],
+                    values_low[hour_1] >= 100 ? 5 : 6,
+                    is_prices ? "DKK/kWh" : "g/kWh");
             } else {
                 strings_append(table, "├─────────────────────────────────────────────┤");
                 strings_append_format(table,
                     "│            %02d:00 -> % 3.2f %*s           │",
-                    hour_1, values_low[hour_1],
-                                      values_low[hour_1] >= 100?5:6,is_prices ?
-                                      "DKK/kWh" : "g/kWh");
+                    hour_1,
+                    values_low[hour_1],
+                    values_low[hour_1] >= 100 ? 5 : 6,
+                    is_prices ? "DKK/kWh" : "g/kWh");
             }
         }
     }
@@ -105,13 +105,13 @@ void average_prices_table(Strings *table, float values[], int is_prices,
     free(header);
 }
 
+
 /* Handles the logic of the highest prices table. */
-void highest_prices_table(Strings *table, float values[], int is_prices,
-                          enum languages language)
+void highest_values_table(Strings *table, float values[], int is_prices, enum languages language)
 {
     int i, *length;
     int hour[] = {-1, -1, -1};
-    float average = average_price(values);
+    float average = average_value(values);
     char* header;
     for(i = 0; i < DAY_HOURS; i++)
     {   
@@ -137,13 +137,10 @@ void highest_prices_table(Strings *table, float values[], int is_prices,
 
     if(less_than_step(values, average))
     { 
-        if(is_prices)
-        {
-            header = get_string_from_id(language, "Table_prices_neutral", 1);
-        }
-        else
-        {
-            header = get_string_from_id(language, "Table_CO2_neutral", 1);
+        if(is_prices){
+            header = get_string_from_id(language, "Table_prices_neutral");
+        } else {
+            header = get_string_from_id(language, "Table_CO2_neutral");
         }
             
         length = fill_table_width(header);
@@ -154,13 +151,10 @@ void highest_prices_table(Strings *table, float values[], int is_prices,
     }
     else
     {
-        if(is_prices)
-        {
-            header = get_string_from_id(language, "Table_prices_high", 1);
-        }
-        else
-        {
-            header = get_string_from_id(language, "Table_CO2_high", 1);
+        if(is_prices){
+            header = get_string_from_id(language, "Table_prices_high");
+        } else {
+            header = get_string_from_id(language, "Table_CO2_high");
         }
         
         length = fill_table_width(header);
@@ -175,9 +169,10 @@ void highest_prices_table(Strings *table, float values[], int is_prices,
                            "├─────────────────────────────────────────────┤");
             strings_append_format(table,
                 "│            %02d:00 ─> %3.2f %*s            │",
-                hour[i], values[hour[i]],
-                                  values[hour[i]] >= 100?5:7, is_prices ?
-                                  "DKK/kWh": "g/kWh");
+                hour[i],
+                values[hour[i]],
+                values[hour[i]] >= 100 ? 5 : 7,
+                is_prices ? "DKK/kWh": "g/kWh");
         }
         strings_append(table, "╰─────────────────────────────────────────────╯");
     }
@@ -185,36 +180,34 @@ void highest_prices_table(Strings *table, float values[], int is_prices,
     free(header);
 }
 
-/* Calculates and returns the average price of the day */
-double average_price(float prices[])
+/* Calculates and returns the average values of the day */
+float average_value(float values[])
 {
-    double average = 0;
+    float average = 0;
     int i;
-
     for(i = 0; i < DAY_HOURS; i++)
-        average += prices[i];
+        average += values[i];
     
     average = average / DAY_HOURS;
 
     return average;
 }
 
+
 /* Handles the logic of the compare prices table. */
-void compare_prices_table(Strings *table, float today[], float tomorrow[],
-                          int is_prices, enum languages language)
+void compare_values_table(Strings *table, float today[], float tomorrow[], int is_prices, enum languages language)
 {
-    float relative_deviation = (average_price(tomorrow) - average_price(today)) /
-                                average_price(today) * 100;
-    char* header;
-    char* body;
-    int* length;
+    float relative_deviation = (average_value(tomorrow) - average_value(today)) / average_value(today) * 100;
+    char* header = {0};
+    char* body = {0};
+    int* length = {0};
 
     if(relative_deviation > 1)
     {
         if(is_prices){
-            header = get_string_from_id(language, "Price_compare_positive",0);
+            header = get_string_from_id(language, "Price_compare_positive");
         } else {
-            header = get_string_from_id(language, "CO2_compare_positive",0);
+            header = get_string_from_id(language, "CO2_compare_positive");
         }
 
         body = calloc(strlen(header)*2, sizeof(char));
@@ -231,9 +224,9 @@ void compare_prices_table(Strings *table, float today[], float tomorrow[],
         relative_deviation *= (-1);
 
         if(is_prices){
-            header = get_string_from_id(language, "Price_compare_negative",0);
+            header = get_string_from_id(language, "Price_compare_negative");
         } else {
-            header = get_string_from_id(language, "CO2_compare_negative",0);
+            header = get_string_from_id(language, "CO2_compare_negative");
         }
 
         body = calloc(strlen(header)*2, sizeof(char));
@@ -251,41 +244,45 @@ void compare_prices_table(Strings *table, float today[], float tomorrow[],
 }
 
 /* Handles the creation of a graph. */
-void graph(float prices[], Graph *graph, int price_flag)
+void graph(float values[], Graph *graph, int is_price)
 {
-    find_extremes(prices, graph);
-    make_y_axis(graph, price_flag);
-    make_graph(prices, graph);
+    find_extremes(values, graph);
+    make_y_axis(graph, is_price);
+    make_graph(values, graph);
 }
 
 /* Finds the lowest and highest points of the graph. */
-void find_extremes(float prices[], Graph *graph)
+void find_extremes(float values[], Graph *graph)
 {
     int i;
-    graph->min_price = prices[0];
-    graph->max_price = prices[0];
+    graph->min_value = values[0];
+    graph->max_value = values[0];
     for(i = 0; i < DAY_HOURS; i++)
     {
-        if(prices[i] < graph->min_price) { graph->min_price = prices[i]; }
-        else if(prices[i] > graph->max_price){ graph->max_price = prices[i]; }
+        if(values[i] < graph->min_value){
+            graph->min_value = values[i];
+        }
+        else if(values[i] > graph->max_value){
+            graph->max_value = values[i];
+        }
     }
 }
 
 /* Creates the y-axis of the graph. */
-void make_y_axis(Graph *graph, int price_flag)
+void make_y_axis(Graph *graph, int is_price)
 {
     int i;
     float min_y, current_step = 0;
 
-    if(price_flag == 1)
+    if(is_price)
     {
-        min_y = ((double)((int)(graph->min_price * 2))) / 2;
-        graph->max_y = ((double)((int)((graph->max_price + 0.5) * 2))) / 2;
+        min_y = ((double)((int)(graph->min_value * 2))) / 2;
+        graph->max_y = ((double)((int)((graph->max_value + 0.5) * 2))) / 2;
     }
     else
     {
-        min_y = (int)(graph->min_price / 50) * 50;
-        graph->max_y = (int)((graph->max_price + 50) / 50) * 50;
+        min_y = (int)(graph->min_value / 50) * 50;
+        graph->max_y = (int)((graph->max_value + 50) / 50) * 50;
     }
 
     current_step = graph->max_y;
@@ -299,7 +296,7 @@ void make_y_axis(Graph *graph, int price_flag)
 }
 
 /* Responsible for making the graph. */
-void make_graph(float prices[], Graph *graph)
+void make_graph(float values[], Graph *graph)
 {
     int i, j, is_set = 0;
     /* We make 24 empty string with 20 characters each and put them in an array. 
@@ -312,13 +309,14 @@ void make_graph(float prices[], Graph *graph)
         current_step = graph->max_y;
         for(j = 0; j < Y_AXIS_LENGTH; j++)
         {
-            if(prices[i] - current_step >= graph->step / 2 && prices[i] -
+            if(values[i] - current_step >= graph->step / 2 && values[i] -
                current_step <= graph->step)
             {
                 graph_line[i] = j-1;
                 is_set = 1;
             }
-            else if(prices[i] - current_step <= graph->step / 2 && prices[i] -
+
+            else if(values[i] - current_step <= graph->step / 2 && values[i] -
                     current_step >= 0)
             {
                 graph_line[i] = j;
@@ -359,17 +357,15 @@ void format_graph(Graph *graph, int graph_line[])
 
 /* Responsible for printing the graph to the screen. */
 void print_graphs(Graph *today, Graph *tomorrow, Date *date,
-                  enum languages language)
+ enum languages language)
 {
     int i, j;
     char* co2_header;
     char* prices_header;
     char* hour;
-    prices_header = get_string_from_id(language, "Graph_price", 0);
-    co2_header = get_string_from_id(language, "Graph_CO2", 0);
-
-    
-    hour = get_string_from_id(language, "Time", 0);
+    prices_header = get_string_from_id(language, "Graph_price");
+    co2_header = get_string_from_id(language, "Graph_CO2");
+    hour = get_string_from_id(language, "Time");
     printf("\nDKK / kWh %21s %12s%d/%d/%d", " ", prices_header, date->day,
            date->month, date->year);
     printf("%33sg / kWh %21s %12s%d/%d/%d\n", " ", "", co2_header, date->day,
@@ -409,6 +405,7 @@ void print_table(Strings* table_1, Strings* table_2){
 
     int longest_table = table_1->index > table_2->index ? 
         table_1->index : table_2->index;
+
     for(i = 0; i < longest_table; i++){
         if(table_1->index > i){
             printf("%19s%s%24s", "", table_1->buffer[i], "");
@@ -447,15 +444,15 @@ int compare_intergers(const void* int1, const void* int2)
 }
 
 /* Returns whether the graph is relatively stable for the day. */
-int less_than_step(float prices[], float average)
+int less_than_step(float values[], float average)
 {   
     Graph graph = {0};
     float min_y = 0, max_y = 0;
 
-    find_extremes(prices, &graph);
+    find_extremes(values, &graph);
 
-    max_y = ((double)((int)((graph.max_price + 0.5) * 2))) / 2;
-    min_y = ((double)((int)(graph.min_price * 2))) / 2;
+    max_y = ((double)((int)((graph.max_value + 0.5) * 2))) / 2;
+    min_y = ((double)((int)(graph.min_value * 2))) / 2;
     graph.step = (max_y - min_y) / Y_AXIS_LENGTH;
 
     if(graph.step < 0.05)
@@ -463,14 +460,14 @@ int less_than_step(float prices[], float average)
         graph.step = 0.05;
     }
 
-    return ((graph.max_price - average) < graph.step);
+    return ((graph.max_value - average) < graph.step);
 }
 
 /* Responsiible for dynamically fitting the table width. */
 int* fill_table_width(char* string){
     int width1;
     int width2;
-    int length = utf8len(string);
+    int length = utf8_length(string);
     int* result = malloc(sizeof(int) * 2);
     int total_length = 0;
 
@@ -491,9 +488,9 @@ int* fill_table_width(char* string){
 
 /* https://www.drk.com.ar/code/count-characters-in-utf8-string-c-utf8len.php */
 /* This fixes a counting issue we had with UTF-8 characters, i.e. æ, ø and å. */
-size_t utf8len(const char *s)
+size_t utf8_length(const char *string)
 {
-    size_t len = 0;
+    size_t length = 0;
     /* 
         We use the & operator it works by going through each bit of the character
         and checking if it existis in both *(strings) AND 0xC0.
@@ -507,7 +504,7 @@ size_t utf8len(const char *s)
         ignore 0xB8. UTF-8 chars can be up to 4 bytes long but in any case we
         only count the first character as we see in the example above.
     */
-    while(*s)
-        len += (*(s++)&0xC0)!=0x80;
-    return len;
+    while(*string)
+        length += (*(string++)&0xC0)!=0x80;
+    return length;
 }

@@ -34,8 +34,8 @@ enum languages {
     language_count
 };
 
-void print_string_from_id(enum languages, char[], int);
-void get_localisation_indexes(int[], char[]);
-char* get_string_from_id(enum languages language, char target_id[], int needs_newline);
+void print_string_from_id(enum languages, char[], int); /* input: language, target_id, needs_newline output: none */
+void get_localisation_indexes(int[], char[]);           /* input: language, target_id output: none */
+char* get_string_from_id(enum languages, char []);      /* input: indexes, localisation_string output: string */
 
 #endif /* LOCALISATION_H */

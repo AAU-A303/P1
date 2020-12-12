@@ -27,4 +27,18 @@
 #include "energy.h"
 #include "localisation.h"
 
+void all_tests();                               /* input: none, output: none */
+CuSuite* test_suite();                          /* input: none, output: CuSuite */
+void test_load_data(CuTest*);                   /* input: test_context, output: none */
+void test_convert_kwh(CuTest*);                 /* input: test_context, output: none */
+void test_add_fees(CuTest*);                    /* input: test_context, output: none */
+void test_add_vat(CuTest*);                     /* input: test_context, output: none */
+void test_do_calculations(CuTest*);             /* input: test_context, output: none */
+void test_get_localisation_indexes(CuTest*);    /* input: test_context, output: none */
+void test_get_string_from_id(CuTest*);          /* input: test_context, output: none */
+void test_utf8_length(CuTest*);                 /* input: test_context, output: none */
+void test_fill_table_width(CuTest*);            /* input: test_context, output: none */
+void test_average_price(CuTest*);               /* input: test_context, output: none */
+void test_find_extremes(CuTest*);               /* input: test_context, output: none */
+
 #endif /* CUTEST_H */

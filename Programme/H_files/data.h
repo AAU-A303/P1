@@ -58,14 +58,10 @@ typedef struct {
 
 /* Function Prototypes */
 
-void get_data(User_data*, Date);
-void date_set(Date*, char[]);
-int date_equals(Date*, Date*);
-int date_difference_in_days(Date*, Date*);
-void reset_energy_price(Energy_data*);
-
-void print_date(Date);
-void print_energy_data(Energy_data);
-void print_user_data(User_data);
+void get_data(User_data*, Date);            /* input: data, date output: none */
+void date_set(Date*, char[]);               /* input: date, date_string output: none */
+int date_equals(Date*, Date*);              /* input: date_a, date_b output: boolean */
+int date_difference_in_days(Date*, Date*);  /* input: date_a, date_b output: boolean */
+void reset_energy_data(Energy_data*);       /* input: energy_data output: none */
 
 #endif /* DATA_H */
