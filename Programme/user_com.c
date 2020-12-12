@@ -18,14 +18,12 @@
  */
 
 #include "./H_files/user_com.h"
-#include <ctype.h>
-#include <stdio.h>
 
 /* Constants */
 char* language_names[] = {"English","Dansk"};
 
-/* Gets the user input for date and time. */
-void get_user_input(User_data *data)
+/* Sets up the data file according to user input. */
+void setup_user_data(User_data *data)
 {
     int hour;
 
@@ -53,13 +51,18 @@ void set_language(User_data *data)
         print_string_from_id(data->language, "Select_language", 0);
         if(scanf(" %d", &answer) != 1)
         {
-            print_string_from_id(data->language, "Fail_message_language", 1); printf("\n");
-            fflush(stdin);
+            print_string_from_id(data->language, "Fail_message_language", 1);
+            printf("\n"); fflush(stdin);
         }
         else
         {
             if(answer >= 0 && answer < language_count) { is_valid = TRUE; }
-            else { print_string_from_id(data->language, "Fail_message_language", 1); printf("\n"); }
+            else
+            {
+                print_string_from_id(data->language, "Fail_message_language", 1);
+                printf("\n");
+                
+            }
         }
     } while(!is_valid);
 

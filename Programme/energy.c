@@ -25,7 +25,7 @@ void setup(User_data *data)
     reset_energy_price(&data->today);
     reset_energy_price(&data->tomorrow);
 
-    get_user_input(data);
+    setup_user_data(data);
     
     do_calculations(data);
 
@@ -33,7 +33,9 @@ void setup(User_data *data)
     present(data, 1);
 
     if (data->access_tomorrow && want_data_for_tommorow(*data))
+    {
         present(data, 0);
+    }
 }
 
 /* Does the calculations on the received data, takes in a day struct. */
@@ -43,12 +45,10 @@ void do_calculations(User_data *data)
     
     for (i = 0; i < DAY_HOURS; i++) {
         convert_kwh(&data->today.prices[i]);
-        add_fees(&data->today.prices[i]);
-        add_vat(&data->today.prices[i]);
+        add_fees(&data->today.prices[i]); add_vat(&data->today.prices[i]);
         
         convert_kwh(&data->tomorrow.prices[i]);
-        add_fees(&data->tomorrow.prices[i]);
-        add_vat(&data->tomorrow.prices[i]);
+        add_fees(&data->tomorrow.prices[i]); add_vat(&data->tomorrow.prices[i]);
     }
 }
 
@@ -63,20 +63,22 @@ void add_vat(float *price) { *price = *price * VAT; }
 
 /* This presents the received data to the user. */
 void present(User_data *data, int today){
-    Graph prices_graph = {0};
-    Graph co2_graph = {0};
-
-    Tables prices_table = {0};
-    Tables co2_table = {0};
-    if(today){
+    Graph prices_graph = {0}; Graph co2_graph = {0};
+    Tables prices_table = {0}; Tables co2_table = {0};
+    
+    if(today)
+    {
         graph(data->today.prices, &prices_graph, 1);
         graph(data->today.co2_emissions, &co2_graph,  0);
         
         present_data(&prices_table, &co2_table, data, today);
 
-        print_graphs(&prices_graph, &co2_graph, &data->today.date, data->language);
+        print_graphs(&prices_graph, &co2_graph, &data->today.date,
+                     data->language);
         print_tables(&prices_table, &co2_table);
-    } else {
+    }
+    else
+    {
         graph(data->tomorrow.prices, &prices_graph, 1);
         graph(data->tomorrow.co2_emissions, &co2_graph,  0);
 
@@ -85,6 +87,7 @@ void present(User_data *data, int today){
         print_graphs(&prices_graph, &co2_graph, &data->tomorrow.date, 1);
         print_tables(&prices_table, &co2_table);
     }
+    
     free_strings(&prices_table.average);
     free_strings(&prices_table.highest);
     free_strings(&prices_table.compare);
