@@ -45,26 +45,26 @@ typedef struct _Tables {
     Strings highest;
 } Tables;
 
-void present_data(Tables* prices, Tables* co2, User_data* data, int today);
-void average_prices_table(Strings *table, float values[], int is_prices, enum languages language);
-void highest_prices_table(Strings *table,float prices[], int is_prices, enum languages language);
-double average_price(float prices[]);
-void compare_prices_table(Strings *table, float today[], float tomorrow[], int is_prices, enum languages language);
-int less_than_step(float prices[], float average);
+void present_data(Tables*, Tables*, User_data*, int); /* input: prices, co2, data, today output: none */
+void average_values_table(Strings*, float[], int, enum languages);
+void highest_values_table(Strings*, float[], int, enum languages);
+float average_value(float[]);
+void compare_values_table(Strings*, float[], float[], int, enum languages);
+int less_than_step(float[], float);
 
-void graph(float prices[], Graph *graph, int flag_price);
-void find_extremes(float prices[], Graph *graph);
-void make_y_axis(Graph *graph, int flag_price);
-void make_graph(float prices[], Graph *graph);
-void format_graph(Graph *graph, int graph_line[]);
+void graph(float[], Graph*, int);
+void find_extremes(float[], Graph*);
+void make_y_axis(Graph*, int);
+void make_graph(float[], Graph*);
+void format_graph(Graph*, int[]);
 
-int compare_floats(float f1, float f2);
-int compare_intergers(const void* int1, const void* int2);
+int compare_floats(float, float);
+int compare_intergers(const void*, const void*);
 
 
-int* fill_table_width(char* string);
-void print_graphs(Graph *today, Graph *tomorrow, Date *date, enum languages language);
-void print_tables(Tables* prices, Tables* co2);
-void print_table(Strings* table_1, Strings* table_2);
-size_t utf8len(const char *s);
+int* fill_table_width(char*);
+void print_graphs(Graph*, Graph*, Date*, enum languages);
+void print_tables(Tables*, Tables*);
+void print_table(Strings*, Strings*);
+size_t utf8_length(const char*);
 #endif /* PRESENT_H */
