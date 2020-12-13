@@ -317,28 +317,38 @@ void CuSuiteSummary(CuSuite* testSuite, CuString* summary)
 void CuSuiteDetails(CuSuite* testSuite, CuString* details)
 {
 	int i;
+    int n = testSuite->count;
+    int digitCount = 0;
 	int failCount = 0;
-
-    if (testSuite->failCount == 1)
-        CuStringAppend(details, "\nThere was 1 failure:\n\n");
-    else
-        CuStringAppendFormat(details, "\nThere were %d failures:\n\n", testSuite->failCount);
+    int spacing = 0;
+    char testName[STRING_MAX];
+    while (n != 0){
+        n /= 10;
+        digitCount++;
+    }
+    CuStringAppendFormat(details, "\nRuning %d tests:\n\n", testSuite->count);
+    for (i = 0 ; i < testSuite->count ; ++i){
+        CuTest* testCase = testSuite->list[i];
+        if(strlen(testCase->name) > spacing){
+            spacing = strlen(testCase->name);
+        }
+    }
 
     for (i = 0 ; i < testSuite->count ; ++i){
         CuTest* testCase = testSuite->list[i];
+        strncpy(testName, &(testCase->name)[5], strlen(testCase->name));
+        testName[strlen(testName)] = '\0';
         if (testCase->failed){
             failCount++;
-            CuStringAppendFormat(details, "%d) %s: %s\n",
-                i+1, strupr(testCase->name), testCase->message);
+            CuStringAppendFormat(details, "%0*d) %s: %*s%s\n",
+                digitCount, i+1, strupr(testName), spacing-strlen(testCase->name), "", testCase->message);
         } else {
-            CuStringAppendFormat(details, "%d) %s: %s\n",
-                i+1, strupr(testCase->name),"Passed");
+            CuStringAppendFormat(details, "%0*d) %s: %*s%s\n",
+                digitCount, i+1, strupr(testName), spacing-strlen(testCase->name), "", "Passed");
         }
     }
     CuStringAppend(details, "\n");
 
-    if (testSuite->failCount >= 1)
-        CuStringAppend(details, "\n!!!FAILURES!!!\n");
     CuStringAppendFormat(details, "Runs: %d ",   testSuite->count);
     CuStringAppendFormat(details, "Passes: %d ", testSuite->count - testSuite->failCount);
     CuStringAppendFormat(details, "Fails: %d\n",  testSuite->failCount);
