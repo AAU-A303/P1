@@ -20,7 +20,7 @@
 #include "./H_files/energy.h"
 
 /* Responsible for doing all of the calculations. */
-void setup(User_data *data)
+void run_programme(User_data *data)
 {   
     reset_energy_data(&data->today);
     reset_energy_data(&data->tomorrow);

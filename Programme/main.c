@@ -36,7 +36,7 @@ int main(void)
     
     do {
         system("cls || clear");
-        setup(&data);
+        run_programme(&data);
     } while (has_new_inquiry(data));
     
     print_string_from_id(data.language, "Goodbye", 1);
