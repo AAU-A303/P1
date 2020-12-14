@@ -35,7 +35,6 @@ int main(void)
     print_string_from_id(data.language, "Welcome", 1);
     
     do {
-        system("cls || clear");
         run_programme(&data);
     } while (has_new_inquiry(data));
     

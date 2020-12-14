@@ -173,6 +173,5 @@ int has_new_inquiry(User_data data)
         if ((input != 'y') || (input != 'Y') ||
             (input != 'n') || (input != 'N')) { wrong_input = FALSE; }
     } while (wrong_input);
-    
-    printf("\n"); return (input == 'y' || input == 'Y');
+    system("cls || clear"); return (input == 'y' || input == 'Y');
 }
