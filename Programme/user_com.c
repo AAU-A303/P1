@@ -152,8 +152,8 @@ int want_data_for_tommorow(User_data data)
         printf("\n"); print_string_from_id(data.language, "Tomorrow", 0);
         scanf(" %c", &input);
         
-        if ((input != 'y') || (input != 'Y') ||
-            (input != 'n') || (input != 'N')) { wrong_input = FALSE; }
+        if ((input == 'y') || (input == 'Y') ||
+            (input == 'n') || (input == 'N')) { wrong_input = FALSE; }
     } while (wrong_input);
     
     printf("\n"); return (input == 'y' || input == 'Y');
@@ -170,8 +170,8 @@ int has_new_inquiry(User_data data)
         printf("\n"); print_string_from_id(data.language, "Continue", 0);
         scanf(" %c", &input);
         
-        if ((input != 'y') || (input != 'Y') ||
-            (input != 'n') || (input != 'N')) { wrong_input = FALSE; }
+        if ((input == 'y') || (input == 'Y') ||
+            (input == 'n') || (input == 'N')) { wrong_input = FALSE; }
     } while (wrong_input);
     
     printf("\n"); return (input == 'y' || input == 'Y');
