@@ -32,7 +32,7 @@ void run_programme(User_data *data)
     system("cls || clear");
     present(data, 1);
 
-    if (data->access_tomorrow && want_data_for_tommorow(*data))
+    if (data->access_tomorrow && want_data_for_tomorrow(*data))
     {
         present(data, 0);
     }

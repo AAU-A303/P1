@@ -142,7 +142,7 @@ int is_leap_year(int year)
 }
 
 /* Returns whether the user wants to see the data for tomorrow, when it is available. */
-int want_data_for_tommorow(User_data data)
+int want_data_for_tomorrow(User_data data)
 {
     char input;
     int wrong_input = TRUE;
