@@ -85,14 +85,8 @@ void set_date(User_data *data)
         }
         else
         {
-            /* TODO: remove the first two if statements after Jan 1st */
-            if(month <= 11)
-            {
-                if (month == 11 && day > 5) { continue; }
-
-                if (day <= days_in_month(month, CURRENT_YEAR) && day > 0) { is_valid = TRUE; }
-                else { print_string_from_id(data->language, "Fail_message_general", 1); printf("\n"); }
-            }
+            if (day <= days_in_month(month, CURRENT_YEAR) && day > 0) { is_valid = TRUE; }
+            else { print_string_from_id(data->language, "Fail_message_general", 1); printf("\n"); }
         }
         
     } while (!is_valid);
