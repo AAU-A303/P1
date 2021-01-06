@@ -1,4 +1,4 @@
-# P1 - Title is a work in Progress
+# P1 - Raising Energy Awareness
 This programme has been developed by the data science group, A303, at Aalborg University.
 
 ## About this Project
