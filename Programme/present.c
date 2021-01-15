@@ -171,7 +171,7 @@ void highest_values_table(Strings *table, float values[], int is_prices, enum la
                 "│            %02d:00 ─> %3.2f %*s            │",
                 hour[i],
                 values[hour[i]],
-                values[hour[i]] >= 100 ? 5 : 7,
+                values[hour[i]] >= 100 ? 5 : 6,
                 is_prices ? "DKK/kWh": "g/kWh");
         }
         strings_append(table, "╰─────────────────────────────────────────────╯");
